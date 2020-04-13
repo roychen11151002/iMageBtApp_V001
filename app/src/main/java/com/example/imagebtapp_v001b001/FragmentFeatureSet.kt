@@ -121,7 +121,7 @@ class FragmentFeatureSet : Fragment() {
                         0x30
                     }
                 }
-            updataData()
+            updateData()
         }
         rdGpMode.setOnCheckedChangeListener { group, checkedId ->
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
@@ -214,7 +214,7 @@ class FragmentFeatureSet : Fragment() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-        updataData()
+        updateData()
     }
 
     fun checkUpdate(it: View, isChecked: Boolean) {
@@ -246,7 +246,7 @@ class FragmentFeatureSet : Fragment() {
         Logger.d(LogGbl, String.format("checkbox id:%2d feature:%4X", i, (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp))
     }
 
-    fun updataData() {
+    fun updateData() {
         var chkBox: CheckBox
         var feature: Int
         var ledLight = Array<Int>(4) {0}

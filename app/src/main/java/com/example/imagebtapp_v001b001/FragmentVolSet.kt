@@ -112,7 +112,7 @@ class FragmentVolSet : Fragment() {
                         0x30
                     }
                 }
-            updataData()
+            updateData()
         }
         rdGpMode.setOnCheckedChangeListener { group, checkedId ->
             mode =
@@ -123,7 +123,7 @@ class FragmentVolSet : Fragment() {
                     R.id.rdModeVcs -> 8
                     else -> 8
                 }
-            updataData()
+            updateData()
         }
         seekSrcHfpMicVol.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -275,10 +275,10 @@ class FragmentVolSet : Fragment() {
                         (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade.and(0x80.inv())
             }
         }
-        updataData()
+        updateData()
     }
 
-    fun updataData() {
+    fun updateData() {
         when(mode) {
             1 -> {
                 seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireAvSpkrVol

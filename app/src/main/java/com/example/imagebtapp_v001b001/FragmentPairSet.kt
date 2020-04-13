@@ -129,10 +129,10 @@ class FragmentPairSet : Fragment() {
                 return true
             }
         })
-        updataData()
+        updateData()
     }
 
-    fun updataData() {
+    fun updateData() {
         recyclerListPair.adapter!!.notifyDataSetChanged()
         txvPairTitle.text =
             when((activity as DevUnitMsg).getPairState()) {

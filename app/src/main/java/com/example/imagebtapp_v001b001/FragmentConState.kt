@@ -238,7 +238,7 @@ class FragmentConState : Fragment() {
             else -> 0xff.toByte()
         }
 
-    fun updataData() {
+    fun updateData() {
         recyclerDevList.adapter!!.notifyDataSetChanged()
     }
 }
