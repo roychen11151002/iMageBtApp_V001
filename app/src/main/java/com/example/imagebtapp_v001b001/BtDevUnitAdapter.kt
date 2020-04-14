@@ -222,15 +222,15 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                 else
                     String.format("%s%d ", strIndicate[4], btDevUnitList[position].batLevel)
             else
-                if(btDevUnitList[position].batLow)
-                    String.format("%s%d ", strIndicate[2], btDevUnitList[position].batLevel)
-                else
+                if(btDevUnitList[position].batInd)
                     String.format("%s%d ", strIndicate[1], btDevUnitList[position].batLevel)
+                else
+                    String.format("%s%d ", strIndicate[2], btDevUnitList[position].batLevel)
         holder.batTxv.setTextColor((
-            if(btDevUnitList[position].batLow)
-                0xffff0000
+            if(btDevUnitList[position].batInd)
+                0xff000000
             else
-                0xff000000).toInt())
+                0xffff0000).toInt())
         holder.rssiTxv.text = String.format("%s%d",strIndicate[0], (127 - btDevUnitList[position].rssi) * 9 / 127)
         holder.rssiTxv.setTextColor((
             if(((127 - btDevUnitList[position].rssi) * 9 / 127) < 3)

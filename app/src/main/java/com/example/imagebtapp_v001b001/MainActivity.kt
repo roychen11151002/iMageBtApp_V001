@@ -134,7 +134,7 @@ class BtDevUnit {
     var volMicHfp: Int = 15
     var muteSpkr: Boolean = false
     var muteMic: Boolean = false
-    var batLow: Boolean = false
+    var batInd: Boolean = false
     var devDfu: Boolean = false
     var volSpkrAg: Int = 15
     var volMicAg: Int = 15
@@ -182,6 +182,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     private val MaxBtDev = 2
     private var PairState = 0
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
+    private var staUpdateInterval = 600000.toLong()
     private val BtPermissionReqCode = 1
     private val BtActionReqCode = 3
     private lateinit var preferData: SharedPreferences
@@ -289,7 +290,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendBtServiceMsg(sendMsg)
             true
         }
-        stateUpdateAuto(parseInt(resources.getString(R.string.timeUpdate)).toLong())
+        preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
+        staUpdateInterval = preferData.getLong("staUpdateInterval", 30000)
+        stateUpdateAuto(staUpdateInterval)
+        Logger.d(LogMain, "state update interval $staUpdateInterval")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -341,7 +345,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 bindService(Intent(this, iMageBtService::class.java), iMageBtServiceConnection, Context.BIND_AUTO_CREATE)
                 txvConSta0.text = "Enable"
                 txvConSta1.text = "Enable"
-                preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
                 viewPagerM6.adapter = adapterPager
                 BtDevUnitList.add(BtDevUnit())
             }
@@ -488,8 +491,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             CmdId.GET_HFP_EXT_STA_RSP.value -> {
                 BtDevUnitList[id].stateExtra = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
                 BtDevUnitList[id].batLevel = BtDevUnitList[id].stateExtra.shr(12)
-                BtDevUnitList[id].batLow =
-                    if(BtDevUnitList[id].stateExtra.and(0x04) == 0x04)
+                BtDevUnitList[id].batInd =
+                    if(BtDevUnitList[id].stateExtra.and(0x40) == 0x40)
                         true
                     else
                         false

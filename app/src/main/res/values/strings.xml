@@ -52,5 +52,4 @@
     <string name="txvStaBatLow">L:</string>
     <string name="txvStaBatChg">C:</string>
     <string name="txvStaBatPwr">P:</string>
-    <string name="timeUpdate">30000</string>
 </resources>

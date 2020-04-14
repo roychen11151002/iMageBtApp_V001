@@ -61,5 +61,15 @@ class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListA
         holder.TxvDevName.text = items[position].removeRange(items[position].lastIndexOf(" + "), items[position].lastIndex + 1)
         holder.TXVDevBdaddr.text = items[position].removeRange(0, items[position].lastIndexOf(" + ") + 3)
         holder.ImgDevType.setImageResource(ImgTypeId[position % ImgTypeId.size])
+        holder.TxvDevName.setTextColor((
+            if(position == 0)
+                0xffff0000
+            else
+                0xff000000).toInt())
+        holder.TXVDevBdaddr.setTextColor((
+            if(position == 0)
+                0xffff0000
+            else
+                0xff000000).toInt())
     }
 }

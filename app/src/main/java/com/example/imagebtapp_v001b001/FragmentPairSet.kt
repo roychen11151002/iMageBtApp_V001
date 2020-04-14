@@ -35,6 +35,7 @@ class FragmentPairSet : Fragment() {
             val sendMsg = BtDevMsg(0, 1)
 
             (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
+            (activity as DevUnitMsg).getBtList().add("clear paired device + 00:00:00:00:00:00")
             recyclerListPair.layoutManager!!.scrollToPosition(0)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
