@@ -48,9 +48,10 @@
     <string name="txvVolumeSrc">系統外部音量設定</string>
     <string name="txvVolumeAg">系統內部音量設定</string>
     <string name="txvStaBat">池:</string>
-    <string name="txvStaRssi">強:</string>
     <string name="txvStaBatLow">低:</string>
     <string name="txvStaBatChg">充:</string>
     <string name="txvStaBatPwr">電:</string>
     <string name="txvModeVcs">VCS</string>
+    <string name="txvStaRssiStrong">強:</string>
+    <string name="txvStaRssiWeak">弱:</string>
 </resources>

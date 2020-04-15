@@ -9,8 +9,9 @@
     <string name="txvRecyclerTitle">non activity</string>
     <string name="txvFeatureTitle">Feature Set</string>
     <string name="txvVolumeTitle">Volume Set</string>
-    <string name="txvStaBat">B:5</string>
-    <string name="txvStaRssi">R:5</string>
+    <string name="txvStaBat">B:</string>
+    <string name="txvStaRssiStrong">R:</string>
+    <string name="txvStaRssiWeak">R:</string>
     <string name="txvStaConnected">Connected</string>
     <string name="txvStaConnecting">Connecting</string>
     <string name="txvStaDiscon">Disconnect</string>

@@ -33,7 +33,7 @@ class FragmentConState : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var strIndMsg = Array(5) {"OK"}
+        var strIndMsg = Array(6) {""}
         val devUnitAdapter = BtDevUnitAdapter((activity as DevUnitMsg).getBtDevUnitList(), strIndMsg)
         val lmg = GridLayoutManager(context, 2)
 
@@ -48,11 +48,12 @@ class FragmentConState : Fragment() {
         }
         recyclerDevList.layoutManager = lmg
         recyclerDevList.adapter = devUnitAdapter
-        strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssi)
-        strIndMsg[1] = context!!.resources.getString(R.string.txvStaBat)
-        strIndMsg[2] = context!!.resources.getString(R.string.txvStaBatLow)
-        strIndMsg[3] = context!!.resources.getString(R.string.txvStaBatChg)
-        strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatPwr)
+        strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssiStrong)
+        strIndMsg[1] = context!!.resources.getString(R.string.txvStaRssiWeak)
+        strIndMsg[2] = context!!.resources.getString(R.string.txvStaBat)
+        strIndMsg[3] = context!!.resources.getString(R.string.txvStaBatLow)
+        strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatChg)
+        strIndMsg[5] = context!!.resources.getString(R.string.txvStaBatPwr)
 
         devUnitAdapter.setOnItemClickListener(object : BtDevUnitAdapter.OnItemClickListener {
             override fun onItemClick(position: Int, btDevUnit: BtDevUnit) {

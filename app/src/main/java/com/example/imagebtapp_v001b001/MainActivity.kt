@@ -6,23 +6,18 @@ import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.os.*
-import android.os.SystemClock.sleep
-import android.view.View
+import android.view.View.FOCUSABLE
 import android.view.WindowManager
-import android.widget.CheckBox
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_con_state.*
-import kotlinx.android.synthetic.main.fragment_feature_set.*
-import kotlinx.android.synthetic.main.fragment_pair_set.*
 import java.lang.Integer.parseInt
-import java.lang.Long.parseLong
 
 private const val LogMain = "testMain"
 const val LogGbl = "testGlobal"
@@ -138,7 +133,7 @@ class BtDevUnit {
     var devDfu: Boolean = false
     var volSpkrAg: Int = 15
     var volMicAg: Int = 15
-    var batLevel: Int = 5
+    var batLevel: Int = 0
     var modeSrcWireHfpMicVol = 15
     var modeSrcWireHfpSpkrVol = 15
     var modeSrcWireAvSpkrVol = 15
@@ -182,7 +177,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     private val MaxBtDev = 2
     private var PairState = 0
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
-    private var staUpdateInterval = 600000.toLong()
+    private var staUpdateInterval = 60
     private val BtPermissionReqCode = 1
     private val BtActionReqCode = 3
     private lateinit var preferData: SharedPreferences
@@ -290,9 +285,27 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendBtServiceMsg(sendMsg)
             true
         }
+        editTextStaUpTime.setOnEditorActionListener { v, actionId, event ->
+            if(actionId == EditorInfo.IME_ACTION_DONE) {
+                var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val preferDataEdit = preferData.edit()
+
+                imm.hideSoftInputFromWindow(editTextStaUpTime.getWindowToken(), 0)
+                editTextStaUpTime.clearFocus()
+                staUpdateInterval = parseInt(editTextStaUpTime.text.toString())
+                preferDataEdit.putInt("staUpdateInterval", staUpdateInterval)
+                preferDataEdit.apply()
+                true
+            }
+            else {
+                false
+            }
+        }
+        editTextStaUpTime.clearFocus()
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
-        staUpdateInterval = preferData.getLong("staUpdateInterval", 30000)
-        stateUpdateAuto(staUpdateInterval)
+        staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
+        editTextStaUpTime.setText(staUpdateInterval.toString())
+        stateUpdateAuto(staUpdateInterval.toLong() * 1000)
         Logger.d(LogMain, "state update interval $staUpdateInterval")
     }
 
@@ -376,7 +389,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     fun stateUpdateAuto(time: Long) {
         Handler().postDelayed({
             stateUpdate()
-            stateUpdateAuto(time)
+            if(staUpdateInterval >= 3)
+                stateUpdateAuto(staUpdateInterval.toLong() * 1000)
         }, time)
     }
 

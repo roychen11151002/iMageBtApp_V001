@@ -23,6 +23,8 @@ import java.security.AccessController.getContext
 import kotlin.coroutines.coroutineContext as coroutinesCoroutineContext
 
 class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate: Array<String>) : RecyclerView.Adapter<BtDevUnitAdapter.ViewHolder>() {
+    private val rssiStrong = 50
+    private val rssiWeak = 90
     lateinit var clickItemClickListener: OnItemClickListener
     lateinit var clickSpkrVolListener: OnSpkrVolListener
     lateinit var clickSpkrMuteListener: OnSpkrMuteListener
@@ -218,26 +220,37 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         holder.batTxv.text =
             if(btDevUnitList[position].stateExtra.and(0x02) == 0x02)
                 if(btDevUnitList[position].stateExtra.and(0x04) == 0x04)
-                     String.format("%s%d ", strIndicate[3], btDevUnitList[position].batLevel)
+                     String.format("%s%d ", strIndicate[4], btDevUnitList[position].batLevel)
                 else
-                    String.format("%s%d ", strIndicate[4], btDevUnitList[position].batLevel)
+                    String.format("%s%d ", strIndicate[5], btDevUnitList[position].batLevel)
             else
                 if(btDevUnitList[position].batInd)
-                    String.format("%s%d ", strIndicate[1], btDevUnitList[position].batLevel)
-                else
                     String.format("%s%d ", strIndicate[2], btDevUnitList[position].batLevel)
+                else
+                    String.format("%s%d ", strIndicate[3], btDevUnitList[position].batLevel)
         holder.batTxv.setTextColor((
             if(btDevUnitList[position].batInd)
                 0xff000000
             else
                 0xffff0000).toInt())
-        holder.rssiTxv.text = String.format("%s%d",strIndicate[0], (127 - btDevUnitList[position].rssi) * 9 / 127)
+        holder.rssiTxv.text =
+            if(btDevUnitList[position].rssi <= rssiStrong) {
+                String.format("%s9",strIndicate[0])
+            }
+            else if(btDevUnitList[position].rssi <= rssiWeak) {
+                if((rssiWeak - btDevUnitList[position].rssi) * 9 / (rssiWeak - rssiStrong) < 3)
+                    String.format("%s%d", strIndicate[1], (rssiWeak - btDevUnitList[position].rssi) * 9 / (rssiWeak - rssiStrong))
+                else
+                    String.format("%s%d", strIndicate[0], (rssiWeak - btDevUnitList[position].rssi) * 9 / (rssiWeak - rssiStrong))
+            }
+            else {
+                String.format("%s0",strIndicate[1])
+            }
         holder.rssiTxv.setTextColor((
-            if(((127 - btDevUnitList[position].rssi) * 9 / 127) < 3)
+            if((rssiWeak - btDevUnitList[position].rssi) * 9 / (rssiWeak - rssiStrong) < 3)
                 0xffff0000
             else
                 0xff000000).toInt())
-
         if(btDevUnitList[position].stateCon.and(0x00000220) == 0x00000220) {
             holder.batTxv.visibility = VISIBLE
             holder.rssiTxv.visibility = VISIBLE
