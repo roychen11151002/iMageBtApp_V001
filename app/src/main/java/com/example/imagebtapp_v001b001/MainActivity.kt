@@ -516,7 +516,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
-                viewPagerM6.setCurrentItem(0)
+                // viewPagerM6.setCurrentItem(0)
                 Logger.d(LogMain, "${String.format("src %02X get hfp vol", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_RSSI_RSP.value -> {
@@ -725,7 +725,11 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             }
             CmdId.SET_INT_PAIR_RSP.value -> {
                 var str = ""
-                PairState = 3
+                PairState =
+                    if(msg.btCmd[6] == 0x01.toByte())
+                        3
+                    else
+                        0
                 for(i in 0 until (msg.btCmd[5] - 7) / 2) {
                     str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                 }

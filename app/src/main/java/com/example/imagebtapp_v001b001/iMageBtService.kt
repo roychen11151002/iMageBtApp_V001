@@ -457,7 +457,11 @@ class iMageBtService : Service() {
                         sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
                         sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
                         sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
-                        sendMsg.btCmd[6] = 0x01.toByte()
+                        sendMsg.btCmd[6] =
+                            if(device == paired.last())
+                                0x00.toByte()
+                            else
+                                0x01.toByte()
                         strList = device.address.split(':')
                         sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
                         sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()

@@ -197,16 +197,38 @@ class FragmentConState : Fragment() {
             override fun onTalk(position: Int) {
                 val sendMsg = BtDevMsg(0, 0)
 
-                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
-                sendMsg.btCmd[4] = CmdId.SET_HFP_EXT_STA_REQ.value
-                sendMsg.btCmd[5] = 0x02
-                sendMsg.btCmd[6] = 0x00
-                sendMsg.btCmd[7] = 0x81.toByte()
-                (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-                Logger.d(LogGbl, "talk click id:$position")
+                if((activity as DevUnitMsg).getBtDevUnitList()[position].stateCon.and(0x00000220) == 0x00000220) {
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_EXT_STA_REQ.value
+                    sendMsg.btCmd[5] = 0x02
+                    sendMsg.btCmd[6] = 0x00
+                    sendMsg.btCmd[7] = 0x81.toByte()
+                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                    Logger.d(LogGbl, "talk click id:$position")
+                }
+                else {
+                    val strList = (activity as DevUnitMsg).getBtDevUnitList()[position].bdaddrPair.split(':')
+
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = getDevId(position)
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_PAIR_REQ.value
+                    sendMsg.btCmd[5] = 0x07
+                    sendMsg.btCmd[6] = 0x00
+                    sendMsg.btCmd[7] = Integer.parseInt(strList[3], 16).toByte()
+                    sendMsg.btCmd[8] = Integer.parseInt(strList[4], 16).toByte()
+                    sendMsg.btCmd[9] = Integer.parseInt(strList[5], 16).toByte()
+                    sendMsg.btCmd[10] = Integer.parseInt(strList[2], 16).toByte()
+                    sendMsg.btCmd[11] = Integer.parseInt(strList[0], 16).toByte()
+                    sendMsg.btCmd[12] = Integer.parseInt(strList[1], 16).toByte()
+                    Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+
+                }
             }
         })
         devUnitAdapter.setOnLongTalkListener(object : BtDevUnitAdapter.OnLongTalkListener {
@@ -229,13 +251,13 @@ class FragmentConState : Fragment() {
 
     fun getDevId(position: Int): Byte =
         when(position) {
-            0 -> 0x30.toByte()
-            1 -> 0x00.toByte()
-            2 -> 0x08.toByte()
-            3 -> 0x10.toByte()
-            4 -> 0x18.toByte()
-            5 -> 0x20.toByte()
-            6 -> 0x28.toByte()
+            0 -> 0x30
+            1 -> 0x00
+            2 -> 0x08
+            3 -> 0x10
+            4 -> 0x18
+            5 -> 0x20
+            6 -> 0x28
             else -> 0xff.toByte()
         }
 

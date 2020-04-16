@@ -85,7 +85,7 @@ class FragmentPairSet : Fragment() {
                         sendMsg.btCmd[6] = 0x01
                     }
                     else {
-                        sendMsg.btCmd[3] = getBtCmdId(which)
+                        sendMsg.btCmd[3] = getDevId(which)
                         sendMsg.btCmd[4] = CmdId.SET_HFP_PAIR_REQ.value
                         sendMsg.btCmd[6] = 0x00
                     }
@@ -139,6 +139,7 @@ class FragmentPairSet : Fragment() {
             when((activity as DevUnitMsg).getPairState()) {
                 0 -> {
                     btnPair.isEnabled = true
+                    btnDiscovery.isEnabled = true
                     context!!.resources.getString(R.string.txvStaDiscoveryEnd)
                 }
                 1 -> {
@@ -150,18 +151,20 @@ class FragmentPairSet : Fragment() {
                     context!!.resources.getString(R.string.txvStaDiscoveryStart)
                 }
                 3 -> {
-                    btnPair.isEnabled = true
+                    btnPair.isEnabled = false
+                    btnDiscovery.isEnabled = false
                     context!!.resources.getString(R.string.txvStaPaired)
                 }
                 else -> {
                     btnPair.isEnabled = true
+                    btnDiscovery.isEnabled = true
                     context!!.resources.getString(R.string.txvPairTitle)
 
                 }
         }
     }
 
-    fun getBtCmdId(dev: Int): Byte =
+    fun getDevId(dev: Int): Byte =
         when(dev) {
             0 -> 0x30
             1 -> 0x00
@@ -170,6 +173,6 @@ class FragmentPairSet : Fragment() {
             4 -> 0x18
             5 -> 0x20
             6 -> 0x28
-            else -> 0x00
+            else -> 0xff.toByte()
         }
 }
