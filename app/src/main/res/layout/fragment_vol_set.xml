@@ -25,23 +25,23 @@
         app:layout_constraintTop_toTopOf="@+id/btnVolRead" />
 
     <RadioGroup
-        android:id="@+id/rdGpDev"
+        android:id="@+id/rdGpDevVolume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:checkedButton="@id/rdSrc"
+        android:checkedButton="@id/rdSrcVolume"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="@+id/txvVolSetTitle"
         app:layout_constraintTop_toBottomOf="@+id/txvVolSetTitle">
 
         <RadioButton
-            android:id="@+id/rdSrc"
+            android:id="@+id/rdSrcVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvDevSrc" />
 
         <RadioButton
-            android:id="@+id/rdHfpAll"
+            android:id="@+id/rdHfpAllVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -58,36 +58,36 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/rdGpMode"
+        android:id="@+id/rdGpModeVolume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:checkedButton="@id/rdModeVcs"
+        android:checkedButton="@id/rdModeVcsVolume"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/rdGpDev"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpDev">
+        app:layout_constraintStart_toStartOf="@+id/rdGpDevVolume"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpDevVolume">
 
         <RadioButton
-            android:id="@+id/rdModeWire"
+            android:id="@+id/rdModeWireVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvModeWired" />
 
         <RadioButton
-            android:id="@+id/rdModeUsb"
+            android:id="@+id/rdModeUsbVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvModeUsb" />
 
         <RadioButton
-            android:id="@+id/rdModeBt"
+            android:id="@+id/rdModeBtVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/txvModeBt" />
 
         <RadioButton
-            android:id="@+id/rdModeVcs"
+            android:id="@+id/rdModeVcsVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -173,7 +173,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="@string/txvVolumeSrc"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpMode"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume"
         tools:layout_editor_absoluteX="1dp" />
 
     <TextView

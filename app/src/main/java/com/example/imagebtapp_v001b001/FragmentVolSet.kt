@@ -96,14 +96,14 @@ class FragmentVolSet : Fragment() {
             sendMsgAg.btCmd[21] = 0x00
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
         }
-        rdGpDev.setOnCheckedChangeListener { group, checkedId ->
+        rdGpDevVolume.setOnCheckedChangeListener { group, checkedId ->
             srcDevId =
                 when (checkedId) {
-                    R.id.rdSrc -> {
+                    R.id.rdSrcVolume -> {
                         srcDevItme = 0
                         0x30
                     }
-                    R.id.rdHfpAll -> {
+                    R.id.rdHfpAllVolume -> {
                         srcDevItme = 1
                         0x38
                     }
@@ -114,13 +114,13 @@ class FragmentVolSet : Fragment() {
                 }
             updateData()
         }
-        rdGpMode.setOnCheckedChangeListener { group, checkedId ->
+        rdGpModeVolume.setOnCheckedChangeListener { group, checkedId ->
             mode =
                 when (checkedId) {
-                    R.id.rdModeWire -> 1
-                    R.id.rdModeUsb -> 2
-                    R.id.rdModeBt -> 4
-                    R.id.rdModeVcs -> 8
+                    R.id.rdModeWireVolume -> 1
+                    R.id.rdModeUsbVolume -> 2
+                    R.id.rdModeBtVolume -> 4
+                    R.id.rdModeVcsVolume -> 8
                     else -> 8
                 }
             updateData()

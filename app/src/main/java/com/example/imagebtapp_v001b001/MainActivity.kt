@@ -13,8 +13,10 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Integer.parseInt
@@ -516,7 +518,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
-                // viewPagerM6.setCurrentItem(0)
+                viewPagerM6.setCurrentItem(0)
                 Logger.d(LogMain, "${String.format("src %02X get hfp vol", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_RSSI_RSP.value -> {
@@ -595,8 +597,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 if(msg.btCmd[2] == 0x30.toByte()) {
                     BtDevUnitList.removeAll(BtDevUnitList)
                     BtDevUnitList.add(BtDevUnit())
-                    for (i in 0 until msg.btCmd[6])
+                    BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src")
+                    BtDevUnitList
+                    for (i in 0 until msg.btCmd[6]) {
                         BtDevUnitList.add(BtDevUnit())
+                        BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i")
+                    }
                 }
                 setUpdate()
                 stateUpdate()
@@ -750,7 +756,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     }
 }
 
-class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment =
         when(position) {
             0 -> ViewPagerArray[0]

@@ -1,26 +1,27 @@
 package com.example.imagebtapp_v001b001
 
 import android.content.Context
-import android.content.res.Resources
-import android.content.res.Resources.getSystem
-import android.graphics.Color
-import android.provider.Settings.Global.getString
+import android.text.InputType
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.WindowManager
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.os.persistableBundleOf
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.device_unit_adapter.view.*
-import java.security.AccessController.getContext
-import kotlin.coroutines.coroutineContext as coroutinesCoroutineContext
 
 class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate: Array<String>) : RecyclerView.Adapter<BtDevUnitAdapter.ViewHolder>() {
     private val rssiStrong = 50
@@ -100,6 +101,7 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         var imgViewMicMute: ImageView
         var seekSpkrVol: SeekBar
         var seekMicVol: SeekBar
+
         init {
             imgViewIcon = itemView.findViewById(R.id.imgViewIcon)
             imgViewStaCon = itemView.findViewById(R.id.imgViewStaCon)
@@ -175,6 +177,9 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 }
             })
+            nameTxv.setOnClickListener {
+                Logger.d(LogGbl, "position$adapterPosition name edit request")
+            }
         }
     }
 
@@ -182,6 +187,7 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.nameTxv.text = btDevUnitList[position].localNameHfp
+        // holder.nameTxv.text = btDevUnitList[position].nameAlias
         holder.itemView.seekVolSpkr.seekVolSpkr.progress = btDevUnitList[position].volSpkrHfp
         holder.itemView.seekVolMic.seekVolMic.progress = btDevUnitList[position].volMicHfp
         // holder.itemView.imgViewMuSpkr.visibility = VISIBLE

@@ -14,6 +14,7 @@ class FragmentFeatureSet : Fragment() {
     var srcDevId: Byte = 0x30
     var cmdSetFeatureId: Byte = CmdId.SET_HFP_FEATURE_REQ.value
     var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
+    var modeChangeFlag = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,19 +53,22 @@ class FragmentFeatureSet : Fragment() {
             val sendMsg = BtDevMsg(0, 0)
             val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
 
-            sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgMode.btCmd[3] = srcDevId
-            sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
-            sendMsgMode.btCmd[5] = 0x6
-            sendMsgMode.btCmd[6] = 0x00
-            sendMsgMode.btCmd[7] = 9
-            sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(24).toByte()
-            sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(16).toByte()
-            sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(8).toByte()
-            sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(0).toByte()
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
+            if(modeChangeFlag == true) {
+                sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsgMode.btCmd[3] = srcDevId
+                sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+                sendMsgMode.btCmd[5] = 0x6
+                sendMsgMode.btCmd[6] = 0x00
+                sendMsgMode.btCmd[7] = 9
+                sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(24).toByte()
+                sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(16).toByte()
+                sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(8).toByte()
+                sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(0).toByte()
+                (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
+                modeChangeFlag = false
+            }
 
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -93,22 +97,22 @@ class FragmentFeatureSet : Fragment() {
             sendMsg.btCmd[24] = seekLedRev.progress.and(0xff).toByte()
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
-        rdGpDev.setOnCheckedChangeListener { group, checkedId ->
+        rdGpDevFeature.setOnCheckedChangeListener { group, checkedId ->
             srcDevId =
                 when(checkedId) {
-                    R.id.rdSrc -> {
+                    R.id.rdSrcFeature -> {
                         srcDevItme = 0
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
                         0x30
                     }
-                    R.id.rdAgAll -> {
+                    R.id.rdAgAllFeature -> {
                         srcDevItme = 1
                         cmdSetFeatureId = CmdId.SET_AG_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_AG_FEATURE_REQ.value
                         0x38
                     }
-                    R.id.rdHfpAll -> {
+                    R.id.rdHfpAllFeature -> {
                         srcDevItme = 1
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
@@ -123,16 +127,20 @@ class FragmentFeatureSet : Fragment() {
                 }
             updateData()
         }
-        rdGpMode.setOnCheckedChangeListener { group, checkedId ->
+        rdGpModeFeature.setOnCheckedChangeListener { group, checkedId ->
+            var mode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode
+
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode =
                 when(checkedId) {
-                    R.id.rdModeUsb ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
-                    R.id.rdModeBt -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x02000000)
-                    R.id.rdModeVcs -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x04000000)
-                    R.id.rdModeWire -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x08000000)
+                    R.id.rdModeUsbFeature ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
+                    R.id.rdModeBtFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x02000000)
+                    R.id.rdModeVcsFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x04000000)
+                    R.id.rdModeWireFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x08000000)
                     else -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
                 }
+            if(mode != (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode)
+                modeChangeFlag = true
         }
         chkFeature0.setOnCheckedChangeListener { buttonView, isChecked ->
             checkUpdate(buttonView, isChecked)
@@ -263,10 +271,10 @@ class FragmentFeatureSet : Fragment() {
         }
 
         when((activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000)) {
-            0x01000000 -> rdModeUsb.isChecked = true
-            0x02000000 -> rdModeBt.isChecked = true
-            0x04000000 -> rdModeVcs.isChecked = true
-            0x08000000 -> rdModeWire.isChecked = true
+            0x01000000 -> rdModeUsbFeature.isChecked = true
+            0x02000000 -> rdModeBtFeature.isChecked = true
+            0x04000000 -> rdModeVcsFeature.isChecked = true
+            0x08000000 -> rdModeWireFeature.isChecked = true
         }
         for(i in 0..15) {
             chkBox =

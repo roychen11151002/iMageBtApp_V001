@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,6 +59,7 @@ class FragmentConState : Fragment() {
 
         devUnitAdapter.setOnItemClickListener(object : BtDevUnitAdapter.OnItemClickListener {
             override fun onItemClick(position: Int, btDevUnit: BtDevUnit) {
+
                 val msgItem = arrayOf(btDevUnit.nameAlias, btDevUnit.verFirmwareHfp, btDevUnit.localNameHfp, btDevUnit.verFirmwareAg, btDevUnit.localNameAg, btDevUnit.bdaddr, btDevUnit.bdaddrPair)
 
                 AlertDialog.Builder(activity).setTitle("Device message").setItems(msgItem) {
@@ -66,7 +69,7 @@ class FragmentConState : Fragment() {
                 }.show()
                 Logger.d(LogGbl, "btdevunit on item click")
                 // Toast.makeText(activity, "${btDevUnit.verFirmwareAg}\n${btDevUnit.localNameHfp}", Toast.LENGTH_LONG).show()
-            }
+             }
         })
         devUnitAdapter.setOnSpkrVolListener(object : BtDevUnitAdapter.OnSpkrVolListener {
             override fun onSpkrVol(position: Int, progress: Int, fromUser: Boolean) {
@@ -227,7 +230,6 @@ class FragmentConState : Fragment() {
                     sendMsg.btCmd[12] = Integer.parseInt(strList[1], 16).toByte()
                     Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
                     (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-
                 }
             }
         })

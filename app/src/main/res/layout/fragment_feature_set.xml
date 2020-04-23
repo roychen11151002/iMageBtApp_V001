@@ -155,35 +155,35 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature7"
-                app:layout_constraintStart_toStartOf="@+id/rdGpDev"
-                app:layout_constraintTop_toBottomOf="@+id/rdGpMode" />
+                app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
+                app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature" />
 
             <RadioGroup
-                android:id="@+id/rdGpDev"
+                android:id="@+id/rdGpDevFeature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:checkedButton="@id/rdSrc"
+                android:checkedButton="@id/rdSrcFeature"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="@+id/txvFeatureSetTitle"
                 app:layout_constraintTop_toBottomOf="@+id/txvFeatureSetTitle">
 
                 <RadioButton
-                    android:id="@+id/rdSrc"
+                    android:id="@+id/rdSrcFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txvDevSrc"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <RadioButton
-                    android:id="@+id/rdAgAll"
+                    android:id="@+id/rdAgAllFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/txvDevAllAg" />
 
                 <RadioButton
-                    android:id="@+id/rdHfpAll"
+                    android:id="@+id/rdHfpAllFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -248,36 +248,36 @@
                 app:layout_constraintTop_toTopOf="@+id/textView2" />
 
             <RadioGroup
-                android:id="@+id/rdGpMode"
+                android:id="@+id/rdGpModeFeature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:checkedButton="@id/rdModeVcs"
+                android:checkedButton="@id/rdModeVcsFeature"
                 android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/rdGpDev"
-                app:layout_constraintTop_toBottomOf="@+id/rdGpDev">
+                app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
+                app:layout_constraintTop_toBottomOf="@+id/rdGpDevFeature">
 
                 <RadioButton
-                    android:id="@+id/rdModeWire"
+                    android:id="@+id/rdModeWireFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txvModeWired" />
 
                 <RadioButton
-                    android:id="@+id/rdModeUsb"
+                    android:id="@+id/rdModeUsbFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/txvModeUsb" />
 
                 <RadioButton
-                    android:id="@+id/rdModeBt"
+                    android:id="@+id/rdModeBtFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/txvModeBt" />
 
                 <RadioButton
-                    android:id="@+id/rdModeVcs"
+                    android:id="@+id/rdModeVcsFeature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
