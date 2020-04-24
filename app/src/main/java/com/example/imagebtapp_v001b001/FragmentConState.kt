@@ -1,7 +1,9 @@
 package com.example.imagebtapp_v001b001
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,6 +21,8 @@ import kotlin.experimental.and
 import kotlin.experimental.or
 
 class FragmentConState : Fragment() {
+    var positionEdit = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d(LogGbl, "FragmentConState on Create")
@@ -57,10 +61,9 @@ class FragmentConState : Fragment() {
         strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatChg)
         strIndMsg[5] = context!!.resources.getString(R.string.txvStaBatPwr)
 
-        devUnitAdapter.setOnItemClickListener(object : BtDevUnitAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int, btDevUnit: BtDevUnit) {
-
-                val msgItem = arrayOf(btDevUnit.nameAlias, btDevUnit.verFirmwareHfp, btDevUnit.localNameHfp, btDevUnit.verFirmwareAg, btDevUnit.localNameAg, btDevUnit.bdaddr, btDevUnit.bdaddrPair)
+        devUnitAdapter.setOnItemClickListener(object : BtDevUnitAdapter.OnItemImgListener {
+            override fun onItemImg(position: Int, btDevUnit: BtDevUnit) {
+                val msgItem = arrayOf(btDevUnit.nameAlias, btDevUnit.verFirmwareHfp, btDevUnit.nameLocalHfp, btDevUnit.verFirmwareAg, btDevUnit.nameLocalAg, btDevUnit.bdaddr, btDevUnit.bdaddrPair)
 
                 AlertDialog.Builder(activity).setTitle("Device message").setItems(msgItem) {
                     dialog, which ->
@@ -70,6 +73,18 @@ class FragmentConState : Fragment() {
                 Logger.d(LogGbl, "btdevunit on item click")
                 // Toast.makeText(activity, "${btDevUnit.verFirmwareAg}\n${btDevUnit.localNameHfp}", Toast.LENGTH_LONG).show()
              }
+        })
+        devUnitAdapter.setOnLongItemImgListener(object : BtDevUnitAdapter.OnLongItemImgLisener {
+            override fun onLongItemImg(position: Int, btDevUnit: BtDevUnit) {
+                val intent = Intent(context, MsgEditActivity::class.java)
+                val bundle = Bundle()
+
+                positionEdit = position
+                bundle.putInt("position", position)
+                bundle.putString("nameAlias", btDevUnit.nameAlias)
+                intent.putExtras(bundle)
+                startActivityForResult(intent, 100)
+            }
         })
         devUnitAdapter.setOnSpkrVolListener(object : BtDevUnitAdapter.OnSpkrVolListener {
             override fun onSpkrVol(position: Int, progress: Int, fromUser: Boolean) {
@@ -249,6 +264,51 @@ class FragmentConState : Fragment() {
                 Logger.d(LogGbl, "talk long click id:$position")
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode) {
+            100 -> {
+                when(resultCode) {
+                    Activity.RESULT_OK -> {
+                        var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
+                        val sendMsg = BtDevMsg(0, 0)
+                        val nameAlias = data?.getStringExtra("nameAlias") ?: "hfp alias name"
+                        var s: Int
+
+                        (activity as DevUnitMsg).getBtDevUnitList()[positionEdit].nameAlias = nameAlias
+                        preferDataEdit.putString("nameAlias$positionEdit", nameAlias)
+                        preferDataEdit.apply()
+                        updateData()
+                        sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                        sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                        sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                        sendMsg.btCmd[3] = getDevId(positionEdit)
+                        sendMsg.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+                        sendMsg.btCmd[5] = (nameAlias.length * 2 + 2).toByte()
+                        sendMsg.btCmd[6] = 0x00
+                        sendMsg.btCmd[7] = 26
+                        for (i in 0 until nameAlias.length) {
+                            s = nameAlias[i].toInt()
+                            sendMsg.btCmd[i * 2 + 8] = s.shr(8).toByte()
+                            sendMsg.btCmd[i * 2 + 8 + 1] = s.and(0x00ff).toByte()
+                        }
+                        (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                        Logger.d(LogGbl, "OK result code")
+                    }
+                    Activity.RESULT_CANCELED -> {
+                        Logger.d(LogGbl, "CANCEL result code")
+                    }
+                    else -> {
+                        Logger.d(LogGbl, "other result code")
+                    }
+                }
+            }
+            else -> {
+                Logger.d(LogGbl, "other request code")
+            }
+        }
     }
 
     fun getDevId(position: Int): Byte =

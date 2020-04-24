@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".FragmentAudioParaSet">
+
+
+    <TextView
+        android:id="@+id/txvAudioParaSetTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/txvAudioParaTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="421dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAudioParaWrite"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txvAudioParaSetTitle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioGroup
+                android:id="@+id/rdGpDevAudioPara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@id/rdA6AudioPara"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <RadioButton
+                    android:id="@+id/rdA6AudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txvDevA6"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <RadioButton
+                    android:id="@+id/rdA7AudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/txvDevA7" />
+
+                <RadioButton
+                    android:id="@+id/rdAllAudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/txvDevAllHfp" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/rdGpModeAudioPara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checkedButton="@id/rdModeVcsAudioPara"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="@+id/rdGpDevAudioPara"
+                app:layout_constraintTop_toBottomOf="@+id/rdGpDevAudioPara">
+
+                <RadioButton
+                    android:id="@+id/rdModeWireAudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txvModeWired" />
+
+                <RadioButton
+                    android:id="@+id/rdModeUsbAudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/txvModeUsb" />
+
+                <RadioButton
+                    android:id="@+id/rdModeBtAudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/txvModeBt" />
+
+                <RadioButton
+                    android:id="@+id/rdModeVcsAudioPara"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/txvModeVcs" />
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/rdGpParaAudioPara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checkedButton="@id/rdAudioPara0"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@+id/rdGpModeAudioPara">
+
+                <RadioButton
+                    android:id="@+id/rdAudioPara0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="parameter0" />
+
+                <RadioButton
+                    android:id="@+id/rdAudioPara1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="parameter1" />
+
+                <RadioButton
+                    android:id="@+id/rdAudioPara2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="parameter2" />
+
+                <RadioButton
+                    android:id="@+id/rdAudioPara3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="parameter3" />
+            </RadioGroup>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btnAudioParaRead"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/btnRead"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btnAudioParaWrite"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:text="@string/btnWrite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

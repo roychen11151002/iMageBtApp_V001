@@ -101,7 +101,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/txvDecadeSpkrHfp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <CheckBox
         android:id="@+id/chkSrcAvSpkrDecade"
@@ -171,10 +171,11 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="8dp"
         android:text="@string/txvVolumeSrc"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume"
-        tools:layout_editor_absoluteX="1dp" />
+        app:layout_constraintStart_toStartOf="@+id/rdGpModeVolume"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume" />
 
     <TextView
         android:id="@+id/textView6"
@@ -194,5 +195,22 @@
         android:progress="3"
         app:layout_constraintStart_toStartOf="@+id/seekSrcAvSpkrVol"
         app:layout_constraintTop_toTopOf="@+id/seekAgHfpSpkrVol" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/txvTalkMode"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txvMusicMode"
+        app:layout_constraintStart_toStartOf="@+id/chkSrcAvSpkrDecade"
+        app:layout_constraintTop_toTopOf="@+id/textView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

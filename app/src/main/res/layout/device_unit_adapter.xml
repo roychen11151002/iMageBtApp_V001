@@ -70,8 +70,8 @@
 
     <ImageView
         android:id="@+id/imgViewIcon"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_width="57dp"
+        android:layout_height="59dp"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvDeviceName"

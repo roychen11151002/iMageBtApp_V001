@@ -22,16 +22,16 @@
     <string name="txvPairTitle">無作動</string>
     <string name="txvDevSrc">控制裝置</string>
     <string name="txvDevAllAg">AG</string>
-    <string name="txvDevAllHfp">HFP</string>
+    <string name="txvDevAllHfp">喇叭</string>
     <string name="txvModeWired">有線</string>
     <string name="txvModeUsb">USB</string>
     <string name="txvModeBt">藍牙</string>
     <string name="txvFeature0">固定通話模式</string>
     <string name="txvFeature1">清除靜音</string>
-    <string name="txvFeature4">關閉CVC</string>
+    <string name="txvFeature4">關閉音效處理</string>
     <string name="txvFeature5">開啟I2S輸出</string>
     <string name="txvFeature6">開啟聲音回放</string>
-    <string name="txvFeature7">開啟A2DP</string>
+    <string name="txvFeature7">開啟音樂模式</string>
     <string name="txvFeature9">開啟I2S輸入</string>
     <string name="txvFeature8">關閉過濾裝置</string>
     <string name="txvFeatureA">" "</string>
@@ -41,8 +41,8 @@
     <string name="txvFeatureE">" "</string>
     <string name="txvFeatureF">開啟額外功能</string>
     <string name="txvFilterBda">過濾裝置:</string>
-    <string name="txvDecadeSpkrHfp">HFP模式麥克風輸入</string>
-    <string name="txvDecadeSpkrAv">AV模式麥克風輸入</string>
+    <string name="txvDecadeSpkrHfp">麥克風輸入</string>
+    <string name="txvDecadeSpkrAv">麥克風輸入</string>
     <string name="txvFeature2">" "</string>
     <string name="txvFeature3">" "</string>
     <string name="txvVolumeSrc">系統外部音量設定</string>
@@ -51,7 +51,13 @@
     <string name="txvStaBatLow">低:</string>
     <string name="txvStaBatChg">充:</string>
     <string name="txvStaBatPwr">電:</string>
-    <string name="txvModeVcs">VCS</string>
+    <string name="txvModeVcs">多顆喇叭</string>
     <string name="txvStaRssiStrong">強:</string>
     <string name="txvStaRssiWeak">弱:</string>
+    <string name="title_activity_message_edit">資料編輯</string>
+    <string name="txvTalkMode">通話模式</string>
+    <string name="txvMusicMode">音樂模式</string>
+    <string name="txvAudioParaTitle">聲音參數設定</string>
+    <string name="txvDevA6">A6</string>
+    <string name="txvDevA7">A7</string>
 </resources>

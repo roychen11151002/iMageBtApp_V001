@@ -14,6 +14,7 @@ import java.lang.Integer.parseInt
 class FragmentPairSet : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Logger.d(LogGbl, "FragmentConState on Create")
     }
 
     override fun onCreateView(

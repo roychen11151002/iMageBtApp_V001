@@ -26,7 +26,8 @@ import kotlinx.android.synthetic.main.device_unit_adapter.view.*
 class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate: Array<String>) : RecyclerView.Adapter<BtDevUnitAdapter.ViewHolder>() {
     private val rssiStrong = 50
     private val rssiWeak = 90
-    lateinit var clickItemClickListener: OnItemClickListener
+    lateinit var clickItemImgListener: OnItemImgListener
+    lateinit var longClickItemImgListener: OnLongItemImgLisener
     lateinit var clickSpkrVolListener: OnSpkrVolListener
     lateinit var clickSpkrMuteListener: OnSpkrMuteListener
     lateinit var longClickSpkrMuteListener: OnLongSpkrMuteListener
@@ -35,11 +36,18 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
     lateinit var clickTalkListener: OnTalkListener
     lateinit var longclickTalkListener: OnLongTalkListener
 
-    interface OnItemClickListener {
-        fun onItemClick(position: Int, btDevUnit: BtDevUnit)
+    interface OnItemImgListener {
+        fun onItemImg(position: Int, btDevUnit: BtDevUnit)
     }
-    fun setOnItemClickListener(listen: OnItemClickListener) {
-        this.clickItemClickListener = listen
+    fun setOnItemClickListener(listen: OnItemImgListener) {
+        this.clickItemImgListener = listen
+    }
+
+    interface OnLongItemImgLisener {
+        fun onLongItemImg(position: Int, btDevUnit: BtDevUnit)
+    }
+    fun setOnLongItemImgListener(listen: OnLongItemImgLisener) {
+        this.longClickItemImgListener = listen
     }
 
     interface OnSpkrVolListener {
@@ -112,41 +120,37 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
             nameTxv = itemView.findViewById(R.id.txvDeviceName)
             batTxv = itemView.findViewById(R.id.txvBat)
             rssiTxv = itemView.findViewById(R.id.txvRssi)
-            imgViewIcon.setOnClickListener(View.OnClickListener {
-                clickItemClickListener.onItemClick(adapterPosition, btDevUnitList[adapterPosition])
+            imgViewIcon.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(v: View?) {
+                    clickItemImgListener.onItemImg(adapterPosition, btDevUnitList[adapterPosition])
+                }
+            })
+            imgViewIcon.setOnLongClickListener(object : View.OnLongClickListener {
+                override fun onLongClick(v: View?): Boolean {
+                    longClickItemImgListener.onLongItemImg(adapterPosition, btDevUnitList[adapterPosition])
+                    return true
+                }
             })
             imgViewSpkrMute.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    clickSpkrMuteListener.onSpkrMute(
-                        adapterPosition,
-                        btDevUnitList[adapterPosition].muteSpkr
-                    )
+                    clickSpkrMuteListener.onSpkrMute(adapterPosition, btDevUnitList[adapterPosition].muteSpkr)
                 }
             })
             imgViewSpkrMute.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
-                    longClickSpkrMuteListener.onLongSpkrMute(
-                        adapterPosition,
-                        btDevUnitList[adapterPosition].muteSpkr
-                    )
+                    longClickSpkrMuteListener.onLongSpkrMute(adapterPosition, btDevUnitList[adapterPosition].muteSpkr)
                     return true
                 }
             })
             imgViewMicMute.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    clickMicMuteListener.onMicMute(
-                        adapterPosition,
-                        btDevUnitList[adapterPosition].muteMic
-                    )
+                    clickMicMuteListener.onMicMute(adapterPosition, btDevUnitList[adapterPosition].muteMic)
                 }
 
             })
             imgViewMicMute.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
-                    longClickMicMuteListener.onLongMicMute(
-                        adapterPosition,
-                        btDevUnitList[adapterPosition].muteMic
-                    )
+                    longClickMicMuteListener.onLongMicMute(adapterPosition, btDevUnitList[adapterPosition].muteMic)
                     return true
                 }
             })
@@ -177,17 +181,14 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                 override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 }
             })
-            nameTxv.setOnClickListener {
-                Logger.d(LogGbl, "position$adapterPosition name edit request")
-            }
         }
     }
 
     override fun getItemCount(): Int = btDevUnitList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.nameTxv.text = btDevUnitList[position].localNameHfp
-        // holder.nameTxv.text = btDevUnitList[position].nameAlias
+        // holder.nameTxv.text = btDevUnitList[position].nameLocalHfp
+        holder.nameTxv.text = btDevUnitList[position].nameAlias
         holder.itemView.seekVolSpkr.seekVolSpkr.progress = btDevUnitList[position].volSpkrHfp
         holder.itemView.seekVolMic.seekVolMic.progress = btDevUnitList[position].volMicHfp
         // holder.itemView.imgViewMuSpkr.visibility = VISIBLE
@@ -260,14 +261,14 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         if(btDevUnitList[position].stateCon.and(0x00000220) == 0x00000220) {
             holder.batTxv.visibility = VISIBLE
             holder.rssiTxv.visibility = VISIBLE
-            holder.nameTxv.visibility  = VISIBLE
-            holder.imgViewIcon.visibility = VISIBLE
+            // holder.nameTxv.visibility  = VISIBLE
+            // holder.imgViewIcon.visibility = VISIBLE
         }
         else {
             holder.batTxv.visibility = INVISIBLE
             holder.rssiTxv.visibility = INVISIBLE
-            holder.nameTxv.visibility  = INVISIBLE
-            holder.imgViewIcon.visibility = INVISIBLE
+            // holder.nameTxv.visibility  = INVISIBLE
+            // holder.imgViewIcon.visibility = INVISIBLE
         }
         if(btDevUnitList[position].stateCon.and(0x00000080) == 0x00000080) {
             holder.seekMicVol.visibility = VISIBLE

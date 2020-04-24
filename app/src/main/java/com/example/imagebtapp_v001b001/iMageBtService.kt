@@ -425,7 +425,8 @@ class iMageBtService : Service() {
                         0.toByte() -> btDevArray[msg.btDevNo].close()
                         1.toByte() -> {
                             if(btDevArray[msg.btDevNo].isReadable == false)
-                                btDevArray[msg.btDevNo].connect()
+                                if(btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
+                                    btDevArray[msg.btDevNo].connect()
                         }
                         else -> {
                             Logger.d(LogService, "other connect command")

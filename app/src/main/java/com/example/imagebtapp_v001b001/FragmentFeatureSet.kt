@@ -16,6 +16,11 @@ class FragmentFeatureSet : Fragment() {
     var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
     var modeChangeFlag = false
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Logger.d(LogGbl, "FragmentConState on Create")
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

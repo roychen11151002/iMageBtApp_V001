@@ -118,8 +118,8 @@ class BtDevUnit {
     var verFirmwareHfp: String = ""
     var verFirmwareAg: String = ""
     var nameAlias: String = "alias name"
-    var localNameHfp: String = ""
-    var localNameAg: String = ""
+    var nameLocalHfp: String = ""
+    var nameLocalAg: String = ""
     var featureHfp: Int = 0
     var featureAg: Int = 0
     var featureMode: Int = 0x01000000
@@ -171,7 +171,7 @@ interface DevUnitMsg {
     fun getPairState(): Int
 }
 
-val ViewPagerArray = arrayOf(FragmentConState(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet())
+val ViewPagerArray = arrayOf(FragmentConState(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet(), FragmentAudioParaSet())
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtList = ArrayList<String>()
@@ -240,8 +240,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         // intentFilter.addAction("iMageBroadcastMain")                            // register broadcast receiver
         // registerReceiver(iMageBtBroadcast(), intentFilter)
 
-        initBt()
-
         btnStaUpdate.setOnClickListener {
             setUpdate()
             stateUpdate()
@@ -308,6 +306,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
         stateUpdateAuto(staUpdateInterval.toLong() * 1000)
+        initBt()
         Logger.d(LogMain, "state update interval $staUpdateInterval")
     }
 
@@ -361,11 +360,23 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 txvConSta0.text = "Enable"
                 txvConSta1.text = "Enable"
                 viewPagerM6.adapter = adapterPager
-                BtDevUnitList.add(BtDevUnit())
+                preferData.getInt("deviceNo", 0)
+                initHfpDevice(preferData.getInt("deviceNo", 0))
             }
         } else {
             Logger.d(LogMain, "bluetooth action request")
             startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), BtActionReqCode)
+        }
+    }
+
+    fun initHfpDevice(dev: Int) {
+        BtDevUnitList.removeAll(BtDevUnitList)
+        BtDevUnitList.add(BtDevUnit())
+        BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src")
+        for (i in 0 until dev) {
+            BtDevUnitList.add(BtDevUnit())
+            BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i")
+            BtDevUnitList[i + 1].nameLocalHfp = BtDevUnitList[i + 1].nameAlias
         }
     }
 
@@ -398,7 +409,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
     fun setUpdate() {
         val srcDevId = arrayOf(CmdId.CMD_DEV_SRC.value, CmdId.CMD_DEV_AG_ALL.value)
-        val pskey = arrayOf(9, 16, 17, 18)
+        val pskey = arrayOf(9, 16, 17, 18, 26)
         val cmdId = arrayOf(
             CmdId.GET_HFP_LOCAL_NAME_REQ.value,
             CmdId.GET_AG_LOCAL_NAME_REQ.value,
@@ -569,6 +580,18 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         if(viewPagerM6.currentItem == 3)
                             (ViewPagerArray[3] as FragmentVolSet).updateData()
                     }
+                    26 -> {
+                        var str = ""
+
+                        for(i in 0 until (msg.btCmd[5] - 2) / 2) {
+                            str += msg.btCmd[i * 2 + 8].toInt().shl(8).or(msg.btCmd[i * 2 + 8 + 1].toInt()).toChar()
+                        }
+                        BtDevUnitList[id].nameAlias = str
+                        Logger.d(LogMain, "${String.format("get ag pskey id:%d alias name:%s length:%d", pskId, str, str.length)}")
+                    }
+                    else -> {
+
+                    }
                 }
             }
             CmdId.GET_AG_PSKEY_RSP.value -> {
@@ -582,27 +605,23 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
                 if(id.and(0x1) == 0x1)
                     BtDevUnitList[id + 1].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-
             }
             CmdId.GET_HFP_LOCAL_NAME_RSP.value -> {
-                BtDevUnitList[id].localNameHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                BtDevUnitList[id].nameLocalHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
             }
             CmdId.GET_AG_LOCAL_NAME_RSP.value -> {
-                BtDevUnitList[id].localNameAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                BtDevUnitList[id].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
                 if(id.and(0x1) == 0x1)
-                    BtDevUnitList[id + 1].localNameAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                    BtDevUnitList[id + 1].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
             }
             CmdId.GET_SRC_DEV_NO_RSP.value -> {
+                val preferDataEdit = preferData.edit()
+
                 Logger.d(LogMain, "${String.format("src:%02X source device number:%02d", msg.btCmd[2], msg.btCmd[6])}")
                 if(msg.btCmd[2] == 0x30.toByte()) {
-                    BtDevUnitList.removeAll(BtDevUnitList)
-                    BtDevUnitList.add(BtDevUnit())
-                    BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src")
-                    BtDevUnitList
-                    for (i in 0 until msg.btCmd[6]) {
-                        BtDevUnitList.add(BtDevUnit())
-                        BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i")
-                    }
+                    initHfpDevice(msg.btCmd[6].toUByte().toInt())
+                    preferDataEdit.putInt("deviceNo", msg.btCmd[6].toUByte().toInt())
+                    preferDataEdit.apply()
                 }
                 setUpdate()
                 stateUpdate()
@@ -763,6 +782,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
             1 -> ViewPagerArray[1]
             2 -> ViewPagerArray[2]
             3 -> ViewPagerArray[3]
+            4 -> ViewPagerArray[4]
             else -> ViewPagerArray[0]
         }
 

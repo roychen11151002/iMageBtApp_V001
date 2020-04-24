@@ -24,19 +24,21 @@
     <string name="txvStaPaired">List Paired Device</string>
     <string name="txvDevSrc">SRC</string>
     <string name="txvDevAllAg">All AG</string>
-    <string name="txvDevAllHfp">All HFP</string>
+    <string name="txvDevAllHfp">All Speaker</string>
+    <string name="txvDevA6">A6</string>
+    <string name="txvDevA7">A7</string>
     <string name="txvModeWired">Wired</string>
     <string name="txvModeUsb">USB</string>
     <string name="txvModeBt">BT</string>
-    <string name="txvModeVcs">VCS</string>
+    <string name="txvModeVcs">Mutli-Speaker</string>
     <string name="txvFeature0">Fixed Device</string>
     <string name="txvFeature1">Clear Mute</string>
     <string name="txvFeature2">2</string>
     <string name="txvFeature3">3</string>
-    <string name="txvFeature4">Disable CVC</string>
+    <string name="txvFeature4">Disable EC</string>
     <string name="txvFeature5">Enable I2S Output</string>
     <string name="txvFeature6">Enable Loop Back</string>
-    <string name="txvFeature7">Enable A2DP</string>
+    <string name="txvFeature7">Enable Music Mode</string>
     <string name="txvFeature8">Disable Filter BDA</string>
     <string name="txvFeature9">Enable I2S Input</string>
     <string name="txvFeatureA">10</string>
@@ -46,20 +48,17 @@
     <string name="txvFeatureE">14</string>
     <string name="txvFeatureF">Enable Expan Function</string>
     <string name="txvFilterBda">Filter BDA:</string>
-    <string name="txvDecadeSpkrHfp">HFP Speaker Decade</string>
-    <string name="txvDecadeSpkrAv">A2DP speaker Decade</string>
+    <string name="txvDecadeSpkrHfp">MIC Level</string>
+    <string name="txvDecadeSpkrAv">MIC Level</string>
     <string name="txvVolumeSrc">Source Device Volume Set</string>
     <string name="txvVolumeAg">HFP Device Volume Set</string>
     <string name="txvStaBatLow">L:</string>
     <string name="txvStaBatChg">C:</string>
     <string name="txvStaBatPwr">P:</string>
+    <string name="txvTalkMode">Talk Mode</string>
+    <string name="txvMusicMode">Music Mode</string>
     <string name="title_activity_message_edit">MessageEdit</string>
+    <string name="txvAudioParaTitle">Audio Parameter Set</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
