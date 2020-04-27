@@ -708,7 +708,32 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 // "Connected"
                                 applicationContext.resources.getString(R.string.txvStaConnected)
                             }
-                            0x01.toByte() -> applicationContext.resources.getString(R.string.txvStaDiscon)
+                            0x01.toByte() ->{
+                                var strList: List<String>
+
+                                for (i in 0 until MaxBtDev) {
+                                    var sendMsg =BtDevMsg(0, 1)
+
+                                    strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
+                                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                    sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                                    sendMsg.btCmd[5] = 0x07
+                                    sendMsg.btCmd[6] = 0x01
+                                    sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                                    sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                                    sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                                    sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                                    sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                                    sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                                    Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                                    sendMsg.btDevNo = i
+                                    sendBtServiceMsg(sendMsg)
+                                }
+                                applicationContext.resources.getString(R.string.txvStaDiscon)
+                            }
                             0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
                             else -> applicationContext.resources.getString(R.string.txvStaEnable)
                         }

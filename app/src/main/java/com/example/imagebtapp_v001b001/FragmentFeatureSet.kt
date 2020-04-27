@@ -1,6 +1,7 @@
 package com.example.imagebtapp_v001b001
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +9,13 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_feature_set.*
+import java.lang.Integer.parseInt
 
 class FragmentFeatureSet : Fragment() {
     var srcDevItme = 0
     var srcDevId: Byte = 0x30
     var cmdSetFeatureId: Byte = CmdId.SET_HFP_FEATURE_REQ.value
     var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
-    var modeChangeFlag = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,7 @@ class FragmentFeatureSet : Fragment() {
         btnFeatureRead.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
             val sendMsgMode = BtDevMsg(0, 0)
+            var preferData = (activity as DevUnitMsg).getpreferData()
 
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -58,22 +60,29 @@ class FragmentFeatureSet : Fragment() {
             val sendMsg = BtDevMsg(0, 0)
             val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
 
-            if(modeChangeFlag == true) {
-                sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
-                sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsgMode.btCmd[3] = srcDevId
-                sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
-                sendMsgMode.btCmd[5] = 0x6
-                sendMsgMode.btCmd[6] = 0x00
-                sendMsgMode.btCmd[7] = 9
-                sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(24).toByte()
-                sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(16).toByte()
-                sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(8).toByte()
-                sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(0).toByte()
-                (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
-                modeChangeFlag = false
-            }
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode =
+                when(rdGpModeFeature.checkedRadioButtonId) {
+                    R.id.rdModeUsbFeature ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
+                    R.id.rdModeBtFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x02000000)
+                    R.id.rdModeVcsFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x04000000)
+                    R.id.rdModeWireFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x08000000)
+                    else -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
+                }
+
+            sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsgMode.btCmd[3] = srcDevId
+            sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+            sendMsgMode.btCmd[5] = 0x6
+            sendMsgMode.btCmd[6] = 0x00
+            sendMsgMode.btCmd[7] = 9
+            sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(24).toByte()
+            sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(16).toByte()
+            sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(8).toByte()
+            sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(0).toByte()
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
 
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -131,21 +140,6 @@ class FragmentFeatureSet : Fragment() {
                     }
                 }
             updateData()
-        }
-        rdGpModeFeature.setOnCheckedChangeListener { group, checkedId ->
-            var mode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode
-
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode =
-                when(checkedId) {
-                    R.id.rdModeUsbFeature ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
-                    R.id.rdModeBtFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x02000000)
-                    R.id.rdModeVcsFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x04000000)
-                    R.id.rdModeWireFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x08000000)
-                    else -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
-                }
-            if(mode != (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode)
-                modeChangeFlag = true
         }
         chkFeature0.setOnCheckedChangeListener { buttonView, isChecked ->
             checkUpdate(buttonView, isChecked)
