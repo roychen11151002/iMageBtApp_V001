@@ -5,19 +5,17 @@ import android.bluetooth.BluetoothAdapter
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.*
-import android.view.View.FOCUSABLE
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import java.lang.Integer.parseInt
 
@@ -107,6 +105,10 @@ class BtDevMsg(var btDevNo: Int = 0, var btGroup: Int = 0) {
 }
 
 class BtDevUnit {
+    companion object {
+        lateinit var resolver: ContentResolver
+    }
+    var imgIconUri = Uri.parse("")
     var bdaddr = "00:00:00:00:00:00"
     var bdaddrPair = "00:00:00:00:00:00"
     var bdaddrFilterHfp = "00:00:00:00:00:00"
@@ -115,15 +117,15 @@ class BtDevUnit {
     var maxAgNo = 0
     var ledLightHfp = arrayOf(0, 0, 0, 0)
     var ledLightAg = arrayOf(0, 0, 0, 0)
-    var verFirmwareHfp: String = ""
-    var verFirmwareAg: String = ""
-    var nameAlias: String = "alias name"
-    var nameLocalHfp: String = ""
-    var nameLocalAg: String = ""
-    var featureHfp: Int = 0
-    var featureAg: Int = 0
-    var featureMode: Int = 0x01000000
-    var stateCon: Int = 0
+    var verFirmwareHfp = ""
+    var verFirmwareAg = ""
+    var nameAlias = "alias name"
+    var nameLocalHfp = ""
+    var nameLocalAg = ""
+    var featureHfp = 0
+    var featureAg = 0
+    var featureMode = 0x01000000
+    var stateCon = 0
     var stateDial: Int = 0
     var stateExtra: Int = 0
     var rssi: Int = 0
@@ -182,6 +184,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var staUpdateInterval = 60
     private val BtPermissionReqCode = 1
     private val BtActionReqCode = 3
+    private val MainBackGroundImage = 88
     private lateinit var preferData: SharedPreferences
     private var iMageBtServiceBind = false
     private lateinit var iMageBtServiceMsg: Messenger
@@ -239,10 +242,16 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
         // intentFilter.addAction("iMageBroadcastMain")                            // register broadcast receiver
         // registerReceiver(iMageBtBroadcast(), intentFilter)
-
         btnStaUpdate.setOnClickListener {
             setUpdate()
             stateUpdate()
+        }
+        btnStaUpdate.setOnClickListener {
+            var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+
+            intent.setType("image/*")
+            startActivityForResult(intent, MainBackGroundImage)
+            true
         }
         btnCon.setOnClickListener {
             var sendMsg = BtDevMsg(0, 1)
@@ -306,6 +315,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
         stateUpdateAuto(staUpdateInterval.toLong() * 1000)
+        Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.android_image_1).into(imgMainBackGround)
         initBt()
         Logger.d(LogMain, "state update interval $staUpdateInterval")
     }
@@ -331,6 +341,21 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     Logger.d(LogMain, "bluetooth disable")
                     finish()
                 }
+            }
+            MainBackGroundImage ->  {
+                var preferDataEdit = preferData.edit()
+
+                if(resultCode == Activity.RESULT_OK) {
+                    preferDataEdit.putString("imgIconUri", data?.data.toString())
+                    preferDataEdit.apply()
+                    Glide.with(applicationContext).load(data?.data).error(R.drawable.android_image_1).into(imgMainBackGround)
+                    Logger.d(LogGbl, "result code OK; image icon URI: ${data?.data?.toString()}")
+                }
+                else
+                    Logger.d(LogGbl, "result code $resultCode")
+            }
+            else -> {
+                Logger.d(LogGbl, "other request code")
             }
         }
     }
@@ -373,9 +398,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         BtDevUnitList.removeAll(BtDevUnitList)
         BtDevUnitList.add(BtDevUnit())
         BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src")
+        BtDevUnitList[0].imgIconUri = Uri.parse(preferData.getString("imgIconUri0", ""))
+        Logger.d(LogMain, "imgIconUri0: ${BtDevUnitList[0].imgIconUri}")
         for (i in 0 until dev) {
             BtDevUnitList.add(BtDevUnit())
             BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i")
+            BtDevUnitList[i + 1].imgIconUri = Uri.parse(preferData.getString("imgIconUri${i + 1}", ""))
             BtDevUnitList[i + 1].nameLocalHfp = BtDevUnitList[i + 1].nameAlias
         }
     }
@@ -513,6 +541,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[7].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[7].toInt().and(0x10) == 0x10
                 BtDevUnitList[id].muteMic = msg.btCmd[7].toInt().and(0x20) == 0x20
+                if(viewPagerM6.currentItem == 0)
+                    (ViewPagerArray[0] as FragmentConState).updateData()
                 Logger.d(LogMain, "${String.format("src:%02X get hfp state", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_EXT_STA_RSP.value -> {
@@ -523,6 +553,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         true
                     else
                         false
+                if(viewPagerM6.currentItem == 0)
+                    (ViewPagerArray[0] as FragmentConState).updateData()
                 Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_VOL_RSP.value -> {
@@ -530,10 +562,14 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
                 viewPagerM6.setCurrentItem(0)
+                if(viewPagerM6.currentItem == 0)
+                    (ViewPagerArray[0] as FragmentConState).updateData()
                 Logger.d(LogMain, "${String.format("src %02X get hfp vol", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_RSSI_RSP.value -> {
                 BtDevUnitList[id].rssi = (0x10000 - (msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff))).and(0xffff)
+                if(viewPagerM6.currentItem == 0)
+                    (ViewPagerArray[0] as FragmentConState).updateData()
             }
             CmdId.GET_HFP_PSKEY_RSP.value -> {
                 val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
@@ -793,14 +829,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 Logger.d(LogMain, "${String.format("other command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
             }
         }
-        if(viewPagerM6.currentItem == 0)
-            (ViewPagerArray[0] as FragmentConState).updateData()
         // ((viewPagerM6.adapter as ViewPagerAdapter).getItem(0) as FragmentConState).recyclerDevList.adapter!!.notifyDataSetChanged()
         // viewPagerM6.adapter!!.notifyDataSetChanged()
     }
 }
 
-class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment =
         when(position) {
             0 -> ViewPagerArray[0]

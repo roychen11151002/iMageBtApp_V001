@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
     <TextView
@@ -67,5 +68,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imgMainBackGround"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.4"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/viewPagerM6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/android_image_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

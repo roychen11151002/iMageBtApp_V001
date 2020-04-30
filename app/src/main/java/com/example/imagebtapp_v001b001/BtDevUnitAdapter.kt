@@ -1,52 +1,55 @@
 package com.example.imagebtapp_v001b001
 
-import android.content.Context
-import android.text.InputType
-import android.util.Log
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.Movie
+import android.graphics.Movie.decodeFile
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.os.persistableBundleOf
-import androidx.core.view.isVisible
+import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.device_unit_adapter.view.*
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 
 class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate: Array<String>) : RecyclerView.Adapter<BtDevUnitAdapter.ViewHolder>() {
     private val rssiStrong = 50
     private val rssiWeak = 90
-    lateinit var clickItemImgListener: OnItemImgListener
-    lateinit var longClickItemImgListener: OnLongItemImgLisener
+    lateinit var clickItemImgListener: OnItemImageListener
+    lateinit var longClickItemImgListener: OnLongItemImageLisener
     lateinit var clickSpkrVolListener: OnSpkrVolListener
     lateinit var clickSpkrMuteListener: OnSpkrMuteListener
     lateinit var longClickSpkrMuteListener: OnLongSpkrMuteListener
     lateinit var clickMicMuteListener: OnMicMuteListener
     lateinit var longClickMicMuteListener: OnLongMicMuteListener
     lateinit var clickTalkListener: OnTalkListener
-    lateinit var longclickTalkListener: OnLongTalkListener
+    lateinit var longClickTalkListener: OnLongTalkListener
+    lateinit var longClickNameListener: OnLongNameListener
+    val imgIconId = arrayOf(R.drawable.android_image_1, R.drawable.android_image_2, R.drawable.android_image_3, R.drawable.android_image_4, R.drawable.android_image_5, R.drawable.android_image_6, R.drawable.android_image_7, R.drawable.android_image_8)
 
-    interface OnItemImgListener {
-        fun onItemImg(position: Int, btDevUnit: BtDevUnit)
+    interface OnItemImageListener {
+        fun onItemImage(position: Int, btDevUnit: BtDevUnit)
     }
-    fun setOnItemClickListener(listen: OnItemImgListener) {
+    fun setOnkItemImageListener(listen: OnItemImageListener) {
         this.clickItemImgListener = listen
     }
 
-    interface OnLongItemImgLisener {
-        fun onLongItemImg(position: Int, btDevUnit: BtDevUnit)
+    interface OnLongItemImageLisener {
+        fun onLongItemImage(position: Int, btDevUnit: BtDevUnit)
     }
-    fun setOnLongItemImgListener(listen: OnLongItemImgLisener) {
+    fun setOnLongItemImageListener(listen: OnLongItemImageLisener) {
         this.longClickItemImgListener = listen
     }
 
@@ -96,7 +99,14 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         fun onLongTalk(position: Int)
     }
     fun setOnLongTalkListener(listen: OnLongTalkListener) {
-        this.longclickTalkListener = listen
+        this.longClickTalkListener = listen
+    }
+
+    interface OnLongNameListener {
+        fun onLongNameEdit(position: Int, btDevUnit: BtDevUnit)
+    }
+    fun setOnLongNameEditListener(listen: OnLongNameListener) {
+        this.longClickNameListener = listen
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -120,14 +130,15 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
             nameTxv = itemView.findViewById(R.id.txvDeviceName)
             batTxv = itemView.findViewById(R.id.txvBat)
             rssiTxv = itemView.findViewById(R.id.txvRssi)
+            imgViewIcon.setImageResource(R.drawable.android_image_1)
             imgViewIcon.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(v: View?) {
-                    clickItemImgListener.onItemImg(adapterPosition, btDevUnitList[adapterPosition])
+                    clickItemImgListener.onItemImage(adapterPosition, btDevUnitList[adapterPosition])
                 }
             })
             imgViewIcon.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
-                    longClickItemImgListener.onLongItemImg(adapterPosition, btDevUnitList[adapterPosition])
+                    longClickItemImgListener.onLongItemImage(adapterPosition, btDevUnitList[adapterPosition])
                     return true
                 }
             })
@@ -161,9 +172,16 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
             })
             imgViewStaCon.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {
-                    longclickTalkListener.onLongTalk(adapterPosition)
+                    longClickTalkListener.onLongTalk(adapterPosition)
                     return true
                 }
+            })
+            nameTxv.setOnLongClickListener(object : View.OnLongClickListener {
+                override fun onLongClick(v: View?): Boolean {
+                    longClickNameListener.onLongNameEdit(adapterPosition, btDevUnitList[adapterPosition])
+                    return true
+                }
+
             })
             seekSpkrVol.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(
@@ -193,18 +211,8 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         holder.itemView.seekVolMic.seekVolMic.progress = btDevUnitList[position].volMicHfp
         // holder.itemView.imgViewMuSpkr.visibility = VISIBLE
         // holder.itemView.imgViewMuSpkr.setImageResource(android.R.drawable.ic_lock_silent_mode_off)
-        holder.imgViewIcon.setImageResource(
-            when(position % 8) {
-                0 -> R.drawable.android_image_1
-                1 -> R.drawable.android_image_2
-                2 -> R.drawable.android_image_3
-                3 -> R.drawable.android_image_4
-                4 -> R.drawable.android_image_5
-                5 -> R.drawable.android_image_6
-                6 -> R.drawable.android_image_7
-                7 -> R.drawable.android_image_8
-                else -> R.drawable.android_image_1
-            })
+        Glide.with(holder.imgViewIcon.context).load(btDevUnitList[position].imgIconUri).error(imgIconId[position % imgIconId.size]).into(holder.imgViewIcon)
+        Logger.d(LogGbl, "imgIconUri$position: ${btDevUnitList[position].imgIconUri}")
         holder.imgViewStaCon.setBackgroundColor((
             if(btDevUnitList[position].stateCon.and(0x00000080) == 0x00000080)
                 0xFF54A6E8

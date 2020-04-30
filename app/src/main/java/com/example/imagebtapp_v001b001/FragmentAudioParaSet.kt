@@ -1,10 +1,12 @@
 package com.example.imagebtapp_v001b001
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.fragment_audio_para_set.*
 import java.lang.Integer.parseInt
 
@@ -32,6 +34,7 @@ class FragmentAudioParaSet : Fragment() {
         btnAudioParaWrite.setOnClickListener {
             val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
 
+            rdGpParaAudioPara.check(rdGpParaAudioPara.checkedRadioButtonId)
             for(i in 0..1) {
                 var strList =
                     paraData[when(rdGpParaAudioPara.checkedRadioButtonId) {
@@ -139,8 +142,8 @@ class FragmentAudioParaSet : Fragment() {
                 }
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg[i])
             }
-            // (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             Logger.d(LogGbl, "audio parameter send")
         }
+        Logger.d(LogGbl, "audio parameter activity created")
     }
 }

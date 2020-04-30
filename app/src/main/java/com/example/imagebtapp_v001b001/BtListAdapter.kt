@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListAdapter.ViewHolder>() {
     lateinit var clickListener: OnItemClickListener
     lateinit var longClickListener: OnItemLongClickListener
-    val ImgTypeId = intArrayOf(R.drawable.android_image_1, R.drawable.android_image_2,
+    val ImgIconId = arrayOf(R.drawable.android_image_1, R.drawable.android_image_2,
         R.drawable.android_image_3, R.drawable.android_image_4, R.drawable.android_image_5,
         R.drawable.android_image_6, R.drawable.android_image_7, R.drawable.android_image_8)
 
@@ -60,7 +60,7 @@ class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListA
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.TxvDevName.text = items[position].removeRange(items[position].lastIndexOf(" + "), items[position].lastIndex + 1)
         holder.TXVDevBdaddr.text = items[position].removeRange(0, items[position].lastIndexOf(" + ") + 3)
-        holder.ImgDevType.setImageResource(ImgTypeId[position % ImgTypeId.size])
+        holder.ImgDevType.setImageResource(ImgIconId[position % ImgIconId.size])
         holder.TxvDevName.setTextColor((
             if(position == 0)
                 0xffff0000

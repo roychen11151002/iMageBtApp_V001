@@ -2,8 +2,10 @@ package com.example.imagebtapp_v001b001
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,16 +14,21 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.net.toFile
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_con_state.*
+import java.io.InputStream
 import java.text.FieldPosition
+import java.time.format.ResolverStyle
 import kotlin.experimental.and
 import kotlin.experimental.or
 
 class FragmentConState : Fragment() {
-    var positionEdit = 0
+    private val DevIconImage = 101
+    private var positionEdit = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,8 +68,8 @@ class FragmentConState : Fragment() {
         strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatChg)
         strIndMsg[5] = context!!.resources.getString(R.string.txvStaBatPwr)
 
-        devUnitAdapter.setOnItemClickListener(object : BtDevUnitAdapter.OnItemImgListener {
-            override fun onItemImg(position: Int, btDevUnit: BtDevUnit) {
+        devUnitAdapter.setOnkItemImageListener(object : BtDevUnitAdapter.OnItemImageListener {
+            override fun onItemImage(position: Int, btDevUnit: BtDevUnit) {
                 val msgItem = arrayOf(btDevUnit.nameAlias, btDevUnit.verFirmwareHfp, btDevUnit.nameLocalHfp, btDevUnit.verFirmwareAg, btDevUnit.nameLocalAg, btDevUnit.bdaddr, btDevUnit.bdaddrPair)
 
                 AlertDialog.Builder(activity).setTitle("Device message").setItems(msgItem) {
@@ -74,8 +81,17 @@ class FragmentConState : Fragment() {
                 // Toast.makeText(activity, "${btDevUnit.verFirmwareAg}\n${btDevUnit.localNameHfp}", Toast.LENGTH_LONG).show()
              }
         })
-        devUnitAdapter.setOnLongItemImgListener(object : BtDevUnitAdapter.OnLongItemImgLisener {
-            override fun onLongItemImg(position: Int, btDevUnit: BtDevUnit) {
+        devUnitAdapter.setOnLongItemImageListener(object : BtDevUnitAdapter.OnLongItemImageLisener {
+            override fun onLongItemImage(position: Int, btDevUnit: BtDevUnit) {
+                var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+
+                intent.setType("image/*")
+                startActivityForResult(intent, DevIconImage)
+                positionEdit = position
+            }
+        })
+        devUnitAdapter.setOnLongNameEditListener(object : BtDevUnitAdapter.OnLongNameListener {
+            override fun onLongNameEdit(position: Int, btDevUnit: BtDevUnit) {
                 val intent = Intent(context, MsgEditActivity::class.java)
                 val bundle = Bundle()
 
@@ -304,6 +320,19 @@ class FragmentConState : Fragment() {
                         Logger.d(LogGbl, "other result code")
                     }
                 }
+            }
+            DevIconImage -> {
+                var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
+
+                if(resultCode == Activity.RESULT_OK) {
+                    preferDataEdit.putString("imgIconUri$positionEdit", data?.data.toString())
+                    preferDataEdit.apply()
+                    (activity as DevUnitMsg).getBtDevUnitList()[positionEdit].imgIconUri = data?.data
+                    updateData()
+                    Logger.d(LogGbl, "result code OK; image icon URI: ${data?.data?.toString()}")
+                }
+                else
+                    Logger.d(LogGbl, "result code $resultCode")
             }
             else -> {
                 Logger.d(LogGbl, "other request code")

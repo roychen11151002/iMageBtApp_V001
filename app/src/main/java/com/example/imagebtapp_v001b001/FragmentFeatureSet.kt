@@ -35,7 +35,6 @@ class FragmentFeatureSet : Fragment() {
         btnFeatureRead.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
             val sendMsgMode = BtDevMsg(0, 0)
-            var preferData = (activity as DevUnitMsg).getpreferData()
 
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value

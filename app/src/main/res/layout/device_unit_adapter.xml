@@ -19,7 +19,6 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="4dp"
         android:background="#DFD581"
         app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
         app:layout_constraintTop_toTopOf="@+id/imgViewIcon"
@@ -70,8 +69,8 @@
 
     <ImageView
         android:id="@+id/imgViewIcon"
-        android:layout_width="57dp"
-        android:layout_height="59dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvDeviceName"
