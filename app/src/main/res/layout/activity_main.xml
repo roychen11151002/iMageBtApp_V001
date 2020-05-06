@@ -35,6 +35,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/btnStaUpdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:text="@string/btnUpdate"
+        app:layout_constraintStart_toEndOf="@+id/btnCon"
+        app:layout_constraintTop_toTopOf="@+id/btnCon" />
+
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerM6"
         android:layout_width="0dp"
@@ -44,28 +53,21 @@
         app:layout_constraintStart_toStartOf="@+id/btnCon"
         app:layout_constraintTop_toBottomOf="@+id/btnCon" />
 
-    <Button
-        android:id="@+id/btnStaUpdate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:text="@string/btnUpdate"
-        app:layout_constraintStart_toEndOf="@+id/btnCon"
-        app:layout_constraintTop_toTopOf="@+id/btnCon" />
-
     <EditText
         android:id="@+id/editTextStaUpTime"
         android:layout_width="0dp"
-        android:layout_height="41dp"
+        android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:autofillHints=""
         android:ems="10"
         android:imeOptions="actionDone"
         android:inputType="numberDecimal"
         android:singleLine="true"
         android:textAlignment="center"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -73,12 +75,23 @@
         android:id="@+id/imgMainBackGround"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:alpha="0.4"
+        android:alpha="0.2"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="@+id/viewPagerM6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/android_image_1" />
+
+    <SeekBar
+        android:id="@+id/seekMainAlpha"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:max="15"
+        android:progress="3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
+        app:layout_constraintTop_toBottomOf="@+id/editTextStaUpTime" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

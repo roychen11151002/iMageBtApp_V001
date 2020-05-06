@@ -2,6 +2,8 @@ package com.example.imagebtapp_v001b001
 
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.STATE_OFF
+import android.bluetooth.BluetoothAdapter.STATE_ON
 import android.content.*
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
@@ -10,6 +12,7 @@ import android.os.*
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -183,7 +186,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
     private var staUpdateInterval = 60
     private val BtPermissionReqCode = 1
-    private val BtActionReqCode = 3
+    private val BtActionReqCode = 66
     private val MainBackGroundImage = 88
     private lateinit var preferData: SharedPreferences
     private var iMageBtServiceBind = false
@@ -246,7 +249,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             setUpdate()
             stateUpdate()
         }
-        btnStaUpdate.setOnClickListener {
+        btnStaUpdate.setOnLongClickListener {
             var intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
 
             intent.setType("image/*")
@@ -310,12 +313,30 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 false
             }
         }
+        seekMainAlpha.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                val preferDataEdit = preferData.edit()
+
+                preferDataEdit.putInt("MainIconAlpha", seekMainAlpha.progress)
+                preferDataEdit.apply()
+                imgMainBackGround.alpha = seekMainAlpha.progress.toFloat() / seekMainAlpha.max
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+
+        })
         editTextStaUpTime.clearFocus()
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
         stateUpdateAuto(staUpdateInterval.toLong() * 1000)
         Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.android_image_1).into(imgMainBackGround)
+        imgMainBackGround.alpha = preferData.getInt("MainIconAlpha", 3).toFloat() / seekMainAlpha.max
+        seekMainAlpha.progress = preferData.getInt("MainIconAlpha", 3)
         initBt()
         Logger.d(LogMain, "state update interval $staUpdateInterval")
     }
@@ -349,6 +370,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     preferDataEdit.putString("imgIconUri", data?.data.toString())
                     preferDataEdit.apply()
                     Glide.with(applicationContext).load(data?.data).error(R.drawable.android_image_1).into(imgMainBackGround)
+                    imgMainBackGround.alpha = seekMainAlpha.progress.toFloat() / seekMainAlpha.max
                     Logger.d(LogGbl, "result code OK; image icon URI: ${data?.data?.toString()}")
                 }
                 else
@@ -558,12 +580,15 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_VOL_RSP.value -> {
+                /*
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
                 viewPagerM6.setCurrentItem(0)
                 if(viewPagerM6.currentItem == 0)
                     (ViewPagerArray[0] as FragmentConState).updateData()
+
+                 */
                 Logger.d(LogMain, "${String.format("src %02X get hfp vol", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_RSSI_RSP.value -> {
@@ -725,6 +750,9 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             sendMsg.btDevNo = i
                             sendBtServiceMsg(sendMsg)
                         }
+                    }
+                    STATE_ON.toByte(), STATE_OFF.toByte()  -> {
+                        finish()
                     }
                 }
             CmdId.SET_INT_CON_RSP.value -> when(msg.btDevNo) {

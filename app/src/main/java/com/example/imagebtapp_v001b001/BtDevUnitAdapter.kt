@@ -279,7 +279,7 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
             // holder.imgViewIcon.visibility = INVISIBLE
         }
         if(btDevUnitList[position].stateCon.and(0x00000080) == 0x00000080) {
-            holder.seekMicVol.visibility = VISIBLE
+            holder.seekMicVol.visibility = INVISIBLE
             holder.seekSpkrVol.visibility = VISIBLE
             holder.imgViewMicMute.visibility = VISIBLE
             holder.imgViewSpkrMute.visibility = VISIBLE

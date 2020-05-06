@@ -65,13 +65,13 @@ class FragmentPairSet : Fragment() {
 
         recyclerListAdapter.setOnItemClickListener(object : BtListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
-                val listItem = arrayOf("source", "aghfp0", "aghfp1", "aghfp2", "aghfp3", "aghfp4", "aghfp5")
+                val listItem = resources.getStringArray(R.array.txvDevName)
                 var sendMsg = BtDevMsg(0, 1)
                 var str = (activity as DevUnitMsg).getBtList()[position].removeRange(0, (activity as DevUnitMsg).getBtList()[position].lastIndexOf(" + ") + 3)
                 var strList = str.split(':')
                 var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
 
-                AlertDialog.Builder(activity).setTitle("Pair device").setItems(listItem) {
+                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevPair)).setItems(listItem) {
                     dialog, which ->
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value

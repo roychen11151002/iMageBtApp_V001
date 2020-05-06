@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iMageBtApp</string>
+    <string name="app_name">iMage M6 APP</string>
     <string name="btnUpdate">Update</string>
     <string name="btnCon">BT Con</string>
     <string name="btnPair">Pair</string>
@@ -59,6 +59,31 @@
     <string name="txvMusicMode">Music Mode</string>
     <string name="title_activity_message_edit">MessageEdit</string>
     <string name="txvAudioParaTitle">Audio Parameter Set</string>
-    <!-- Strings used for fragments for navigation -->
-
+    <string name="txvDevPair">Pair Device</string>
+    <string name="txvDevMsg">Device Message</string>
+    <string name="txvAudioParameter0">audio parameter 0</string>
+    <string name="txvAudioParameter1">audio parameter 1</string>
+    <string name="txvAudioParameter2">audio parameter 2(A7)</string>
+    <string name="txvAudioParameter3">audio parameter 3(A6)</string>
+    <string name="txvAudioParameter4">audio parameter 4</string>
+    <string name="txvAudioParameter5">audio parameter 5</string>
+    <string name="txvAudioParameter6">audio parameter 6</string>
+    <string name="txvAudioParameter7">audio parameter 7</string>
+    <string name="txvAudioParameter8">audio parameter 8</string>
+    <string name="txvAudioParameter9">audio parameter 9</string>
+    <string name="txvAudioParameter10">audio parameter 10</string>
+    <string name="txvAudioParameter11">audio parameter 11</string>
+    <string name="txvAudioParameter12">audio parameter 12</string>
+    <string name="txvAudioParameter13">audio parameter 13</string>
+    <string name="txvAudioParameter14">audio parameter 14</string>
+    <string name="txvAudioParameter15">audio parameter 15</string>
+    <string-array name="txvDevName">
+        <item name="0">source</item>
+        <item name="1">aghfp0</item>
+        <item name="2">aghfp1</item>
+        <item name="3">aghfp2</item>
+        <item name="4">aghfp3</item>
+        <item name="5">aghfp4</item>
+        <item name="6">aghfp5</item>
+    </string-array>
 </resources>

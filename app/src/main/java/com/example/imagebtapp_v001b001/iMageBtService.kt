@@ -2,6 +2,8 @@ package com.example.imagebtapp_v001b001
 
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothAdapter.STATE_OFF
+import android.bluetooth.BluetoothAdapter.STATE_ON
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -30,6 +32,7 @@ class iMageBtService : Service() {
         when(it.what) {
             0 -> {
                 val msg = BtDevMsg(0, 0)
+
                 clientMsg = it.replyTo
                 msg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 msg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -209,7 +212,16 @@ class iMageBtService : Service() {
                 BluetoothAdapter.ACTION_STATE_CHANGED -> {
                     val btState = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothDevice.ERROR)
                     val btPrevState = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_STATE, BluetoothDevice.ERROR)
+                    val msg = BtDevMsg(0, 0)
 
+                    msg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    msg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    msg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    msg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    msg.btCmd[4] = CmdId.SET_INT_SERVICE_RSP.value
+                    msg.btCmd[5] = 0x01
+                    msg.btCmd[6] = btState.toByte()
+                    sendMainMsg(msg)
                     Logger.d(LogService, "ACTION_STATE_CHANGED $btState $btPrevState")
                 }
                 BluetoothDevice.ACTION_ACL_CONNECTED -> {

@@ -72,7 +72,7 @@ class FragmentConState : Fragment() {
             override fun onItemImage(position: Int, btDevUnit: BtDevUnit) {
                 val msgItem = arrayOf(btDevUnit.nameAlias, btDevUnit.verFirmwareHfp, btDevUnit.nameLocalHfp, btDevUnit.verFirmwareAg, btDevUnit.nameLocalAg, btDevUnit.bdaddr, btDevUnit.bdaddrPair)
 
-                AlertDialog.Builder(activity).setTitle("Device message").setItems(msgItem) {
+                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) {
                     dialog, which ->
                 }.setPositiveButton("OK") {
                     dialog, which ->
