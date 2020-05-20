@@ -15,18 +15,92 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
+    <RadioGroup
+        android:id="@+id/rdGpDevFeature"
         android:layout_width="wrap_content"
-        android:layout_height="421dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnFeatureRead"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:checkedButton="@id/rdSrcFeature"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvFeatureSetTitle">
 
+        <RadioButton
+            android:id="@+id/rdSrcFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvDevSrc"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <RadioButton
+            android:id="@+id/rdAgAllFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txvDevAllAg" />
+
+        <RadioButton
+            android:id="@+id/rdHfpAllFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txvDevAllHfp" />
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/rdGpModeFeature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:checkedButton="@id/rdModeUsbFeature"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpDevFeature">
+
+        <RadioButton
+            android:id="@+id/rdModeWireFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvModeWired" />
+
+        <RadioButton
+            android:id="@+id/rdModeUsbFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvModeUsb" />
+
+        <RadioButton
+            android:id="@+id/rdModeBtFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txvModeBt" />
+
+        <RadioButton
+            android:id="@+id/rdModeVcsFeature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/txvModeVcs" />
+    </RadioGroup>
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/shape_rectangle"
+        app:layout_constraintBottom_toTopOf="@+id/btnFeatureWrite"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature">
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <CheckBox
@@ -87,7 +161,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature9"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature10"
                 app:layout_constraintTop_toBottomOf="@+id/chkFeature10" />
 
@@ -146,7 +220,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature5"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature6"
                 app:layout_constraintTop_toBottomOf="@+id/chkFeature6" />
 
@@ -166,74 +240,6 @@
                 android:text="@string/txvFeature7"
                 app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
                 app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature" />
-
-            <RadioGroup
-                android:id="@+id/rdGpDevFeature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:checkedButton="@id/rdSrcFeature"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <RadioButton
-                    android:id="@+id/rdSrcFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txvDevSrc"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <RadioButton
-                    android:id="@+id/rdAgAllFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/txvDevAllAg" />
-
-                <RadioButton
-                    android:id="@+id/rdHfpAllFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/txvDevAllHfp" />
-            </RadioGroup>
-
-            <RadioGroup
-                android:id="@+id/rdGpModeFeature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:checkedButton="@id/rdModeUsbFeature"
-                android:orientation="horizontal"
-                app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
-                app:layout_constraintTop_toBottomOf="@+id/rdGpDevFeature">
-
-                <RadioButton
-                    android:id="@+id/rdModeWireFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txvModeWired" />
-
-                <RadioButton
-                    android:id="@+id/rdModeUsbFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/txvModeUsb" />
-
-                <RadioButton
-                    android:id="@+id/rdModeBtFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/txvModeBt" />
-
-                <RadioButton
-                    android:id="@+id/rdModeVcsFeature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/txvModeVcs" />
-            </RadioGroup>
 
             <SeekBar
                 android:id="@+id/seekLedPwr"

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_pair_set.*
 import java.lang.Integer.parseInt
@@ -31,6 +32,7 @@ class FragmentPairSet : Fragment() {
 
         recyclerListPair.layoutManager = LinearLayoutManager(context)
         recyclerListPair.adapter = recyclerListAdapter
+        recyclerListPair.addItemDecoration(SpaceItemDecoration(4))
 
         btnPair.setOnClickListener{
             val sendMsg = BtDevMsg(0, 1)

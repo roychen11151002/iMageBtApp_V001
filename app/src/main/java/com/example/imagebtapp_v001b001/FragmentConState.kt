@@ -61,6 +61,7 @@ class FragmentConState : Fragment() {
         }
         recyclerDevList.layoutManager = lmg
         recyclerDevList.adapter = devUnitAdapter
+        recyclerDevList.addItemDecoration(SpaceItemDecoration(4))
         strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssiStrong)
         strIndMsg[1] = context!!.resources.getString(R.string.txvStaRssiWeak)
         strIndMsg[2] = context!!.resources.getString(R.string.txvStaBat)

@@ -32,6 +32,14 @@ class FragmentFeatureSet : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
+            rdAgAllFeature.isEnabled = false
+            rdHfpAllFeature.isEnabled = false
+        }
+        else {
+            rdAgAllFeature.isEnabled = true
+            rdHfpAllFeature.isEnabled = true
+        }
         btnFeatureRead.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
             val sendMsgMode = BtDevMsg(0, 0)

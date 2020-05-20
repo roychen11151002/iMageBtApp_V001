@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import kotlinx.android.synthetic.main.fragment_feature_set.*
 import kotlinx.android.synthetic.main.fragment_vol_set.*
 
 class FragmentVolSet : Fragment() {
@@ -30,6 +31,12 @@ class FragmentVolSet : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
+            rdHfpAllVolume.isEnabled = false
+        }
+        else {
+            rdHfpAllVolume.isEnabled = true
+        }
         btnVolRead.setOnClickListener {
             for (i in 0 until 2) {
                 val sendMsg = BtDevMsg(0, 0)

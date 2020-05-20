@@ -8,6 +8,7 @@
     <string name="btnRead">讀取</string>
     <string name="btnWrite">寫入</string>
     <string name="btnDiscovery">搜尋裝置</string>
+    <string name="txvConStaTitle">裝置連線狀態</string>
     <string name="txvRecyclerTitle">無作動</string>
     <string name="txvFeatureTitle">功能設定</string>
     <string name="txvVolumeTitle">音量設定</string>
@@ -78,6 +79,7 @@
     <string name="txvAudioParameter13">音效參數13</string>
     <string name="txvAudioParameter14">音效參數14</string>
     <string name="txvAudioParameter15">音效參數15</string>
+    <string name="txvUpdateTime">60</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.1</item>

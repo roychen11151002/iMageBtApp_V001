@@ -565,7 +565,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].muteMic = msg.btCmd[7].toInt().and(0x20) == 0x20
                 if(viewPagerM6.currentItem == 0)
                     (ViewPagerArray[0] as FragmentConState).updateData()
-                Logger.d(LogMain, "${String.format("src:%02X get hfp state", msg.btCmd[2])}")
+                Logger.d(LogMain, "${String.format("src:%02X get hfp state %08X", msg.btCmd[2], BtDevUnitList[id].stateCon)}")
             }
             CmdId.GET_HFP_EXT_STA_RSP.value -> {
                 BtDevUnitList[id].stateExtra = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
@@ -580,16 +580,13 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
             }
             CmdId.GET_HFP_VOL_RSP.value -> {
-                /*
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
                 viewPagerM6.setCurrentItem(0)
                 if(viewPagerM6.currentItem == 0)
                     (ViewPagerArray[0] as FragmentConState).updateData()
-
-                 */
-                Logger.d(LogMain, "${String.format("src %02X get hfp vol", msg.btCmd[2])}")
+                Logger.d(LogMain, "${String.format("src %02X get hfp vol %X", msg.btCmd[2], msg.btCmd[6])}")
             }
             CmdId.GET_HFP_RSSI_RSP.value -> {
                 BtDevUnitList[id].rssi = (0x10000 - (msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff))).and(0xffff)

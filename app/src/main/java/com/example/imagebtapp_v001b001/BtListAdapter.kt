@@ -1,5 +1,6 @@
 package com.example.imagebtapp_v001b001
 
+import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,5 +72,17 @@ class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListA
                 0xffff0000
             else
                 0xff000000).toInt())
+    }
+}
+
+class SpaceItemDecoration(var spaces: Int = 0) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        outRect.bottom = spaces
     }
 }

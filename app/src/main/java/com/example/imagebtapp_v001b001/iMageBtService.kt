@@ -122,13 +122,21 @@ class iMageBtService : Service() {
                             arraycopy(rfcRecData, i, btDevMsg.btCmd, 0, rfcRecData[i + 5] + 7)
                             rfcRecDataLen -= i + rfcRecData[i + 5] + 7
                             arraycopy(rfcRecData, i + 7 + rfcRecData[i + 5], rfcRecData, 0, maxReceiverLen - (i + 7 + rfcRecData[i + 5]))
+                            isRfcRecCmd = true
+                            isRfcRecHead = false
+                            i = 0
+                            when(btDevMsg.btCmd[4]) {
+                                CmdId.GET_HFP_STA_RSP.value-> {
+                                    // Logger.d(LogService, "${String.format("sta cmd: %02X %02X%02X%02X%02X", btDevMsg.btCmd[2], btDevMsg.btCmd[6], btDevMsg.btCmd[7], btDevMsg.btCmd[8], btDevMsg.btCmd[9])}")
+                                }
+                                CmdId.GET_HFP_VOL_RSP.value -> {
+                                    Logger.d(LogService, "${String.format("vol cmd: %02X %02X", btDevMsg.btCmd[2], btDevMsg.btCmd[6])}")
+                                }
+                            }
                             if(checkSum(btDevMsg.btCmd)) {
-                                isRfcRecCmd = true
                                 // Logger.d(KotlinService, "Receiver iMage command")
                                 sendMainMsg(btDevMsg)
                                 // sendBroadcast(Intent("iMageBroadcastMain").putExtra("btServiceMsg", btDevMsg))
-                                isRfcRecHead = false
-                                i = 0
                                 // Handler().postDelayed({
                                 // }, 100)
                                 // Thread.sleep(10)

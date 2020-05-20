@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_rectangle">
 
     <TextView
         android:id="@+id/txvDeviceName"
@@ -18,7 +19,7 @@
         android:id="@+id/imgViewStaCon"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="32dp"
         android:background="#DFD581"
         app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
         app:layout_constraintTop_toTopOf="@+id/imgViewIcon"
@@ -27,11 +28,12 @@
     <SeekBar
         android:id="@+id/seekVolSpkr"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="112dp"
+        android:layout_width="0dp"
         android:layout_height="24dp"
         android:max="15"
         android:progress="10"
         app:layout_constraintBottom_toBottomOf="@+id/imgViewMuSpkr"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imgViewMuSpkr" />
 
     <ImageView
@@ -39,7 +41,7 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/imgViewIcon"
         app:layout_constraintTop_toBottomOf="@+id/imgViewIcon"
