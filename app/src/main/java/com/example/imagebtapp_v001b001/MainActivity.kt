@@ -329,7 +329,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             }
 
         })
-        editTextStaUpTime.clearFocus()
+    }
+
+    override fun onStart() {
+        super.onStart()
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
@@ -338,7 +341,39 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         imgMainBackGround.alpha = preferData.getInt("MainIconAlpha", 3).toFloat() / seekMainAlpha.max
         seekMainAlpha.progress = preferData.getInt("MainIconAlpha", 3)
         initBt()
+        editTextStaUpTime.clearFocus()
         Logger.d(LogMain, "state update interval $staUpdateInterval")
+        Logger.d(LogMain, "main activity onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+/*
+        for(i in 0 until MaxBtDev) {
+            var sendMsg = BtDevMsg(i, 1)
+
+            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+            sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+            sendMsg.btCmd[5] = 0x07
+            sendMsg.btCmd[6] = 0x00
+            sendMsg.btCmd[7] = 0x00
+            sendMsg.btCmd[8] = 0x00
+            sendMsg.btCmd[9] = 0x00
+            sendMsg.btCmd[10] = 0x00
+            sendMsg.btCmd[11] = 0x00
+            sendMsg.btCmd[12] = 0x00
+            sendBtServiceMsg(sendMsg)
+        }
+*/
+        Logger.d(LogMain, "main activity onStop")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Logger.d(LogMain, "main activity onDestroy")
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -401,14 +436,41 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), BtPermissionReqCode)
         } else if (BluetoothAdapter.getDefaultAdapter().isEnabled) {
             Logger.d(LogMain, "bluetooth enabled")
+            // txvConSta0.text = "Enable"
+            // txvConSta1.text = "Enable"
+            preferData.getInt("deviceNo", 0)
+            initHfpDevice(preferData.getInt("deviceNo", 0))
+            viewPagerM6.adapter = adapterPager
             if (!iMageBtServiceBind) {
                 // startService(Intent(this, iMageBtService::class.java))
                 bindService(Intent(this, iMageBtService::class.java), iMageBtServiceConnection, Context.BIND_AUTO_CREATE)
-                txvConSta0.text = "Enable"
-                txvConSta1.text = "Enable"
-                viewPagerM6.adapter = adapterPager
-                preferData.getInt("deviceNo", 0)
-                initHfpDevice(preferData.getInt("deviceNo", 0))
+            }
+            else {
+/*
+                var strList: List<String>
+
+                for (i in 0 until MaxBtDev) {
+                    var sendMsg = BtDevMsg(0, 1)
+
+                    strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                    sendMsg.btCmd[5] = 0x07
+                    sendMsg.btCmd[6] = 0x01
+                    sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                    sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                    sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                    sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                    sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                    sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                    Logger.d(LogMain, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                    sendMsg.btDevNo = i
+                    sendBtServiceMsg(sendMsg)
+                }
+ */
             }
         } else {
             Logger.d(LogMain, "bluetooth action request")

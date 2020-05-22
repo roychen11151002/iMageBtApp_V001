@@ -25,13 +25,13 @@
     <string name="txvStaPaired">List Paired Device</string>
     <string name="txvDevSrc">SRC</string>
     <string name="txvDevAllAg">All AG</string>
-    <string name="txvDevAllHfp">All Speaker</string>
+    <string name="txvDevAllHfp">"All Speaker  "</string>
     <string name="txvDevA6">A6</string>
     <string name="txvDevA7">A7</string>
     <string name="txvModeWired">Wired</string>
     <string name="txvModeUsb">USB</string>
     <string name="txvModeBt">BT</string>
-    <string name="txvModeVcs">Mutli-Speaker</string>
+    <string name="txvModeVcs">"Mutli-Speaker  "</string>
     <string name="txvFeature0">Fixed Device</string>
     <string name="txvFeature1">Clear Mute</string>
     <string name="txvFeature2">2</string>

@@ -67,6 +67,12 @@ class iMageBtService : Service() {
         return serviceHandler.binder
     }
 
+    override fun onUnbind(intent: Intent?): Boolean {
+        return super.onUnbind(intent)
+        btSerivceBind = false
+        Logger.d(LogService, "onUnbind")
+    }
+
     override fun onCreate() {
         super.onCreate()
         Logger.d(LogService, "onCreate")
@@ -75,13 +81,13 @@ class iMageBtService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Logger.d(LogService, "onDestroy")
         btSerivceBind = false
+        Logger.d(LogService, "onDestroy")
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Logger.d(LogService, "onStartCommand")
-        // btSerivceBind = true
+        btSerivceBind = true
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -260,29 +266,30 @@ class iMageBtService : Service() {
                 }
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                     val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    var msg = BtDevMsg(0, 1)
-                    var strList = btDevice.address.split(':')
 
-                    msg.btDevNo =
-                        when(btDevice.address) {
-                            btDevArray[0].bdaddr -> 0
-                            btDevArray[1].bdaddr -> 1
-                            else -> maxBtDdev
+                    for(i in 0 until maxBtDdev) {
+                        if(btDevice.address == btDevArray[i].bdaddr) {
+                            var msg = BtDevMsg(0, 1)
+                            var strList = btDevice.address.split(':')
+
+                            // btDevArray[i].connect()
+                            msg.btDevNo = i
+                            msg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                            msg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                            msg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                            msg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                            msg.btCmd[4] = CmdId.SET_INT_CON_RSP.value
+                            msg.btCmd[5] = 0x07
+                            msg.btCmd[6] = 0x01
+                            msg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                            msg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                            msg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                            msg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                            msg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                            msg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                            sendMainMsg(msg)
                         }
-                    msg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                    msg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                    msg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                    msg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                    msg.btCmd[4] = CmdId.SET_INT_CON_RSP.value
-                    msg.btCmd[5] = 0x07
-                    msg.btCmd[6] = 0x01
-                    msg.btCmd[7] = parseInt(strList[3], 16).toByte()
-                    msg.btCmd[8] = parseInt(strList[4], 16).toByte()
-                    msg.btCmd[9] = parseInt(strList[5], 16).toByte()
-                    msg.btCmd[10] = parseInt(strList[2], 16).toByte()
-                    msg.btCmd[11] = parseInt(strList[0], 16).toByte()
-                    msg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                    sendMainMsg(msg)
+                    }
                     Logger.d(LogService, "ACTION_ACL_DISCONNECTED ${btDevice.name} ${btDevice.address}")
                 }
                 BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED -> {
@@ -440,13 +447,25 @@ class iMageBtService : Service() {
                 if(msg.btCmd[5] == 7.toByte()) {
                     var bda = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
 
-                    btDevArray[msg.btDevNo].bdaddr = bda
                     when(msg.btCmd[6]) {
                         0.toByte() -> btDevArray[msg.btDevNo].close()
                         1.toByte() -> {
-                            if(btDevArray[msg.btDevNo].isReadable == false)
-                                if(btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
+                            if(btDevArray[msg.btDevNo].isReadable == true) {
+                                btDevArray[msg.btDevNo].close()
+                            }
+                            else {
+                                btDevArray[msg.btDevNo].bdaddr = bda
+                                if (btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
                                     btDevArray[msg.btDevNo].connect()
+                            }
+                            /*
+                            Handler().postDelayed({
+                                btDevArray[msg.btDevNo].bdaddr = bda
+                                if (btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
+                                    btDevArray[msg.btDevNo].connect()
+                            }, 3000)
+
+                             */
                         }
                         else -> {
                             Logger.d(LogService, "other connect command")

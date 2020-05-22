@@ -20,9 +20,8 @@
         android:id="@+id/txvDevName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintStart_toEndOf="@+id/imgDevType"
         app:layout_constraintTop_toTopOf="@+id/imgDevType" />
 
@@ -30,9 +29,8 @@
         android:id="@+id/txvDevBdaddr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgDevType"
         app:layout_constraintStart_toEndOf="@+id/imgDevType" />
 </androidx.constraintlayout.widget.ConstraintLayout>

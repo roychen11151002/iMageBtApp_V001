@@ -23,7 +23,7 @@
     <string name="txvPairTitle">無作動</string>
     <string name="txvDevSrc">控制裝置</string>
     <string name="txvDevAllAg">AG</string>
-    <string name="txvDevAllHfp">喇叭</string>
+    <string name="txvDevAllHfp">"喇叭  "</string>
     <string name="txvModeWired">有線</string>
     <string name="txvModeUsb">USB</string>
     <string name="txvModeBt">藍牙</string>
@@ -52,7 +52,7 @@
     <string name="txvStaBatLow">低:</string>
     <string name="txvStaBatChg">充:</string>
     <string name="txvStaBatPwr">電:</string>
-    <string name="txvModeVcs">多顆喇叭</string>
+    <string name="txvModeVcs">"多顆喇叭  "</string>
     <string name="txvStaRssiStrong">強:</string>
     <string name="txvStaRssiWeak">弱:</string>
     <string name="title_activity_message_edit">資料編輯</string>
