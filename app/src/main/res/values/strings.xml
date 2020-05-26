@@ -10,9 +10,6 @@
     <string name="txvRecyclerTitle">non activity</string>
     <string name="txvFeatureTitle">Feature Set</string>
     <string name="txvVolumeTitle">Volume Set</string>
-    <string name="txvStaBat">B:</string>
-    <string name="txvStaRssiStrong">R:</string>
-    <string name="txvStaRssiWeak">R:</string>
     <string name="txvStaConnected">Connected</string>
     <string name="txvStaConnecting">Connecting</string>
     <string name="txvStaDiscon">Disconnect</string>
@@ -53,9 +50,6 @@
     <string name="txvDecadeSpkrAv">MIC Level</string>
     <string name="txvVolumeSrc">Source Device Volume Set</string>
     <string name="txvVolumeAg">HFP Device Volume Set</string>
-    <string name="txvStaBatLow">L:</string>
-    <string name="txvStaBatChg">C:</string>
-    <string name="txvStaBatPwr">P:</string>
     <string name="txvTalkMode">Talk Mode</string>
     <string name="txvMusicMode">Music Mode</string>
     <string name="title_activity_message_edit">MessageEdit</string>
@@ -87,5 +81,13 @@
         <item name="4">aghfp3</item>
         <item name="5">aghfp4</item>
         <item name="6">aghfp5</item>
+    </string-array>
+    <string-array name="txvStaName">
+        <item name="0">R:</item>
+        <item name="1">R:</item>
+        <item name="2">B:</item>
+        <item name="3">L:</item>
+        <item name="4">C:</item>
+        <item name="5">P:</item>
     </string-array>
 </resources>

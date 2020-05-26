@@ -182,7 +182,6 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                     longClickNameListener.onLongNameEdit(adapterPosition, btDevUnitList[adapterPosition])
                     return true
                 }
-
             })
             seekSpkrVol.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
                 override fun onProgressChanged(

@@ -46,7 +46,7 @@ class FragmentConState : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var strIndMsg = Array(6) {""}
+        var strIndMsg = resources.getStringArray(R.array.txvStaName)
         val devUnitAdapter = BtDevUnitAdapter((activity as DevUnitMsg).getBtDevUnitList(), strIndMsg)
         val lmg = GridLayoutManager(context, 2)
 
@@ -62,12 +62,12 @@ class FragmentConState : Fragment() {
         recyclerDevList.layoutManager = lmg
         recyclerDevList.adapter = devUnitAdapter
         recyclerDevList.addItemDecoration(SpaceItemDecoration(4))
-        strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssiStrong)
-        strIndMsg[1] = context!!.resources.getString(R.string.txvStaRssiWeak)
-        strIndMsg[2] = context!!.resources.getString(R.string.txvStaBat)
-        strIndMsg[3] = context!!.resources.getString(R.string.txvStaBatLow)
-        strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatChg)
-        strIndMsg[5] = context!!.resources.getString(R.string.txvStaBatPwr)
+        //strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssiStrong)
+        //strIndMsg[1] = context!!.resources.getString(R.string.txvStaRssiWeak)
+        //strIndMsg[2] = context!!.resources.getString(R.string.txvStaBat)
+        //strIndMsg[3] = context!!.resources.getString(R.string.txvStaBatLow)
+        //strIndMsg[4] = context!!.resources.getString(R.string.txvStaBatChg)
+        //strIndMsg[5] = context!!.resources.getString(R.string.txvStaBatPwr)
 
         devUnitAdapter.setOnkItemImageListener(object : BtDevUnitAdapter.OnItemImageListener {
             override fun onItemImage(position: Int, btDevUnit: BtDevUnit) {

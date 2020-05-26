@@ -84,7 +84,7 @@
         android:id="@+id/txvBat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txvStaBat"
+        android:text="@string/btnCon"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
         app:layout_constraintTop_toTopOf="@+id/imgViewIcon" />
@@ -93,7 +93,7 @@
         android:id="@+id/txvRssi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/txvStaRssiStrong"
+        android:text="@string/btnCon"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/imgViewIcon"
         app:layout_constraintStart_toEndOf="@+id/imgViewIcon" />
