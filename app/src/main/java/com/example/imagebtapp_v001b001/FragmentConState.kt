@@ -2,27 +2,14 @@ package com.example.imagebtapp_v001b001
 
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.ContentResolver
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.net.toFile
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_con_state.*
-import java.io.InputStream
-import java.text.FieldPosition
-import java.time.format.ResolverStyle
 import kotlin.experimental.and
 import kotlin.experimental.or
 
@@ -184,10 +171,10 @@ class FragmentConState : Fragment() {
                 sendMsg.btCmd[3] = getDevId(position)
                 sendMsg.btCmd[4] = CmdId.SET_HFP_VOL_REQ.value
                 sendMsg.btCmd[5] = 0x01
-                    if(mute)
-                        sendMsg.btCmd[6] = 0x00.toByte().or(0x10.toByte())
-                    else
-                        sendMsg.btCmd[6] =0x40.toByte().or(0x10.toByte())
+                if(mute)
+                    sendMsg.btCmd[6] = 0x00.toByte().or(0x10.toByte())
+                else
+                    sendMsg.btCmd[6] =0x40.toByte().or(0x10.toByte())
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
                 Logger.d(LogGbl, "mic mute id:$position $mute")
             }

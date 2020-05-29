@@ -1,13 +1,6 @@
 package com.example.imagebtapp_v001b001
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Movie
-import android.graphics.Movie.decodeFile
 import android.graphics.Rect
-import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.INVISIBLE
@@ -17,13 +10,9 @@ import android.widget.ImageView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import androidx.documentfile.provider.DocumentFile
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.device_unit_adapter.view.*
-import java.io.File
-import java.io.IOException
-import java.io.InputStream
 
 class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate: Array<String>) : RecyclerView.Adapter<BtDevUnitAdapter.ViewHolder>() {
     private val rssiStrong = 50
@@ -158,7 +147,6 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                 override fun onClick(v: View?) {
                     clickMicMuteListener.onMicMute(adapterPosition, btDevUnitList[adapterPosition].muteMic)
                 }
-
             })
             imgViewMicMute.setOnLongClickListener(object : View.OnLongClickListener {
                 override fun onLongClick(v: View?): Boolean {

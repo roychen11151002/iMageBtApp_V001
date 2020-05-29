@@ -15,6 +15,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -24,6 +25,7 @@ import java.lang.Integer.parseInt
 
 private const val LogMain = "testMain"
 const val LogGbl = "testGlobal"
+
 enum class CmdId(val value: Byte) {
     CMD_HEAD_FF(0xff.toByte()),
     CMD_HEAD_55(0x55.toByte()),
@@ -177,12 +179,14 @@ interface DevUnitMsg {
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet(), FragmentAudioParaSet())
+var previousItem = 256
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtList = ArrayList<String>()
     private var BtDevUnitList = ArrayList<BtDevUnit>()
     private val MaxBtDev = 2
     private var PairState = 0
+    private var isReconnect = true
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
     private var staUpdateInterval = 60
     private val BtPermissionReqCode = 1
@@ -232,6 +236,20 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             iMageBtServiceBind = false
         }
     }
+
+    // private val clientMsgHandler = Messenger(Handler(Handler.Callback {
+
+    private val viewM6UpdateHandler = Messenger(Handler(Handler.Callback {
+        when (it.what) {
+            0 -> (ViewPagerArray[0] as FragmentConState).updateData()
+            1 -> (ViewPagerArray[1] as FragmentPairSet).updateData()
+            2 -> (ViewPagerArray[2] as FragmentFeatureSet).updateData()
+            3 -> (ViewPagerArray[3] as FragmentVolSet).updateData()
+            4 -> (ViewPagerArray[4] as FragmentAudioParaSet).updateData()
+        }
+        Logger.d(LogMain, "viewM6 update ${it.what}")
+        true
+    }))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -327,7 +345,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
-
         })
     }
 
@@ -481,12 +498,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     fun initHfpDevice(dev: Int) {
         BtDevUnitList.removeAll(BtDevUnitList)
         BtDevUnitList.add(BtDevUnit())
-        BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src")
+        BtDevUnitList[0].nameAlias = preferData!!.getString("nameAlias0", "alias name src")
         BtDevUnitList[0].imgIconUri = Uri.parse(preferData.getString("imgIconUri0", ""))
         Logger.d(LogMain, "imgIconUri0: ${BtDevUnitList[0].imgIconUri}")
         for (i in 0 until dev) {
             BtDevUnitList.add(BtDevUnit())
-            BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i")
+            BtDevUnitList[i + 1].nameAlias = preferData!!.getString("nameAlias${i + 1}", "alias name hfp$i")
             BtDevUnitList[i + 1].imgIconUri = Uri.parse(preferData.getString("imgIconUri${i + 1}", ""))
             BtDevUnitList[i + 1].nameLocalHfp = BtDevUnitList[i + 1].nameAlias
         }
@@ -510,6 +527,22 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     override fun getBtDevUnitList(): ArrayList<BtDevUnit> = BtDevUnitList
     override fun getpreferData(): SharedPreferences = preferData
     override fun getPairState(): Int = PairState
+
+    fun viewM6UpdateNest() {
+        Handler().postDelayed({
+            viewM6Update()
+            viewM6UpdateNest()
+        }, 1000)
+    }
+
+    fun viewM6Update() {
+        if(previousItem != viewPagerM6.currentItem) {
+            val msg = Message.obtain(null, viewPagerM6.currentItem)
+
+            viewM6UpdateHandler.send(msg)
+            previousItem = viewPagerM6.currentItem
+        }
+    }
 
     fun stateUpdateAuto(time: Long) {
         Handler().postDelayed({
@@ -645,7 +678,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
                 BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                 BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
-                viewPagerM6.setCurrentItem(0)
+                // viewPagerM6.setCurrentItem(0)
                 if(viewPagerM6.currentItem == 0)
                     (ViewPagerArray[0] as FragmentConState).updateData()
                 Logger.d(LogMain, "${String.format("src %02X get hfp vol %X", msg.btCmd[2], msg.btCmd[6])}")
@@ -706,6 +739,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         for(i in 0 until (msg.btCmd[5] - 2) / 2) {
                             str += msg.btCmd[i * 2 + 8].toInt().shl(8).or(msg.btCmd[i * 2 + 8 + 1].toInt()).toChar()
                         }
+                        if(str.length == 0)
+                            str = "alias name"
                         BtDevUnitList[id].nameAlias = str
                         Logger.d(LogMain, "${String.format("get ag pskey id:%d alias name:%s length:%d", pskId, str, str.length)}")
                     }
@@ -786,9 +821,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             CmdId.SET_INT_SERVICE_RSP.value ->
                 when(msg.btCmd[6]) {
                     0x00.toByte() -> {
-                        var strList: List<String>
 
+                        viewM6UpdateNest()
                         for (i in 0 until MaxBtDev) {
+                            var strList: List<String>
                             var sendMsg =BtDevMsg(0, 1)
 
                             strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
@@ -820,6 +856,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             0x00.toByte() -> {
                                 var sendMsg = BtDevMsg(0, 0)
 
+                                isReconnect = true
                                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -834,27 +871,32 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             0x01.toByte() ->{
                                 var strList: List<String>
 
-                                for (i in 0 until MaxBtDev) {
-                                    var sendMsg =BtDevMsg(0, 1)
+                                if(isReconnect == true) {
+                                    isReconnect = false
+                                    for (i in 0 until MaxBtDev) {
+                                        var sendMsg = BtDevMsg(0, 1)
 
-                                    strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
-                                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                                    sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
-                                    sendMsg.btCmd[5] = 0x07
-                                    sendMsg.btCmd[6] = 0x01
-                                    sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
-                                    sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
-                                    sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
-                                    sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
-                                    sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
-                                    sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                                    Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
-                                    sendMsg.btDevNo = i
-                                    sendBtServiceMsg(sendMsg)
+                                        strList = preferData.getString("bdaddr${i}","00:00:00:00:00:00")!!.split(':')
+                                        sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                        sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                        sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                        sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                        sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                                        sendMsg.btCmd[5] = 0x07
+                                        sendMsg.btCmd[6] = 0x01
+                                        sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                                        sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                                        sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                                        sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                                        sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                                        sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                                        Logger.d(LogMain,"${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                                        sendMsg.btDevNo = i
+                                        sendBtServiceMsg(sendMsg)
+                                    }
+                                    Logger.d(LogMain, "bluetooth reconnecct")
                                 }
+                                Logger.d(LogMain, "bluetooth disconnect")
                                 applicationContext.resources.getString(R.string.txvStaDiscon)
                             }
                             0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)

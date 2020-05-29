@@ -2,8 +2,6 @@ package com.example.imagebtapp_v001b001
 
 import android.app.Service
 import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothAdapter.STATE_OFF
-import android.bluetooth.BluetoothAdapter.STATE_ON
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -16,7 +14,6 @@ import android.os.Messenger
 import java.io.IOException
 import java.lang.Integer.parseInt
 import java.lang.System.arraycopy
-import java.sql.Types.NULL
 import java.util.*
 
 private const val LogService = "testService"
@@ -68,9 +65,9 @@ class iMageBtService : Service() {
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
-        return super.onUnbind(intent)
         btSerivceBind = false
         Logger.d(LogService, "onUnbind")
+        return super.onUnbind(intent)
     }
 
     override fun onCreate() {
@@ -457,6 +454,7 @@ class iMageBtService : Service() {
                                 btDevArray[msg.btDevNo].bdaddr = bda
                                 if (btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
                                     btDevArray[msg.btDevNo].connect()
+                                Logger.d(LogService, "connect bluetooth device request")
                             }
                             /*
                             Handler().postDelayed({
@@ -464,8 +462,7 @@ class iMageBtService : Service() {
                                 if (btDevArray[msg.btDevNo].bdaddr != "00:00:00:00:00:00")
                                     btDevArray[msg.btDevNo].connect()
                             }, 3000)
-
-                             */
+                            */
                         }
                         else -> {
                             Logger.d(LogService, "other connect command")

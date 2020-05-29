@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListAdapter.ViewHolder>() {
     lateinit var clickListener: OnItemClickListener
@@ -61,7 +62,8 @@ class BtListAdapter(val items: ArrayList<String>) : RecyclerView.Adapter<BtListA
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.TxvDevName.text = items[position].removeRange(items[position].lastIndexOf(" + "), items[position].lastIndex + 1)
         holder.TXVDevBdaddr.text = items[position].removeRange(0, items[position].lastIndexOf(" + ") + 3)
-        holder.ImgDevType.setImageResource(ImgIconId[position % ImgIconId.size])
+        // holder.ImgDevType.setImageResource(ImgIconId[position % ImgIconId.size])
+        Glide.with(holder.ImgDevType.context).load(ImgIconId[position % ImgIconId.size]).error(ImgIconId[position % ImgIconId.size]).into(holder.ImgDevType)
         holder.TxvDevName.setTextColor((
             if(position == 0)
                 0xffff0000

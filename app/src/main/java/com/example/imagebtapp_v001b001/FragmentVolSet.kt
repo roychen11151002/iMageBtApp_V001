@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import kotlinx.android.synthetic.main.fragment_feature_set.*
+import androidx.core.view.isInvisible
 import kotlinx.android.synthetic.main.fragment_vol_set.*
+import kotlin.reflect.KVariance
 
 class FragmentVolSet : Fragment() {
     var srcDevItme = 0
@@ -31,6 +32,10 @@ class FragmentVolSet : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        seekAgHfpSpkrVol.visibility = View.INVISIBLE
+        seekAgAvSpkrVol.visibility = View.INVISIBLE
+        seekAgHfpMicVol.visibility = View.INVISIBLE
+        textView6.visibility = View.INVISIBLE
         if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
             rdHfpAllVolume.isEnabled = false
         }
@@ -123,8 +128,7 @@ class FragmentVolSet : Fragment() {
             updateData()
         }
         rdGpModeVolume.setOnCheckedChangeListener { group, checkedId ->
-            mode =
-                when (checkedId) {
+            mode = when (checkedId) {
                     R.id.rdModeWireVolume -> 1
                     R.id.rdModeUsbVolume -> 2
                     R.id.rdModeBtVolume -> 4
@@ -142,7 +146,10 @@ class FragmentVolSet : Fragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 when (mode) {
-                    1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpMicVol = seekSrcHfpMicVol.progress
+                    1 -> if(srcDevItme == 0)
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpMicVol = seekSrcHfpMicVol.progress
+                         else
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpMicVol = seekSrcHfpMicVol.progress
                     2 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcUsbHfpMicVol = seekSrcHfpMicVol.progress
                     4 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcBtHfpMicVol = seekSrcHfpMicVol.progress
                     8 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcVcsHfpMicVol = seekSrcHfpMicVol.progress
@@ -159,7 +166,10 @@ class FragmentVolSet : Fragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 when (mode) {
-                    1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpSpkrVol = seekSrcHfpSpkrVol.progress
+                    1 -> if(srcDevItme == 0)
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpSpkrVol = seekSrcHfpSpkrVol.progress
+                        else
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpSpkrVol = seekSrcHfpSpkrVol.progress
                     2 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcUsbHfpSpkrVol = seekSrcHfpSpkrVol.progress
                     4 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcBtHfpSpkrVol = seekSrcHfpSpkrVol.progress
                     8 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcVcsHfpSpkrVol = seekSrcHfpSpkrVol.progress
@@ -176,7 +186,10 @@ class FragmentVolSet : Fragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
                 when (mode) {
-                    1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireAvSpkrVol = seekSrcAvSpkrVol.progress
+                    1 -> if(srcDevItme == 0)
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireAvSpkrVol = seekSrcAvSpkrVol.progress
+                         else
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireAvSpkrVol = seekSrcAvSpkrVol.progress
                     2 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcUsbAvSpkrVol = seekSrcAvSpkrVol.progress
                     4 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcBtAvSpkrVol = seekSrcAvSpkrVol.progress
                     8 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcVcsAvSpkrVol = seekSrcAvSpkrVol.progress
@@ -184,6 +197,7 @@ class FragmentVolSet : Fragment() {
                 }
             }
         })
+/*
         seekAgHfpMicVol.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
             }
@@ -235,6 +249,7 @@ class FragmentVolSet : Fragment() {
                 }
             }
         })
+ */
         chkSrcHfpSpkrDecade.setOnCheckedChangeListener { buttonView, isChecked ->
             when (mode) {
                 1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade =
@@ -283,15 +298,43 @@ class FragmentVolSet : Fragment() {
                         (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade.and(0x80.inv())
             }
         }
+        mode = when(rdGpModeVolume.checkedRadioButtonId) {
+            R.id.rdModeWireVolume -> 1
+            R.id.rdModeUsbVolume -> 2
+            R.id.rdModeBtVolume -> 4
+            R.id.rdModeVcsVolume -> 8
+            else -> 8
+        }
+        srcDevId = when (rdGpDevVolume.checkedRadioButtonId) {
+            R.id.rdSrcVolume -> {
+                srcDevItme = 0
+                0x30
+            }
+            R.id.rdHfpAllVolume -> {
+                srcDevItme = 1
+                0x38
+            }
+            else -> {
+                srcDevItme = 0
+                0x30
+            }
+        }
         updateData()
     }
 
     fun updateData() {
         when(mode) {
             1 -> {
-                seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireAvSpkrVol
-                seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpSpkrVol
-                seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpMicVol
+                if(srcDevItme == 0) {
+                    seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireAvSpkrVol
+                    seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpSpkrVol
+                    seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpMicVol
+                }
+                else {
+                    seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireAvSpkrVol
+                    seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpSpkrVol
+                    seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcWireHfpMicVol
+                }
                 seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireAvSpkrVol
                 seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpSpkrVol
                 seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeAgWireHfpMicVol

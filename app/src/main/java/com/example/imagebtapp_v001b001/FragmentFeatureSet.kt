@@ -117,6 +117,24 @@ class FragmentFeatureSet : Fragment() {
             sendMsg.btCmd[23] = seekLedRev.progress.shr(8).toByte()
             sendMsg.btCmd[24] = seekLedRev.progress.and(0xff).toByte()
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            Handler().postDelayed({
+                var sendMsg = BtDevMsg(0, 1)
+
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                sendMsg.btCmd[5] = 0x07
+                sendMsg.btCmd[6] = 0x00
+                sendMsg.btCmd[7] = 0x00
+                sendMsg.btCmd[8] = 0x00
+                sendMsg.btCmd[9] = 0x00
+                sendMsg.btCmd[10] = 0x00
+                sendMsg.btCmd[11] = 0x00
+                sendMsg.btCmd[12] = 0x00
+                (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            }, 200)
         }
         rdGpDevFeature.setOnCheckedChangeListener { group, checkedId ->
             srcDevId =
@@ -263,7 +281,7 @@ class FragmentFeatureSet : Fragment() {
     fun updateData() {
         var chkBox: CheckBox
         var feature: Int
-        var ledLight = Array<Int>(4) {0}
+        var ledLight: Array<Int>
 
         if(cmdGetFeatureId == CmdId.GET_AG_FEATURE_REQ.value) {
             feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg
