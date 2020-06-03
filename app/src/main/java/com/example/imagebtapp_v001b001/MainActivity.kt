@@ -957,7 +957,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     for (i in 0 until (msg.btCmd[5] - 7) / 2) {
                         str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                     }
-                    str += bdaddrTranslate(msg, 7)
+                    str += " + " + bdaddrTranslate(msg, 7)
                     BtList.add(str)
                     if (viewPagerM6.currentItem == 1)
                         (ViewPagerArray[1] as FragmentPairSet).updateData()
