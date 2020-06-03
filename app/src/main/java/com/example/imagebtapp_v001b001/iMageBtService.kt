@@ -130,7 +130,7 @@ class iMageBtService : Service() {
                             i = 0
                             when(btDevMsg.btCmd[4]) {
                                 CmdId.GET_HFP_STA_RSP.value-> {
-                                    // Logger.d(LogService, "${String.format("sta cmd: %02X %02X%02X%02X%02X", btDevMsg.btCmd[2], btDevMsg.btCmd[6], btDevMsg.btCmd[7], btDevMsg.btCmd[8], btDevMsg.btCmd[9])}")
+                                    // Logger.d(LogService, "${bdaddrTranslate(msg, 7)")
                                 }
                                 CmdId.GET_HFP_VOL_RSP.value -> {
                                     Logger.d(LogService, "${String.format("vol cmd: %02X %02X", btDevMsg.btCmd[2], btDevMsg.btCmd[6])}")
@@ -342,7 +342,7 @@ class iMageBtService : Service() {
                     sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
                     sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
                     sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                    Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                    Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
                     if (btDevice.name != null) {
                         sendMsg.btCmd[5] = (btDevice.name.length * 2 + 7).toByte()
                         for (i in 0 until btDevice.name.length) {
@@ -430,11 +430,13 @@ class iMageBtService : Service() {
         }
     }
 
+    fun bdaddrTranslate(msg: BtDevMsg, offset: Int) = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[offset + 4], msg.btCmd[offset + 5], msg.btCmd[offset + 3], msg.btCmd[offset], msg.btCmd[offset + 1], msg.btCmd[offset + 2])
+
     fun rfcCmdParse(msg: BtDevMsg) {
         when(msg.btCmd[4]) {
             CmdId.SET_INT_SERVICE_REQ.value -> {
                 if(msg.btCmd[5] == 7.toByte()) {
-                    var bda = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
+                    var bda = bdaddrTranslate(msg, 7)
 
                     btDevArray[msg.btDevNo].bdaddr = bda
                     Logger.d(LogService,"bluetooth address changed ==> device: ${msg.btDevNo} address: ${btDevArray[msg.btDevNo].bdaddr}")
@@ -442,7 +444,7 @@ class iMageBtService : Service() {
             }
             CmdId.SET_INT_CON_REQ.value -> {
                 if(msg.btCmd[5] == 7.toByte()) {
-                    var bda = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
+                    var bda = bdaddrTranslate(msg, 7)
 
                     when(msg.btCmd[6]) {
                         0.toByte() -> btDevArray[msg.btDevNo].close()
@@ -506,7 +508,7 @@ class iMageBtService : Service() {
                         sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
                         sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
                         sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                        Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                        Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(msg, 7)}")
                         if (device.name != null) {
                             sendMsg.btCmd[5] = (device.name.length * 2 + 7).toByte()
                             for (i in 0 until device.name.length) {

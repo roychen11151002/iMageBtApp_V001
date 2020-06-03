@@ -58,7 +58,7 @@
     <string name="txvDevPair">需連接裝置</string>
     <string name="txvDevMsg">裝置訊息</string>
     <string name="txvAudioParameter0">音效參數0</string>
-    <string name="txvAudioParameter1">音效參數1</string>
+    <string name="txvAudioParameter1">音效參數1(A6)</string>
     <string name="txvAudioParameter2">音效參數2(A7)</string>
     <string name="txvAudioParameter3">音效參數3(A6)</string>
     <string name="txvAudioParameter4">音效參數4</string>
@@ -90,5 +90,14 @@
         <item name="3">低:</item>
         <item name="4">充:</item>
         <item name="5">電:</item>
+    </string-array>
+    <string-array name="txvMessageName">
+        <item name="0">名稱:</item>
+        <item name="1">搜尋名稱:</item>
+        <item name="2">AG名稱:</item>
+        <item name="3">版本:</item>
+        <item name="4">AG版本:</item>
+        <item name="5">位址:</item>
+        <item name="6">配對位址:</item>
     </string-array>
 </resources>

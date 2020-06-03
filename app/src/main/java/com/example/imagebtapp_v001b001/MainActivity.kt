@@ -179,13 +179,13 @@ interface DevUnitMsg {
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet(), FragmentAudioParaSet())
-var previousItem = 256
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtList = ArrayList<String>()
     private var BtDevUnitList = ArrayList<BtDevUnit>()
     private val MaxBtDev = 2
     private var PairState = 0
+    private var previousItem = 256
     private var isReconnect = true
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
     private var staUpdateInterval = 60
@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
             sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
             sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-            Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+            Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
             sendBtServiceMsg(sendMsg)
         }
         btnCon.setOnLongClickListener {
@@ -311,7 +311,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
             sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
             sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-            Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+            Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
             sendBtServiceMsg(sendMsg)
             true
         }
@@ -346,10 +346,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
         })
-    }
-
-    override fun onStart() {
-        super.onStart()
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
@@ -358,8 +354,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         imgMainBackGround.alpha = preferData.getInt("MainIconAlpha", 3).toFloat() / seekMainAlpha.max
         seekMainAlpha.progress = preferData.getInt("MainIconAlpha", 3)
         initBt()
-        editTextStaUpTime.clearFocus()
         Logger.d(LogMain, "state update interval $staUpdateInterval")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        editTextStaUpTime.clearFocus()
         Logger.d(LogMain, "main activity onStart")
     }
 
@@ -483,7 +483,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
                     sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
                     sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                    Logger.d(LogMain, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                    Logger.d(LogMain, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
                     sendMsg.btDevNo = i
                     sendBtServiceMsg(sendMsg)
                 }
@@ -632,8 +632,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             0x18.toByte() -> 4
             0x20.toByte() -> 5
             0x28.toByte() -> 6
-            else -> 127
+            CmdId.CMD_DEV_HOST.value -> 0x80
+            else -> 0xff
         }
+
+    fun bdaddrTranslate(msg: BtDevMsg, offset: Int) = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[offset + 4], msg.btCmd[offset + 5], msg.btCmd[offset + 3], msg.btCmd[offset], msg.btCmd[offset + 1], msg.btCmd[offset + 2])
+
     fun iMageCmdParse(msg: BtDevMsg) {
 /*
         val len = msg.btCmd[5] + 6
@@ -645,213 +649,218 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         // Logger.d(LogMain, "${String.format("command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
         var id = getBtDevId(msg.btCmd[2])
 
-        when(msg.btCmd[4]) {
-            CmdId.SET_AG_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X AG volume set", msg.btCmd[2])}")
-            CmdId.SET_HFP_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X HFP volume set", msg.btCmd[2])}")
-            CmdId.SET_HFP_PAIR_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp pair bda", msg.btCmd[2])}")
-            CmdId.SET_HFP_PSKEY_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp pskey", msg.btCmd[2])}")
-            CmdId.SET_AG_PSKEY_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set ag pskey", msg.btCmd[2])}")
-            CmdId.SET_HFP_FEATURE_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp feature", msg.btCmd[2])}")
-            CmdId.GET_SRC_DEV_NO_REQ.value -> Logger.d(LogMain, "${String.format("src:%02X get device number", msg.btCmd[2])}")
-            CmdId.GET_HFP_STA_RSP.value -> {
-                BtDevUnitList[id].stateCon = msg.btCmd[6].toInt().and(0xff).shl(24) + msg.btCmd[7].toInt().and(0xff).shl(16) + msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
-                BtDevUnitList[id].volSpkrHfp = msg.btCmd[7].toInt().and(0x0f)
-                BtDevUnitList[id].muteSpkr = msg.btCmd[7].toInt().and(0x10) == 0x10
-                BtDevUnitList[id].muteMic = msg.btCmd[7].toInt().and(0x20) == 0x20
-                if(viewPagerM6.currentItem == 0)
-                    (ViewPagerArray[0] as FragmentConState).updateData()
-                Logger.d(LogMain, "${String.format("src:%02X get hfp state %08X", msg.btCmd[2], BtDevUnitList[id].stateCon)}")
-            }
-            CmdId.GET_HFP_EXT_STA_RSP.value -> {
-                BtDevUnitList[id].stateExtra = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                BtDevUnitList[id].batLevel = BtDevUnitList[id].stateExtra.shr(12)
-                BtDevUnitList[id].batInd =
-                    if(BtDevUnitList[id].stateExtra.and(0x40) == 0x40)
-                        true
-                    else
-                        false
-                if(viewPagerM6.currentItem == 0)
-                    (ViewPagerArray[0] as FragmentConState).updateData()
-                Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
-            }
-            CmdId.GET_HFP_VOL_RSP.value -> {
-                BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
-                BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
-                BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
-                // viewPagerM6.setCurrentItem(0)
-                if(viewPagerM6.currentItem == 0)
-                    (ViewPagerArray[0] as FragmentConState).updateData()
-                Logger.d(LogMain, "${String.format("src %02X get hfp vol %X", msg.btCmd[2], msg.btCmd[6])}")
-            }
-            CmdId.GET_HFP_RSSI_RSP.value -> {
-                BtDevUnitList[id].rssi = (0x10000 - (msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff))).and(0xffff)
-                if(viewPagerM6.currentItem == 0)
-                    (ViewPagerArray[0] as FragmentConState).updateData()
-            }
-            CmdId.GET_HFP_PSKEY_RSP.value -> {
-                val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                Logger.d(LogMain, "${String.format("get hfp pskey id:%d", pskId)}")
-                when(pskId) {
-                    9 -> {
-                        BtDevUnitList[id].featureMode = msg.btCmd[8].toInt().and(0xff).shl(24) + msg.btCmd[9].toInt().and(0xff).shl(16) + msg.btCmd[10].toInt().and(0xff).shl(8) + msg.btCmd[11].toInt().and(0xff)
-                        if(viewPagerM6.currentItem == 2)
-                            (ViewPagerArray[2] as FragmentFeatureSet).updateData()
-                    }
-                    16 -> {
-
-                    }
-                    17 -> {
-                        BtDevUnitList[id].modeSrcWireHfpMicVol = msg.btCmd[8].toInt()
-                        BtDevUnitList[id].modeSrcWireHfpSpkrVol = msg.btCmd[9].toInt()
-                        BtDevUnitList[id].modeSrcUsbHfpMicVol = msg.btCmd[10].toInt()
-                        BtDevUnitList[id].modeSrcUsbHfpSpkrVol = msg.btCmd[11].toInt()
-                        BtDevUnitList[id].modeSrcBtHfpMicVol = msg.btCmd[12].toInt()
-                        BtDevUnitList[id].modeSrcBtHfpSpkrVol = msg.btCmd[13].toInt()
-                        BtDevUnitList[id].modeSrcVcsHfpMicVol = msg.btCmd[14].toInt()
-                        BtDevUnitList[id].modeSrcVcsHfpSpkrVol = msg.btCmd[15].toInt()
-                        BtDevUnitList[id].modeSrcWireAvSpkrVol = msg.btCmd[16].toInt()
-                        BtDevUnitList[id].modeSrcUsbAvSpkrVol = msg.btCmd[17].toInt()
-                        BtDevUnitList[id].modeSrcBtAvSpkrVol = msg.btCmd[18].toInt()
-                        BtDevUnitList[id].modeSrcVcsAvSpkrVol = msg.btCmd[19].toInt()
-                        BtDevUnitList[id].modeSrcSpkrDecade = msg.btCmd[20].toInt()
-                        if(viewPagerM6.currentItem == 3)
-                            (ViewPagerArray[3] as FragmentVolSet).updateData()
-                    }
-                    18 -> {
-                        BtDevUnitList[id].modeAgWireHfpMicVol = msg.btCmd[8].toInt()
-                        BtDevUnitList[id].modeAgWireHfpSpkrVol = msg.btCmd[9].toInt()
-                        BtDevUnitList[id].modeAgUsbHfpMicVol = msg.btCmd[10].toInt()
-                        BtDevUnitList[id].modeAgUsbHfpSpkrVol = msg.btCmd[11].toInt()
-                        BtDevUnitList[id].modeAgBtHfpMicVol = msg.btCmd[12].toInt()
-                        BtDevUnitList[id].modeAgBtHfpSpkrVol = msg.btCmd[13].toInt()
-                        BtDevUnitList[id].modeAgVcsHfpMicVol = msg.btCmd[14].toInt()
-                        BtDevUnitList[id].modeAgVcsHfpSpkrVol = msg.btCmd[15].toInt()
-                        BtDevUnitList[id].modeAgWireAvSpkrVol = msg.btCmd[16].toInt()
-                        BtDevUnitList[id].modeAgUsbAvSpkrVol = msg.btCmd[17].toInt()
-                        BtDevUnitList[id].modeAgBtAvSpkrVol = msg.btCmd[18].toInt()
-                        BtDevUnitList[id].modeAgVcsAvSpkrVol = msg.btCmd[19].toInt()
-                        if(viewPagerM6.currentItem == 3)
-                            (ViewPagerArray[3] as FragmentVolSet).updateData()
-                    }
-                    26 -> {
-                        var str = ""
-
-                        for(i in 0 until (msg.btCmd[5] - 2) / 2) {
-                            str += msg.btCmd[i * 2 + 8].toInt().shl(8).or(msg.btCmd[i * 2 + 8 + 1].toInt()).toChar()
+        if ((id <= BtDevUnitList.size) || (id == 0x80)) {
+            when (msg.btCmd[4]) {
+                CmdId.SET_AG_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X AG volume set", msg.btCmd[2])}")
+                CmdId.SET_HFP_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X HFP volume set", msg.btCmd[2])}")
+                CmdId.SET_HFP_PAIR_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp pair bda", msg.btCmd[2])}")
+                CmdId.SET_HFP_PSKEY_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp pskey", msg.btCmd[2])}")
+                CmdId.SET_AG_PSKEY_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set ag pskey", msg.btCmd[2])}")
+                CmdId.SET_HFP_FEATURE_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X set hfp feature", msg.btCmd[2])}")
+                CmdId.GET_SRC_DEV_NO_REQ.value -> Logger.d(LogMain, "${String.format("src:%02X get device number", msg.btCmd[2])}")
+                CmdId.GET_HFP_STA_RSP.value -> {
+                    BtDevUnitList[id].stateCon = msg.btCmd[6].toInt().and(0xff).shl(24) + msg.btCmd[7].toInt().and(0xff).shl(16) + msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
+                    BtDevUnitList[id].volSpkrHfp = msg.btCmd[7].toInt().and(0x0f)
+                    BtDevUnitList[id].muteSpkr = msg.btCmd[7].toInt().and(0x10) == 0x10
+                    BtDevUnitList[id].muteMic = msg.btCmd[7].toInt().and(0x20) == 0x20
+                    if (viewPagerM6.currentItem == 0)
+                        (ViewPagerArray[0] as FragmentConState).updateData()
+                    Logger.d(LogMain, "${String.format("src:%02X get hfp state %08X", msg.btCmd[2], BtDevUnitList[id].stateCon)}")
+                }
+                CmdId.GET_HFP_EXT_STA_RSP.value -> {
+                    BtDevUnitList[id].stateExtra =
+                        msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    BtDevUnitList[id].batLevel = BtDevUnitList[id].stateExtra.shr(12)
+                    BtDevUnitList[id].batInd =
+                        if (BtDevUnitList[id].stateExtra.and(0x40) == 0x40)
+                            true
+                        else
+                            false
+                    if (viewPagerM6.currentItem == 0)
+                        (ViewPagerArray[0] as FragmentConState).updateData()
+                    Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
+                }
+                CmdId.GET_HFP_VOL_RSP.value -> {
+                    BtDevUnitList[id].volSpkrHfp = msg.btCmd[6].toInt().and(0x0f)
+                    BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
+                    BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
+                    // viewPagerM6.setCurrentItem(0)
+                    if (viewPagerM6.currentItem == 0)
+                        (ViewPagerArray[0] as FragmentConState).updateData()
+                    Logger.d(LogMain, "${String.format("src %02X get hfp vol %X", msg.btCmd[2], msg.btCmd[6])}")
+                }
+                CmdId.GET_HFP_RSSI_RSP.value -> {
+                    BtDevUnitList[id].rssi = (0x10000 - (msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff))).and(0xffff)
+                    if (viewPagerM6.currentItem == 0)
+                        (ViewPagerArray[0] as FragmentConState).updateData()
+                }
+                CmdId.GET_HFP_PSKEY_RSP.value -> {
+                    val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    Logger.d(LogMain, "${String.format("get hfp pskey id:%d", pskId)}")
+                    when (pskId) {
+                        9 -> {
+                            BtDevUnitList[id].featureMode = msg.btCmd[8].toInt().and(0xff).shl(24) + msg.btCmd[9].toInt().and(0xff).shl(16) + msg.btCmd[10].toInt().and(0xff).shl(8) + msg.btCmd[11].toInt().and(0xff)
+                            if (viewPagerM6.currentItem == 2)
+                                (ViewPagerArray[2] as FragmentFeatureSet).updateData()
                         }
-                        if(str.length == 0)
-                            str = "alias name"
-                        BtDevUnitList[id].nameAlias = str
-                        Logger.d(LogMain, "${String.format("get ag pskey id:%d alias name:%s length:%d", pskId, str, str.length)}")
-                    }
-                    else -> {
+                        16 -> {
 
-                    }
-                }
-            }
-            CmdId.GET_AG_PSKEY_RSP.value -> {
-                val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                Logger.d(LogMain, "${String.format("get ag pskey id:%d", pskId)}")
-            }
-            CmdId.GET_HFP_VRESION_RSP.value -> {
-                BtDevUnitList[id].verFirmwareHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-            }
-            CmdId.GET_AG_VRESION_RSP.value -> {
-                BtDevUnitList[id].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-                if(id.and(0x1) == 0x1)
-                    BtDevUnitList[id + 1].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-            }
-            CmdId.GET_HFP_LOCAL_NAME_RSP.value -> {
-                BtDevUnitList[id].nameLocalHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-            }
-            CmdId.GET_AG_LOCAL_NAME_RSP.value -> {
-                BtDevUnitList[id].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-                if(id.and(0x1) == 0x1)
-                    BtDevUnitList[id + 1].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
-            }
-            CmdId.GET_SRC_DEV_NO_RSP.value -> {
-                val preferDataEdit = preferData.edit()
+                        }
+                        17 -> {
+                            BtDevUnitList[id].modeSrcWireHfpMicVol = msg.btCmd[8].toInt()
+                            BtDevUnitList[id].modeSrcWireHfpSpkrVol = msg.btCmd[9].toInt()
+                            BtDevUnitList[id].modeSrcUsbHfpMicVol = msg.btCmd[10].toInt()
+                            BtDevUnitList[id].modeSrcUsbHfpSpkrVol = msg.btCmd[11].toInt()
+                            BtDevUnitList[id].modeSrcBtHfpMicVol = msg.btCmd[12].toInt()
+                            BtDevUnitList[id].modeSrcBtHfpSpkrVol = msg.btCmd[13].toInt()
+                            BtDevUnitList[id].modeSrcVcsHfpMicVol = msg.btCmd[14].toInt()
+                            BtDevUnitList[id].modeSrcVcsHfpSpkrVol = msg.btCmd[15].toInt()
+                            BtDevUnitList[id].modeSrcWireAvSpkrVol = msg.btCmd[16].toInt()
+                            BtDevUnitList[id].modeSrcUsbAvSpkrVol = msg.btCmd[17].toInt()
+                            BtDevUnitList[id].modeSrcBtAvSpkrVol = msg.btCmd[18].toInt()
+                            BtDevUnitList[id].modeSrcVcsAvSpkrVol = msg.btCmd[19].toInt()
+                            BtDevUnitList[id].modeSrcSpkrDecade = msg.btCmd[20].toInt()
+                            if (viewPagerM6.currentItem == 3)
+                                (ViewPagerArray[3] as FragmentVolSet).updateData()
+                        }
+                        18 -> {
+                            BtDevUnitList[id].modeAgWireHfpMicVol = msg.btCmd[8].toInt()
+                            BtDevUnitList[id].modeAgWireHfpSpkrVol = msg.btCmd[9].toInt()
+                            BtDevUnitList[id].modeAgUsbHfpMicVol = msg.btCmd[10].toInt()
+                            BtDevUnitList[id].modeAgUsbHfpSpkrVol = msg.btCmd[11].toInt()
+                            BtDevUnitList[id].modeAgBtHfpMicVol = msg.btCmd[12].toInt()
+                            BtDevUnitList[id].modeAgBtHfpSpkrVol = msg.btCmd[13].toInt()
+                            BtDevUnitList[id].modeAgVcsHfpMicVol = msg.btCmd[14].toInt()
+                            BtDevUnitList[id].modeAgVcsHfpSpkrVol = msg.btCmd[15].toInt()
+                            BtDevUnitList[id].modeAgWireAvSpkrVol = msg.btCmd[16].toInt()
+                            BtDevUnitList[id].modeAgUsbAvSpkrVol = msg.btCmd[17].toInt()
+                            BtDevUnitList[id].modeAgBtAvSpkrVol = msg.btCmd[18].toInt()
+                            BtDevUnitList[id].modeAgVcsAvSpkrVol = msg.btCmd[19].toInt()
+                            if (viewPagerM6.currentItem == 3)
+                                (ViewPagerArray[3] as FragmentVolSet).updateData()
+                        }
+                        26 -> {
+                            var str = ""
 
-                Logger.d(LogMain, "${String.format("src:%02X source device number:%02d", msg.btCmd[2], msg.btCmd[6])}")
-                if(msg.btCmd[2] == 0x30.toByte()) {
-                    initHfpDevice(msg.btCmd[6].toUByte().toInt())
-                    preferDataEdit.putInt("deviceNo", msg.btCmd[6].toUByte().toInt())
-                    preferDataEdit.apply()
-                }
-                setUpdate()
-                stateUpdate()
-            }
-            CmdId.GET_HFP_FEATURE_RSP.value -> {
-                BtDevUnitList[id].featureHfp = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                BtDevUnitList[id].maxAgNo = msg.btCmd[8].toInt()
-                BtDevUnitList[id].maxTalkNo = msg.btCmd[9].toInt()
-                BtDevUnitList[id].bdaddrFilterHfp = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[15], msg.btCmd[16], msg.btCmd[14], msg.btCmd[10], msg.btCmd[11], msg.btCmd[12])
-                for(i in 0 until 4) {
-                    BtDevUnitList[id].ledLightHfp[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
-                }
-                if(viewPagerM6.currentItem == 2)
-                    (ViewPagerArray[2] as FragmentFeatureSet).updateData()
-                Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureHfp)}")
-            }
-            CmdId.GET_AG_FEATURE_RSP.value -> {
-                BtDevUnitList[id].featureAg = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                BtDevUnitList[id].bdaddrFilterAg = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[15], msg.btCmd[16], msg.btCmd[14], msg.btCmd[10], msg.btCmd[11], msg.btCmd[12])
-                for(i in 0 until 4) {
-                    BtDevUnitList[id].ledLightAg[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
-                }
-                if(id.and(0x1) == 0x1) {
-                    BtDevUnitList[id + 1].featureAg = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                    BtDevUnitList[id + 1].bdaddrFilterAg = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[15], msg.btCmd[16], msg.btCmd[14], msg.btCmd[10], msg.btCmd[11], msg.btCmd[12])
-                    for(i in 0 until 4) {
-                        BtDevUnitList[id + 1].ledLightAg[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
-                    }
-                }
-                if(viewPagerM6.currentItem == 2)
-                    (ViewPagerArray[2] as FragmentFeatureSet).updateData()
-                Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureAg)}")
-            }
-            CmdId.GET_HFP_PAIR_RSP.value -> {
-                BtDevUnitList[id].bdaddrPair = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
-            }
-            CmdId.GET_AG_BDA_RSP.value -> {
-                BtDevUnitList[id].bdaddr = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
-                if(id.and(0x1) == 0x1)
-                    BtDevUnitList[id + 1].bdaddr = String.format("%02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
-            }
-            CmdId.SET_INT_SERVICE_RSP.value ->
-                when(msg.btCmd[6]) {
-                    0x00.toByte() -> {
+                            for (i in 0 until (msg.btCmd[5] - 2) / 2) {
+                                str += msg.btCmd[i * 2 + 8].toInt().shl(8).or(msg.btCmd[i * 2 + 8 + 1].toInt()).toChar()
+                            }
+                            if (str.length == 0)
+                                str = "alias name"
+                            BtDevUnitList[id].nameAlias = str
+                            Logger.d(LogMain, "${String.format("get ag pskey id:%d alias name:%s length:%d", pskId, str, str.length)}")
+                        }
+                        else -> {
 
-                        viewM6UpdateNest()
-                        for (i in 0 until MaxBtDev) {
-                            var strList: List<String>
-                            var sendMsg =BtDevMsg(0, 1)
-
-                            strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
-                            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                            sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                            sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
-                            sendMsg.btCmd[5] = 0x07
-                            sendMsg.btCmd[6] = 0x01
-                            sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
-                            sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
-                            sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
-                            sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
-                            sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
-                            sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                            Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
-                            sendMsg.btDevNo = i
-                            sendBtServiceMsg(sendMsg)
                         }
                     }
-                    STATE_ON.toByte(), STATE_OFF.toByte()  -> {
-                        finish()
-                    }
                 }
-            CmdId.SET_INT_CON_RSP.value -> when(msg.btDevNo) {
-                0 -> txvConSta0.text =
+                CmdId.GET_AG_PSKEY_RSP.value -> {
+                    val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    Logger.d(LogMain, "${String.format("get ag pskey id:%d", pskId)}")
+                }
+                CmdId.GET_HFP_VRESION_RSP.value -> {
+                    BtDevUnitList[id].verFirmwareHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                }
+                CmdId.GET_AG_VRESION_RSP.value -> {
+                    BtDevUnitList[id].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                    if (id.and(0x1) == 0x1)
+                        BtDevUnitList[id + 1].verFirmwareAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                }
+                CmdId.GET_HFP_LOCAL_NAME_RSP.value -> {
+                    BtDevUnitList[id].nameLocalHfp = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                }
+                CmdId.GET_AG_LOCAL_NAME_RSP.value -> {
+                    BtDevUnitList[id].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                    if (id.and(0x1) == 0x1)
+                        BtDevUnitList[id + 1].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
+                }
+                CmdId.GET_SRC_DEV_NO_RSP.value -> {
+                    val preferDataEdit = preferData.edit()
+
+                    Logger.d(LogMain, "${String.format("src:%02X source device number:%02d", msg.btCmd[2], msg.btCmd[6])}")
+                    if (msg.btCmd[2] == 0x30.toByte()) {
+                        initHfpDevice(msg.btCmd[6].toUByte().toInt())
+                        preferDataEdit.putInt("deviceNo", msg.btCmd[6].toUByte().toInt())
+                        preferDataEdit.apply()
+                    }
+                    setUpdate()
+                    stateUpdate()
+                }
+                CmdId.GET_HFP_FEATURE_RSP.value -> {
+                    BtDevUnitList[id].featureHfp = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    BtDevUnitList[id].maxAgNo = msg.btCmd[8].toInt()
+                    BtDevUnitList[id].maxTalkNo = msg.btCmd[9].toInt()
+                    BtDevUnitList[id].bdaddrFilterHfp = bdaddrTranslate(msg, 11)
+                    for (i in 0 until 4) {
+                        BtDevUnitList[id].ledLightHfp[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
+                    }
+                    if (viewPagerM6.currentItem == 2)
+                        (ViewPagerArray[2] as FragmentFeatureSet).updateData()
+                    Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureHfp)}")
+                }
+                CmdId.GET_AG_FEATURE_RSP.value -> {
+                    BtDevUnitList[id].featureAg = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    BtDevUnitList[id].bdaddrFilterAg = bdaddrTranslate(msg, 11)
+                    for (i in 0 until 4) {
+                        BtDevUnitList[id].ledLightAg[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
+                    }
+                    if (id.and(0x1) == 0x1) {
+                        BtDevUnitList[id + 1].featureAg = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                        BtDevUnitList[id + 1].bdaddrFilterAg = bdaddrTranslate(msg, 11)
+                        for (i in 0 until 4) {
+                            BtDevUnitList[id + 1].ledLightAg[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
+                        }
+                    }
+                    if (viewPagerM6.currentItem == 2)
+                        (ViewPagerArray[2] as FragmentFeatureSet).updateData()
+                    Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureAg)}")
+                }
+                CmdId.GET_HFP_PAIR_RSP.value -> {
+                    BtDevUnitList[id].bdaddrPair = bdaddrTranslate(msg, 7)
+                }
+                CmdId.GET_HFP_BDA_RSP.value -> {
+                    if(id == 0)
+                        BtDevUnitList[id].bdaddr = bdaddrTranslate(msg, 7)
+                }
+                CmdId.GET_AG_BDA_RSP.value -> {
+                    BtDevUnitList[id].bdaddr = bdaddrTranslate(msg, 7)
+                    if (id.and(0x1) == 0x1)
+                        BtDevUnitList[id + 1].bdaddr = bdaddrTranslate(msg, 7)
+                }
+                CmdId.SET_INT_SERVICE_RSP.value ->
+                    when (msg.btCmd[6]) {
+                        0x00.toByte() -> {
+                            viewM6UpdateNest()
+                            for (i in 0 until MaxBtDev) {
+                                var strList: List<String>
+                                var sendMsg = BtDevMsg(0, 1)
+
+                                strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
+                                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                                sendMsg.btCmd[5] = 0x07
+                                sendMsg.btCmd[6] = 0x01
+                                sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                                sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                                sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                                sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                                sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                                sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                                Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
+                                sendMsg.btDevNo = i
+                                sendBtServiceMsg(sendMsg)
+                            }
+                        }
+                        STATE_ON.toByte(), STATE_OFF.toByte() -> {
+                            finish()
+                        }
+                    }
+                CmdId.SET_INT_CON_RSP.value -> when (msg.btDevNo) {
+                    0 -> txvConSta0.text =
                         when (msg.btCmd[6]) {
                             0x00.toByte() -> {
                                 var sendMsg = BtDevMsg(0, 0)
@@ -868,15 +877,15 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 // "Connected"
                                 applicationContext.resources.getString(R.string.txvStaConnected)
                             }
-                            0x01.toByte() ->{
+                            0x01.toByte() -> {
                                 var strList: List<String>
 
-                                if(isReconnect == true) {
+                                if (isReconnect == true) {
                                     isReconnect = false
                                     for (i in 0 until MaxBtDev) {
                                         var sendMsg = BtDevMsg(0, 1)
 
-                                        strList = preferData.getString("bdaddr${i}","00:00:00:00:00:00")!!.split(':')
+                                        strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
                                         sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                                         sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                                         sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -890,7 +899,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                         sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
                                         sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
                                         sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                                        Logger.d(LogMain,"${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
+                                        Logger.d(LogMain, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
                                         sendMsg.btDevNo = i
                                         sendBtServiceMsg(sendMsg)
                                     }
@@ -902,64 +911,65 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
                             else -> applicationContext.resources.getString(R.string.txvStaEnable)
                         }
-                1 -> txvConSta1.text =
-                    when (msg.btCmd[6]) {
-                        0x00.toByte() -> applicationContext.resources.getString(R.string.txvStaConnected)
-                        0x01.toByte() -> applicationContext.resources.getString(R.string.txvStaDiscon)
-                        0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
-                        else -> applicationContext.resources.getString(R.string.txvStaEnable)
-                    }
-                else -> {
-                }
-            }
-            CmdId.SET_INT_DISCOVERY_RSP.value -> {
-                when(msg.btCmd[6]) {
-                    0x00.toByte() -> {
-                        PairState = 0
-                    }
-                    0x01.toByte() -> {
-                        var str = ""
-
-                        PairState = 1
-                        for(i in 0 until (msg.btCmd[5] - 7) / 2) {
-                            str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
+                    1 -> txvConSta1.text =
+                        when (msg.btCmd[6]) {
+                            0x00.toByte() -> applicationContext.resources.getString(R.string.txvStaConnected)
+                            0x01.toByte() -> applicationContext.resources.getString(R.string.txvStaDiscon)
+                            0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
+                            else -> applicationContext.resources.getString(R.string.txvStaEnable)
                         }
-                        str += String.format(" + %02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
-                        if(!BtList.contains(str))
-                            BtList.add(str)
-                    }
-                    0x02.toByte() -> {
-                        PairState = 2
-                        BtList.removeAll(BtList)
-                        BtList.add("clear paired device + 00:00:00:00:00:00")
+                    else -> {
                     }
                 }
-                if(viewPagerM6.currentItem == 1)
-                    (ViewPagerArray[1] as FragmentPairSet).updateData()
-                Logger.d(LogMain, " cmmmand SET_INT_DISCOVERY_RSP")
-            }
-            CmdId.SET_INT_PAIR_RSP.value -> {
-                var str = ""
-                PairState =
-                    if(msg.btCmd[6] == 0x01.toByte())
-                        3
-                    else
-                        0
-                for(i in 0 until (msg.btCmd[5] - 7) / 2) {
-                    str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
+                CmdId.SET_INT_DISCOVERY_RSP.value -> {
+                    when (msg.btCmd[6]) {
+                        0x00.toByte() -> {
+                            PairState = 0
+                        }
+                        0x01.toByte() -> {
+                            var str = ""
+
+                            PairState = 1
+                            for (i in 0 until (msg.btCmd[5] - 7) / 2) {
+                                str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
+                            }
+                            str += " + " + bdaddrTranslate(msg, 7)
+                            if (!BtList.contains(str))
+                                BtList.add(str)
+                        }
+                        0x02.toByte() -> {
+                            PairState = 2
+                            BtList.removeAll(BtList)
+                            BtList.add("clear paired device + 00:00:00:00:00:00")
+                        }
+                    }
+                    if (viewPagerM6.currentItem == 1)
+                        (ViewPagerArray[1] as FragmentPairSet).updateData()
+                    Logger.d(LogMain, " cmmmand SET_INT_DISCOVERY_RSP")
                 }
-                str += String.format(" + %02X:%02X:%02X:%02X:%02X:%02X", msg.btCmd[11], msg.btCmd[12], msg.btCmd[10], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9])
-                BtList.add(str)
-                if(viewPagerM6.currentItem == 1)
-                    (ViewPagerArray[1] as FragmentPairSet).updateData()
-                Logger.d(LogMain, "command SET_INT_PAIR_RSP")
+                CmdId.SET_INT_PAIR_RSP.value -> {
+                    var str = ""
+                    PairState =
+                        if (msg.btCmd[6] == 0x01.toByte())
+                            3
+                        else
+                            0
+                    for (i in 0 until (msg.btCmd[5] - 7) / 2) {
+                        str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
+                    }
+                    str += bdaddrTranslate(msg, 7)
+                    BtList.add(str)
+                    if (viewPagerM6.currentItem == 1)
+                        (ViewPagerArray[1] as FragmentPairSet).updateData()
+                    Logger.d(LogMain, "command SET_INT_PAIR_RSP")
+                }
+                else -> {
+                    Logger.d(LogMain, "${String.format("other command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
+                }
             }
-            else -> {
-                Logger.d(LogMain, "${String.format("other command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
-            }
+            // ((viewPagerM6.adapter as ViewPagerAdapter).getItem(0) as FragmentConState).recyclerDevList.adapter!!.notifyDataSetChanged()
+            // viewPagerM6.adapter!!.notifyDataSetChanged()
         }
-        // ((viewPagerM6.adapter as ViewPagerAdapter).getItem(0) as FragmentConState).recyclerDevList.adapter!!.notifyDataSetChanged()
-        // viewPagerM6.adapter!!.notifyDataSetChanged()
     }
 }
 

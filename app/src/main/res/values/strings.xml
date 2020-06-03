@@ -90,4 +90,13 @@
         <item name="4">C:</item>
         <item name="5">P:</item>
     </string-array>
+    <string-array name="txvMessageName">
+        <item name="0">Alias Name:</item>
+        <item name="1">Local name:</item>
+        <item name="2">AG Local name:</item>
+        <item name="3">Ver:</item>
+        <item name="4">AG Ver:</item>
+        <item name="5">BDA: </item>
+        <item name="6">Pair BDA: </item>
+    </string-array>
 </resources>
