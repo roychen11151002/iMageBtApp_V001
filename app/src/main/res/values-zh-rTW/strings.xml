@@ -100,4 +100,6 @@
         <item name="5">位址:</item>
         <item name="6">配對位址:</item>
     </string-array>
+    <string name="btnDfu">靭體更新</string>
+    <string name="btnPowerOff">關機</string>
 </resources>

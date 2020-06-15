@@ -240,4 +240,12 @@
             android:text="@string/txvAudioParameter15"
             android:visibility="visible" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/btnAudioParaPwrCtr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnPowerOff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnAudioParaWrite" />
 </androidx.constraintlayout.widget.ConstraintLayout>

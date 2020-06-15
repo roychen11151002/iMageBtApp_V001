@@ -5,6 +5,8 @@
     <string name="btnPair">Pair</string>
     <string name="btnRead">Read</string>
     <string name="btnWrite">Write</string>
+    <string name="btnDfu">DFU</string>
+    <string name="btnPowerOff">Power Off</string>
     <string name="btnDiscovery">Discovery</string>
     <string name="txvConStaTitle">Device Status</string>
     <string name="txvRecyclerTitle">non activity</string>

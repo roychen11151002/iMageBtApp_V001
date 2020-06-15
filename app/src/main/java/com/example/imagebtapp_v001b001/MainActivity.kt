@@ -57,8 +57,12 @@ enum class CmdId(val value: Byte) {
     SET_AG_FEATURE_RSP(0x1f.toByte()),
     SET_HFP_DIAL_REQ(0x20.toByte()),
     SET_HFP_DIAL_RSP(0x21.toByte()),
-    SET_DFU_REQ(0x3e.toByte()),
-    SETDFU_RSP(0x3f.toByte()),
+    SET_HFP_POWER_REQ(0x38.toByte()),
+    SET_HFP_POWER_RSP(0x39.toByte()),
+    SET_AG_DFU_REQ(0x3c.toByte()),
+    SET_AG_DFU_RSP(0x3d.toByte()),
+    SET_HFP_DFU_REQ(0x3e.toByte()),
+    SET_HFP_DFU_RSP(0x3f.toByte()),
     SET_INT_SERVICE_REQ(0xe0.toByte()),
     SET_INT_SERVICE_RSP(0xe1.toByte()),
     SET_INT_CON_REQ(0xe2.toByte()),
@@ -178,7 +182,7 @@ interface DevUnitMsg {
     fun getPairState(): Int
 }
 
-val ViewPagerArray = arrayOf(FragmentConState(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet(), FragmentAudioParaSet())
+val ViewPagerArray = arrayOf(FragmentConState(), FragmentAudioParaSet(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet())
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtList = ArrayList<String>()
@@ -237,17 +241,29 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         }
     }
 
-    // private val clientMsgHandler = Messenger(Handler(Handler.Callback {
-
     private val viewM6UpdateHandler = Messenger(Handler(Handler.Callback {
-        when (it.what) {
-            0 -> (ViewPagerArray[0] as FragmentConState).updateData()
-            1 -> (ViewPagerArray[1] as FragmentPairSet).updateData()
-            2 -> (ViewPagerArray[2] as FragmentFeatureSet).updateData()
-            3 -> (ViewPagerArray[3] as FragmentVolSet).updateData()
-            4 -> (ViewPagerArray[4] as FragmentAudioParaSet).updateData()
+        when(ViewPagerArray[it.what]) {
+            is FragmentConState -> {
+                (ViewPagerArray[it.what] as FragmentConState).updateData()
+                Logger.d(LogMain, "FragmentConState fragment update")
+            }
+            is FragmentPairSet -> {
+                (ViewPagerArray[it.what] as FragmentPairSet).updateData()
+                Logger.d(LogMain, "FragmentPairSet fragment update")
+            }
+            is FragmentFeatureSet -> {
+                (ViewPagerArray[it.what] as FragmentFeatureSet).updateData()
+                Logger.d(LogMain, "FragmentFeatureSet fragment update")
+            }
+            is FragmentVolSet -> {
+                (ViewPagerArray[it.what] as FragmentVolSet).updateData()
+                Logger.d(LogMain, "FragmentVolSet fragment update")
+            }
+            is FragmentAudioParaSet -> {
+                (ViewPagerArray[it.what] as FragmentAudioParaSet).updateData()
+                Logger.d(LogMain, "FragmentAudioParaSet fragment update")
+            }
         }
-        Logger.d(LogMain, "viewM6 update ${it.what}")
         true
     }))
 
@@ -530,19 +546,15 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
     fun viewM6UpdateNest() {
         Handler().postDelayed({
-            viewM6Update()
+            if(previousItem != viewPagerM6.currentItem) {
+                viewM6Update()
+                previousItem = viewPagerM6.currentItem
+            }
             viewM6UpdateNest()
         }, 1000)
     }
 
-    fun viewM6Update() {
-        if(previousItem != viewPagerM6.currentItem) {
-            val msg = Message.obtain(null, viewPagerM6.currentItem)
-
-            viewM6UpdateHandler.send(msg)
-            previousItem = viewPagerM6.currentItem
-        }
-    }
+    fun viewM6Update() = viewM6UpdateHandler.send(Message.obtain(null, viewPagerM6.currentItem))
 
     fun stateUpdateAuto(time: Long) {
         Handler().postDelayed({
@@ -663,8 +675,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     BtDevUnitList[id].volSpkrHfp = msg.btCmd[7].toInt().and(0x0f)
                     BtDevUnitList[id].muteSpkr = msg.btCmd[7].toInt().and(0x10) == 0x10
                     BtDevUnitList[id].muteMic = msg.btCmd[7].toInt().and(0x20) == 0x20
-                    if (viewPagerM6.currentItem == 0)
-                        (ViewPagerArray[0] as FragmentConState).updateData()
                     Logger.d(LogMain, "${String.format("src:%02X get hfp state %08X", msg.btCmd[2], BtDevUnitList[id].stateCon)}")
                 }
                 CmdId.GET_HFP_EXT_STA_RSP.value -> {
@@ -676,8 +686,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             true
                         else
                             false
-                    if (viewPagerM6.currentItem == 0)
-                        (ViewPagerArray[0] as FragmentConState).updateData()
                     Logger.d(LogMain, "${String.format("src:%02X get hfp extra state", msg.btCmd[2])}")
                 }
                 CmdId.GET_HFP_VOL_RSP.value -> {
@@ -685,14 +693,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     BtDevUnitList[id].muteSpkr = msg.btCmd[6].toInt().and(0x80) == 0x80
                     BtDevUnitList[id].muteMic = msg.btCmd[6].toInt().and(0x40) == 0x40
                     // viewPagerM6.setCurrentItem(0)
-                    if (viewPagerM6.currentItem == 0)
-                        (ViewPagerArray[0] as FragmentConState).updateData()
                     Logger.d(LogMain, "${String.format("src %02X get hfp vol %X", msg.btCmd[2], msg.btCmd[6])}")
                 }
                 CmdId.GET_HFP_RSSI_RSP.value -> {
                     BtDevUnitList[id].rssi = (0x10000 - (msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff))).and(0xffff)
-                    if (viewPagerM6.currentItem == 0)
-                        (ViewPagerArray[0] as FragmentConState).updateData()
                 }
                 CmdId.GET_HFP_PSKEY_RSP.value -> {
                     val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
@@ -700,8 +704,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     when (pskId) {
                         9 -> {
                             BtDevUnitList[id].featureMode = msg.btCmd[8].toInt().and(0xff).shl(24) + msg.btCmd[9].toInt().and(0xff).shl(16) + msg.btCmd[10].toInt().and(0xff).shl(8) + msg.btCmd[11].toInt().and(0xff)
-                            if (viewPagerM6.currentItem == 2)
-                                (ViewPagerArray[2] as FragmentFeatureSet).updateData()
                         }
                         16 -> {
 
@@ -720,8 +722,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             BtDevUnitList[id].modeSrcBtAvSpkrVol = msg.btCmd[18].toInt()
                             BtDevUnitList[id].modeSrcVcsAvSpkrVol = msg.btCmd[19].toInt()
                             BtDevUnitList[id].modeSrcSpkrDecade = msg.btCmd[20].toInt()
-                            if (viewPagerM6.currentItem == 3)
-                                (ViewPagerArray[3] as FragmentVolSet).updateData()
                         }
                         18 -> {
                             BtDevUnitList[id].modeAgWireHfpMicVol = msg.btCmd[8].toInt()
@@ -736,8 +736,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             BtDevUnitList[id].modeAgUsbAvSpkrVol = msg.btCmd[17].toInt()
                             BtDevUnitList[id].modeAgBtAvSpkrVol = msg.btCmd[18].toInt()
                             BtDevUnitList[id].modeAgVcsAvSpkrVol = msg.btCmd[19].toInt()
-                            if (viewPagerM6.currentItem == 3)
-                                (ViewPagerArray[3] as FragmentVolSet).updateData()
                         }
                         26 -> {
                             var str = ""
@@ -795,8 +793,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     for (i in 0 until 4) {
                         BtDevUnitList[id].ledLightHfp[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
                     }
-                    if (viewPagerM6.currentItem == 2)
-                        (ViewPagerArray[2] as FragmentFeatureSet).updateData()
                     Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureHfp)}")
                 }
                 CmdId.GET_AG_FEATURE_RSP.value -> {
@@ -812,8 +808,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             BtDevUnitList[id + 1].ledLightAg[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()
                         }
                     }
-                    if (viewPagerM6.currentItem == 2)
-                        (ViewPagerArray[2] as FragmentFeatureSet).updateData()
                     Logger.d(LogMain, "${String.format("src:%02X source feature:%04X", msg.btCmd[2], BtDevUnitList[id].featureAg)}")
                 }
                 CmdId.GET_HFP_PAIR_RSP.value -> {
@@ -934,8 +928,11 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                             }
                             str += " + " + bdaddrTranslate(msg, 7)
-                            if (!BtList.contains(str))
+                            if(str.substring(0, 6).compareTo("iMage ") == 0) {
+                                if(!BtList.contains(str))
                                 BtList.add(str)
+                                Logger.d(LogMain, "$str has iMage")
+                            }
                         }
                         0x02.toByte() -> {
                             PairState = 2
@@ -943,12 +940,11 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             BtList.add("clear paired device + 00:00:00:00:00:00")
                         }
                     }
-                    if (viewPagerM6.currentItem == 1)
-                        (ViewPagerArray[1] as FragmentPairSet).updateData()
                     Logger.d(LogMain, " cmmmand SET_INT_DISCOVERY_RSP")
                 }
                 CmdId.SET_INT_PAIR_RSP.value -> {
                     var str = ""
+
                     PairState =
                         if (msg.btCmd[6] == 0x01.toByte())
                             3
@@ -958,15 +954,17 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                     }
                     str += " + " + bdaddrTranslate(msg, 7)
-                    BtList.add(str)
-                    if (viewPagerM6.currentItem == 1)
-                        (ViewPagerArray[1] as FragmentPairSet).updateData()
+                    if(str.substring(0, 6).compareTo("iMage ") == 0) {
+                        BtList.add(str)
+                        Logger.d(LogMain, "$str has iMage")
+                    }
                     Logger.d(LogMain, "command SET_INT_PAIR_RSP")
                 }
                 else -> {
                     Logger.d(LogMain, "${String.format("other command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
                 }
             }
+            viewM6Update()
             // ((viewPagerM6.adapter as ViewPagerAdapter).getItem(0) as FragmentConState).recyclerDevList.adapter!!.notifyDataSetChanged()
             // viewPagerM6.adapter!!.notifyDataSetChanged()
         }
@@ -974,15 +972,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 }
 
 class ViewPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
-    override fun getItem(position: Int): Fragment =
-        when(position) {
-            0 -> ViewPagerArray[0]
-            1 -> ViewPagerArray[1]
-            2 -> ViewPagerArray[2]
-            3 -> ViewPagerArray[3]
-            4 -> ViewPagerArray[4]
-            else -> ViewPagerArray[0]
-        }
-
+    override fun getItem(position: Int): Fragment = ViewPagerArray[position]
     override fun getCount(): Int = ViewPagerArray.size
 }

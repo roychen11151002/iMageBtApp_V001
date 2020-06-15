@@ -16,6 +16,7 @@ class FragmentFeatureSet : Fragment() {
     var srcDevId: Byte = 0x30
     var cmdSetFeatureId: Byte = CmdId.SET_HFP_FEATURE_REQ.value
     var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
+    var cmdDfuGeatureId: Byte = CmdId.SET_HFP_DFU_REQ.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -136,6 +137,18 @@ class FragmentFeatureSet : Fragment() {
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             }, 200)
         }
+        btnFeatureDfu.setOnLongClickListener {
+            val sendMsg = BtDevMsg(0, 0)
+
+            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsg.btCmd[3] = srcDevId
+            sendMsg.btCmd[4] = cmdDfuGeatureId
+            sendMsg.btCmd[5] = 0x00
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            true
+        }
         rdGpDevFeature.setOnCheckedChangeListener { group, checkedId ->
             srcDevId =
                 when(checkedId) {
@@ -143,24 +156,28 @@ class FragmentFeatureSet : Fragment() {
                         srcDevItme = 0
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
+                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
                         0x30
                     }
                     R.id.rdAgAllFeature -> {
                         srcDevItme = 1
                         cmdSetFeatureId = CmdId.SET_AG_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_AG_FEATURE_REQ.value
+                        cmdDfuGeatureId = CmdId.SET_AG_DFU_REQ.value
                         0x38
                     }
                     R.id.rdHfpAllFeature -> {
                         srcDevItme = 1
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
+                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
                         0x38
                     }
                     else -> {
                         srcDevItme = 0
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
+                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
                         0x30
                     }
                 }

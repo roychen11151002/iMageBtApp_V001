@@ -319,4 +319,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnFeatureRead" />
 
+    <Button
+        android:id="@+id/btnFeatureDfu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="@string/btnDfu"
+        app:layout_constraintBottom_toBottomOf="@+id/btnFeatureWrite"
+        app:layout_constraintEnd_toStartOf="@+id/btnFeatureWrite"
+        app:layout_constraintTop_toTopOf="@+id/btnFeatureWrite" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
