@@ -17,6 +17,7 @@ class FragmentFeatureSet : Fragment() {
     var cmdSetFeatureId: Byte = CmdId.SET_HFP_FEATURE_REQ.value
     var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
     var cmdDfuGeatureId: Byte = CmdId.SET_HFP_DFU_REQ.value
+    var cmdRfTestGeatureId: Byte = CmdId.SET_HFP_TEST_REQ.value
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -157,6 +158,7 @@ class FragmentFeatureSet : Fragment() {
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
                         cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
+                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
                         0x30
                     }
                     R.id.rdAgAllFeature -> {
@@ -164,6 +166,7 @@ class FragmentFeatureSet : Fragment() {
                         cmdSetFeatureId = CmdId.SET_AG_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_AG_FEATURE_REQ.value
                         cmdDfuGeatureId = CmdId.SET_AG_DFU_REQ.value
+                        cmdRfTestGeatureId = CmdId.SET_AG_TEST_REQ.value
                         0x38
                     }
                     R.id.rdHfpAllFeature -> {
@@ -171,6 +174,7 @@ class FragmentFeatureSet : Fragment() {
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
                         cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
+                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
                         0x38
                     }
                     else -> {
@@ -178,6 +182,7 @@ class FragmentFeatureSet : Fragment() {
                         cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
                         cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
                         cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
+                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
                         0x30
                     }
                 }

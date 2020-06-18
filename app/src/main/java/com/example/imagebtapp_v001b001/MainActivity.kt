@@ -9,6 +9,7 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
+import android.view.Window
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -57,6 +58,10 @@ enum class CmdId(val value: Byte) {
     SET_AG_FEATURE_RSP(0x1f.toByte()),
     SET_HFP_DIAL_REQ(0x20.toByte()),
     SET_HFP_DIAL_RSP(0x21.toByte()),
+    SET_HFP_TEST_REQ(0x34.toByte()),
+    SET_HFP_TEST_RSP(0x35.toByte()),
+    SET_AG_TEST_REQ(0x36.toByte()),
+    SET_AG_TEST_RSP(0x37.toByte()),
     SET_HFP_POWER_REQ(0x38.toByte()),
     SET_HFP_POWER_RSP(0x39.toByte()),
     SET_AG_DFU_REQ(0x3c.toByte()),
@@ -182,7 +187,12 @@ interface DevUnitMsg {
     fun getPairState(): Int
 }
 
-val ViewPagerArray = arrayOf(FragmentConState(), FragmentAudioParaSet(), FragmentPairSet(), FragmentFeatureSet(), FragmentVolSet())
+val ViewPagerArray = arrayOf(FragmentConState(),
+                                              FragmentAudioParaSet(),
+                                              FragmentPairSet(),
+                                              FragmentFeatureSet(),
+                                              FragmentVolSet(),
+                                              FragmentRfTest())
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtList = ArrayList<String>()
@@ -271,6 +281,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         super.onCreate(savedInstanceState)
         // val intentFilter = IntentFilter()
 
+        // requestWindowFeature(Window.FEATURE_NO_TITLE)
+        // window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
         setContentView(R.layout.activity_main)
         Logger.d(LogMain, "onCreate")
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT                 // set screen
@@ -311,6 +323,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendBtServiceMsg(sendMsg)
         }
         btnCon.setOnLongClickListener {
+/*
             var sendMsg = BtDevMsg(1, 1)
             var strList: List<String> = preferData.getString("bdaddr${1}", "00:00:00:00:00:00")!!.split(':')
 
@@ -329,6 +342,21 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
             Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
             sendBtServiceMsg(sendMsg)
+            true
+ */
+            val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
+
+            sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+            sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
+            for(i in 0 until sendMsg.size) {
+                sendMsg[i].btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg[i].btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg[i].btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg[i].btCmd[4] = CmdId.SET_HFP_POWER_REQ.value
+                sendMsg[i].btCmd[5] = 0x01.toByte()
+                sendMsg[i].btCmd[6] = 0x00.toByte()
+                Handler().postDelayed({sendBtServiceMsg(sendMsg[i])}, i.toLong() * 1000)
+            }
             true
         }
         editTextStaUpTime.setOnEditorActionListener { v, actionId, event ->

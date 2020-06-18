@@ -8,10 +8,23 @@
     <string name="btnRead">讀取</string>
     <string name="btnWrite">寫入</string>
     <string name="btnDiscovery">搜尋裝置</string>
+    <string name="btnDfu">靭體更新</string>
+    <string name="btnRfTest">射頻測試</string>
+    <string name="btnHfp0">喇叭0</string>
+    <string name="btnHfp1">喇叭1</string>
+    <string name="btnHfp2">喇叭2</string>
+    <string name="btnHfp3">喇叭3</string>
+    <string name="btnHfp4">喇叭4</string>
+    <string name="btnHfp5">喇叭5</string>
+    <string name="btnSrc">控制裝置</string>
+    <string name="btnAg0">AG0</string>
+    <string name="btnAg1">AG1</string>
+    <string name="btnAg2">AG2</string>
     <string name="txvConStaTitle">裝置連線狀態</string>
     <string name="txvRecyclerTitle">無作動</string>
     <string name="txvFeatureTitle">功能設定</string>
     <string name="txvVolumeTitle">音量設定</string>
+    <string name="txvRfTestTitle">射頻測試</string>
     <string name="txvStaConnected">裝置已連結</string>
     <string name="txvStaConnecting">裝置連結中</string>
     <string name="txvStaDiscon">裝置離線</string>
@@ -76,12 +89,12 @@
     <string name="txvUpdateTime">60</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
-        <item name="1">A6 / A7 NO.1</item>
-        <item name="2">A6 / A7 NO.2</item>
-        <item name="3">A6 / A7 NO.3</item>
-        <item name="4">A6 / A7 NO.4</item>
-        <item name="5">A6 / A7 NO.5</item>
-        <item name="6">A6 / A7 NO.6</item>
+        <item name="1">A6 / A7 NO.0</item>
+        <item name="2">A6 / A7 NO.1</item>
+        <item name="3">A6 / A7 NO.2</item>
+        <item name="4">A6 / A7 NO.3</item>
+        <item name="5">A6 / A7 NO.4</item>
+        <item name="6">A6 / A7 NO.5</item>
     </string-array>
     <string-array name="txvStaName">
         <item name="0">強:</item>
@@ -100,6 +113,4 @@
         <item name="5">位址:</item>
         <item name="6">配對位址:</item>
     </string-array>
-    <string name="btnDfu">靭體更新</string>
-    <string name="btnPowerOff">關機</string>
 </resources>

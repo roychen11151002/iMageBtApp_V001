@@ -90,7 +90,6 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_rectangle"
         app:layout_constraintBottom_toTopOf="@+id/btnFeatureWrite"
@@ -304,7 +303,7 @@
     <Button
         android:id="@+id/btnFeatureRead"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:text="@string/btnRead"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -312,9 +311,8 @@
 
     <Button
         android:id="@+id/btnFeatureWrite"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:text="@string/btnWrite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnFeatureRead" />
@@ -323,10 +321,9 @@
         android:id="@+id/btnFeatureDfu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:text="@string/btnDfu"
-        app:layout_constraintBottom_toBottomOf="@+id/btnFeatureWrite"
-        app:layout_constraintEnd_toStartOf="@+id/btnFeatureWrite"
-        app:layout_constraintTop_toTopOf="@+id/btnFeatureWrite" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnFeatureRead"
+        app:layout_constraintTop_toTopOf="@+id/btnFeatureRead"
+        tools:layout_editor_absoluteX="176dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
