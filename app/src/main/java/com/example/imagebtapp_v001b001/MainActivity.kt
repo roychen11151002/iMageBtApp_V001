@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_pair_set.*
 import java.lang.Integer.parseInt
 
 private const val LogMain = "testMain"
@@ -853,7 +854,45 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 CmdId.SET_INT_SERVICE_RSP.value ->
                     when (msg.btCmd[6]) {
                         0x00.toByte() -> {
+                            var strList: List<String>
+                            var sendMsg = BtDevMsg(0, 1)
+
+                            strList = preferData.getString("bdaddr0", "00:00:00:00:00:00")!!.split(':')
+                            if(preferData.getString("bdaddr0", "00:00:00:00:00:00") == "00:00:00:00:00:00") {
+                                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[4] = CmdId.SET_INT_DISCOVERY_REQ.value
+                                sendMsg.btCmd[5] = 0x01
+                                sendMsg.btCmd[6] = 0x01
+                                sendBtServiceMsg(sendMsg)
+                                for(i in 0 until ViewPagerArray.size) {
+                                    if(ViewPagerArray[i] is FragmentPairSet) {
+                                        viewPagerM6.setCurrentItem(i)
+                                        break
+                                    }
+                                }
+                            }
+                            else {
+                                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                                sendMsg.btCmd[5] = 0x07
+                                sendMsg.btCmd[6] = 0x01
+                                sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                                sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                                sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                                sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                                sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                                sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                                Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
+                                sendBtServiceMsg(sendMsg)
+                            }
                             viewM6UpdateNest()
+/*
                             for (i in 0 until MaxBtDev) {
                                 var strList: List<String>
                                 var sendMsg = BtDevMsg(0, 1)
@@ -876,6 +915,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 sendMsg.btDevNo = i
                                 sendBtServiceMsg(sendMsg)
                             }
+ */
                         }
                         STATE_ON.toByte(), STATE_OFF.toByte() -> {
                             finish()
@@ -896,7 +936,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 sendMsg.btCmd[5] = 0x01
                                 sendMsg.btCmd[6] = 0x00
                                 sendBtServiceMsg(sendMsg)
-                                // "Connected"
+                                for(i in 0 until ViewPagerArray.size) {
+                                    if(ViewPagerArray[i] is FragmentConState) {
+                                        viewPagerM6.setCurrentItem(i)
+                                        break
+                                    }
+                                }
                                 applicationContext.resources.getString(R.string.txvStaConnected)
                             }
                             0x01.toByte() -> {
@@ -974,10 +1019,16 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     var str = ""
 
                     PairState =
-                        if (msg.btCmd[6] == 0x01.toByte())
-                            3
-                        else
-                            0
+                        when(msg.btCmd[6]) {
+                            0x00.toByte() -> 0
+                            0x01.toByte() -> 3
+                            0x02.toByte() -> {
+                                BtList.removeAll(BtList)
+                                BtList.add("clear paired device + 00:00:00:00:00:00")
+                                3
+                            }
+                            else -> 0
+                        }
                     for (i in 0 until (msg.btCmd[5] - 7) / 2) {
                         str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                     }

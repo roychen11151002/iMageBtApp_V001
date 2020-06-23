@@ -106,7 +106,7 @@
                 android:id="@+id/chkFeature15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="180dp"
+                android:layout_marginStart="168dp"
                 android:text="@string/txvFeatureF"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature7"
                 app:layout_constraintTop_toTopOf="@+id/chkFeature7" />
@@ -321,9 +321,12 @@
         android:id="@+id/btnFeatureDfu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:text="@string/btnDfu"
         app:layout_constraintBottom_toBottomOf="@+id/btnFeatureRead"
-        app:layout_constraintTop_toTopOf="@+id/btnFeatureRead"
-        tools:layout_editor_absoluteX="176dp" />
+        app:layout_constraintEnd_toStartOf="@+id/btnFeatureWrite"
+        app:layout_constraintStart_toEndOf="@+id/btnFeatureRead"
+        app:layout_constraintTop_toTopOf="@+id/btnFeatureRead" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

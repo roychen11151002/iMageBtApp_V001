@@ -35,8 +35,8 @@ class FragmentPairSet : Fragment() {
         btnPair.setOnClickListener{
             val sendMsg = BtDevMsg(0, 1)
 
-            (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
-            (activity as DevUnitMsg).getBtList().add("clear paired device + 00:00:00:00:00:00")
+            /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
+            (activity as DevUnitMsg).getBtList().add("clear paired device + 00:00:00:00:00:00") */
             recyclerListPair.layoutManager!!.scrollToPosition(0)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -51,16 +51,30 @@ class FragmentPairSet : Fragment() {
         btnDiscovery.setOnClickListener {
             val sendMsg = BtDevMsg(0, 1)
 
-            (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
-            recyclerListPair.layoutManager!!.scrollToPosition(0)
-            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-            sendMsg.btCmd[4] = CmdId.SET_INT_DISCOVERY_REQ.value
-            sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x01
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList()) */
+            when((activity as DevUnitMsg).getPairState()) {
+                0x00 -> {
+                    recyclerListPair.layoutManager!!.scrollToPosition(0)
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[4] = CmdId.SET_INT_DISCOVERY_REQ.value
+                    sendMsg.btCmd[5] = 0x01
+                    sendMsg.btCmd[6] = 0x01
+                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                }
+                0x01 -> {
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[4] = CmdId.SET_INT_DISCOVERY_REQ.value
+                    sendMsg.btCmd[5] = 0x01
+                    sendMsg.btCmd[6] = 0x00
+                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                }
+            }
         }
 
         recyclerListAdapter.setOnItemClickListener(object : BtListAdapter.OnItemClickListener {
@@ -103,7 +117,7 @@ class FragmentPairSet : Fragment() {
                 }.show()
             }
         })
-
+/*
         recyclerListAdapter.setOnItemLongClickListener(object : BtListAdapter.OnItemLongClickListener {
             override fun onItemLongClick(view: View, position: Int): Boolean {
                 var sendMsg = BtDevMsg(1, 1)
@@ -131,6 +145,7 @@ class FragmentPairSet : Fragment() {
                 return true
             }
         })
+ */
         updateData()
     }
 

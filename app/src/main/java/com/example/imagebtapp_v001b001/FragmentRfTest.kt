@@ -34,7 +34,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x00
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp0.setOnLongClickListener {
@@ -59,7 +59,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x08
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp1.setOnLongClickListener {
@@ -84,7 +84,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x10
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp2.setOnLongClickListener {
@@ -109,7 +109,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x18
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp3.setOnLongClickListener {
@@ -134,7 +134,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x20
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp4.setOnLongClickListener {
@@ -159,7 +159,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x28
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp5.setOnLongClickListener {
@@ -184,7 +184,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x30
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestSrc.setOnLongClickListener {
@@ -209,7 +209,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x00
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg0.setOnLongClickListener {
@@ -234,7 +234,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x10
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg1.setOnLongClickListener {
@@ -259,7 +259,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x20
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x02
+            sendMsg.btCmd[6] = 0x12
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg2.setOnLongClickListener {

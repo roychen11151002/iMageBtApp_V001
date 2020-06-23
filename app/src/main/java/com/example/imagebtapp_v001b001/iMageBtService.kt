@@ -487,6 +487,17 @@ class iMageBtService : Service() {
                 var strList: List<String>
                 var s: Int
 
+                val sendMsg = BtDevMsg(0, 1)
+
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
+                sendMsg.btCmd[5] = 0x01
+                sendMsg.btCmd[6] = 0x02
+                sendMainMsg(sendMsg)
+
                 if(paired.size > 0) {
                     for (device in paired) {
                         val sendMsg = BtDevMsg(0, 1)
@@ -498,9 +509,9 @@ class iMageBtService : Service() {
                         sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
                         sendMsg.btCmd[6] =
                             if(device == paired.last())
-                                0x00.toByte()
+                                0x00
                             else
-                                0x01.toByte()
+                                0x01
                         strList = device.address.split(':')
                         sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
                         sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
