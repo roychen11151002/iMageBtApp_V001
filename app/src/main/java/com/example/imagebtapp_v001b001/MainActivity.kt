@@ -284,8 +284,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
         // requestWindowFeature(Window.FEATURE_NO_TITLE)
         // window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        // supportRequestWindowFeature(Window.FEATURE_ACTION_BAR_OVERLAY)
         setContentView(R.layout.activity_main)
         Logger.d(LogMain, "onCreate")
+        supportActionBar?.hide()                                                        // hide action bar
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT                 // set screen
         // requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -404,6 +406,9 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
     override fun onStart() {
         super.onStart()
+        var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
+        imm.hideSoftInputFromWindow(editTextStaUpTime.getWindowToken(), 0)
         editTextStaUpTime.clearFocus()
         Logger.d(LogMain, "main activity onStart")
     }

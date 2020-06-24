@@ -4,183 +4,227 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
     tools:context=".FragmentRfTest">
 
     <TextView
         android:id="@+id/txvRfTestTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/txvRfTestTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/shape_rectangle"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txvRfTestTitle">
+        app:layout_constraintTop_toBottomOf="@+id/rdGpRfTestFreq">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/txvRfTestSpkr"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/txvDevAllHfp"
+            app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp0"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/txvDevAllHfp" />
+        <Button
+            android:id="@+id/btnRfTestHfp0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/btnHfp0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txvRfTestSpkr" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/btnHfp0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+        <Button
+            android:id="@+id/btnRfTestHfp1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btnHfp1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp0"
+            app:layout_constraintTop_toBottomOf="@+id/btnRfTestHfp0" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/btnHfp1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp0"
-                app:layout_constraintTop_toBottomOf="@+id/btnRfTestHfp0" />
+        <Button
+            android:id="@+id/btnRfTestHfp2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/btnHfp2"
+            app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp0"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp0" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="@string/btnHfp2"
-                app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp0"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp0" />
+        <Button
+            android:id="@+id/btnRfTestHfp3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btnHfp3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp2"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp1" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btnHfp3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp2"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp1" />
+        <Button
+            android:id="@+id/btnRfTestHfp4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/btnHfp4"
+            app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp2"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp2" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="@string/btnHfp4"
-                app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp2"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp2" />
+        <Button
+            android:id="@+id/btnRfTestHfp5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/btnHfp5"
+            app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp3"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp3" />
 
-            <Button
-                android:id="@+id/btnRfTestHfp5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="@string/btnHfp5"
-                app:layout_constraintStart_toEndOf="@+id/btnRfTestHfp3"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestHfp3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-    <ScrollView
-        android:id="@+id/scrollView4"
+        <TextView
+            android:id="@+id/txvRfTestAg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvDevAllAg"
+            app:layout_constraintStart_toStartOf="@+id/btnRfTestAg0"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnRfTestAg0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btnAg0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txvRfTestAg" />
+
+        <Button
+            android:id="@+id/btnRfTestAg1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/btnAg1"
+            app:layout_constraintStart_toEndOf="@+id/btnRfTestAg0"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestAg0" />
+
+        <Button
+            android:id="@+id/btnRfTestAg2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="@string/btnAg2"
+            app:layout_constraintStart_toEndOf="@+id/btnRfTestAg1"
+            app:layout_constraintTop_toTopOf="@+id/btnRfTestAg1" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
+
+        <TextView
+            android:id="@+id/txvRfTestSrc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvDevSrc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnRfTestSrc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btnSrc"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txvRfTestSrc" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/txvRfTestShow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/txvRfTestTime"
+        app:layout_constraintStart_toStartOf="@+id/txvRfTestTitle"
+        app:layout_constraintTop_toBottomOf="@+id/txvRfTestTitle" />
+
+    <SeekBar
+        android:id="@+id/seekRfTestTime"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="128dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:max="31"
+        android:progress="3"
+        app:layout_constraintBottom_toBottomOf="@+id/txvRfTestShow"
+        app:layout_constraintStart_toEndOf="@+id/txvRfTestShow"
+        app:layout_constraintTop_toTopOf="@+id/txvRfTestShow" />
+
+    <RadioGroup
+        android:id="@+id/rdGpRfTestFreq"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/shape_rectangle"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView3"
-        app:layout_constraintStart_toStartOf="@+id/scrollView3"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView3">
+        android:checkedButton="@id/rdRfTestFreqMid"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txvRfTestShow">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/rdRfTestFreqHi"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/txvFreqHi" />
 
-            <TextView
-                android:id="@+id/textView10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/txvDevAllAg" />
-
-            <Button
-                android:id="@+id/btnRfTestAg0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/btnAg0"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-            <Button
-                android:id="@+id/btnRfTestAg1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="@string/btnAg1"
-                app:layout_constraintStart_toEndOf="@+id/btnRfTestAg0"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestAg0" />
-
-            <Button
-                android:id="@+id/btnRfTestAg2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:text="@string/btnAg2"
-                app:layout_constraintStart_toEndOf="@+id/btnRfTestAg1"
-                app:layout_constraintTop_toTopOf="@+id/btnRfTestAg1" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
-    <ScrollView
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/shape_rectangle"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView3"
-        app:layout_constraintStart_toStartOf="@+id/scrollView3"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView4">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/rdRfTestFreqMid"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="@string/txvFreqMid" />
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/txvDevSrc" />
-
-            <Button
-                android:id="@+id/btnRfTestSrc"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/btnSrc"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+        <RadioButton
+            android:id="@+id/rdRfTestFreqLo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/txvFreqLo" />
+    </RadioGroup>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 import kotlinx.android.synthetic.main.fragment_rf_test.*
+import kotlin.experimental.or
 
 class FragmentRfTest : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +27,33 @@ class FragmentRfTest : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        var rfTestTime = (3 + 1).shl(2)
+        var rfTestMode: Byte = 0x02
+
+        txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
+        rdGpRfTestFreq.setOnCheckedChangeListener { group, checkedId ->
+            rfTestMode =
+                when(checkedId) {
+                    R.id.rdRfTestFreqHi -> 3
+                    R.id.rdRfTestFreqMid -> 2
+                    R.id.rdRfTestFreqLo -> 1
+                    else -> 0
+                }
+        }
+        seekRfTestTime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                rfTestTime = (progress + 1).shl(2)
+                txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {
+            }
+
+        })
+
         btnRfTestHfp0.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
@@ -34,7 +63,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x00
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp0.setOnLongClickListener {
@@ -59,7 +88,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x08
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp1.setOnLongClickListener {
@@ -84,7 +113,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x10
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp2.setOnLongClickListener {
@@ -109,7 +138,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x18
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp3.setOnLongClickListener {
@@ -134,7 +163,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x20
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp4.setOnLongClickListener {
@@ -159,7 +188,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x28
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestHfp5.setOnLongClickListener {
@@ -184,7 +213,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x30
             sendMsg.btCmd[4] = CmdId.SET_HFP_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestSrc.setOnLongClickListener {
@@ -209,7 +238,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x00
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg0.setOnLongClickListener {
@@ -234,7 +263,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x10
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg1.setOnLongClickListener {
@@ -259,7 +288,7 @@ class FragmentRfTest : Fragment() {
             sendMsg.btCmd[3] = 0x20
             sendMsg.btCmd[4] = CmdId.SET_AG_TEST_REQ.value
             sendMsg.btCmd[5] = 0x01
-            sendMsg.btCmd[6] = 0x12
+            sendMsg.btCmd[6] = rfTestMode.or(rfTestTime.toByte())
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnRfTestAg2.setOnLongClickListener {

@@ -4,106 +4,105 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
     tools:context=".MainActivity">
 
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/shape_rectangle"
-        app:layout_constraintBottom_toTopOf="@+id/viewPagerM6"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <Button
+            android:id="@+id/btnCon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginStart="8dp"
+            android:text="@string/btnCon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btnCon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/btnCon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/txvConSta0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/txvStaDisable"
+            app:layout_constraintStart_toEndOf="@+id/btnCon"
+            app:layout_constraintTop_toTopOf="@+id/btnCon" />
 
-            <TextView
-                android:id="@+id/txvConSta0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="@string/txvStaDisable"
-                app:layout_constraintStart_toEndOf="@+id/btnCon"
-                app:layout_constraintTop_toTopOf="@+id/btnCon" />
+        <TextView
+            android:id="@+id/txvConSta1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/txvStaDisable"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/btnCon"
+            app:layout_constraintStart_toEndOf="@+id/btnCon"
+            tools:visibility="invisible" />
 
-            <TextView
-                android:id="@+id/txvConSta1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@string/txvStaDisable"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/btnCon"
-                app:layout_constraintStart_toEndOf="@+id/btnCon"
-                tools:visibility="invisible" />
+        <Button
+            android:id="@+id/btnStaUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="92dp"
+            android:text="@string/btnUpdate"
+            app:layout_constraintStart_toEndOf="@+id/btnCon"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
-                android:id="@+id/btnStaUpdate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="92dp"
-                android:text="@string/btnUpdate"
-                app:layout_constraintStart_toEndOf="@+id/btnCon"
-                app:layout_constraintTop_toTopOf="parent" />
+        <SeekBar
+            android:id="@+id/seekMainAlpha"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="15"
+            android:progress="3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
+            app:layout_constraintTop_toBottomOf="@+id/editTextStaUpTime" />
 
-            <SeekBar
-                android:id="@+id/seekMainAlpha"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:max="15"
-                android:progress="3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
-                app:layout_constraintTop_toBottomOf="@+id/editTextStaUpTime" />
+        <EditText
+            android:id="@+id/editTextStaUpTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="5"
+            android:hint="@string/txvUpdateTime"
+            android:imeOptions="actionDone"
+            android:inputType="numberDecimal"
+            android:singleLine="true"
+            android:text="@string/txvUpdateTime"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/editTextStaUpTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:ems="6"
-                android:hint="@string/txvUpdateTime"
-                android:imeOptions="actionDone"
-                android:inputType="numberDecimal"
-                android:singleLine="true"
-                android:text="@string/txvUpdateTime"
-                android:textAlignment="center"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/btnStaUpdate"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewPagerM6"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
-        app:layout_constraintStart_toStartOf="@+id/scrollView2"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
+        app:layout_constraintVertical_bias="1.0">
 
     </androidx.viewpager.widget.ViewPager>
 
