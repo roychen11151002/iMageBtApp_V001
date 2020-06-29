@@ -106,17 +106,19 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/btnVolWrite"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume">
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume"
+        app:layout_constraintVertical_bias="0.0">
 
         <CheckBox
             android:id="@+id/chkSrcHfpSpkrDecade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="@string/txvDecadeSpkrHfp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/seekSrcHfpSpkrVol" />
 
         <CheckBox
             android:id="@+id/chkSrcAvSpkrDecade"
@@ -131,33 +133,32 @@
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="168dp"
             android:layout_height="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:max="15"
             android:progress="3"
-            app:layout_constraintStart_toStartOf="@+id/chkSrcHfpSpkrDecade"
-            app:layout_constraintTop_toBottomOf="@+id/chkSrcHfpSpkrDecade" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <SeekBar
             android:id="@+id/seekSrcHfpMicVol"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="168dp"
             android:layout_height="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:max="15"
             android:progress="3"
             app:layout_constraintStart_toStartOf="@+id/chkSrcHfpSpkrDecade"
-            app:layout_constraintTop_toBottomOf="@+id/seekSrcHfpSpkrVol" />
+            app:layout_constraintTop_toBottomOf="@+id/chkSrcHfpSpkrDecade" />
 
         <SeekBar
             android:id="@+id/seekSrcAvSpkrVol"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="168dp"
-            android:layout_height="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="0dp"
             android:max="15"
             android:progress="3"
-            app:layout_constraintStart_toStartOf="@+id/chkSrcAvSpkrDecade"
-            app:layout_constraintTop_toBottomOf="@+id/chkSrcAvSpkrDecade" />
+            app:layout_constraintStart_toStartOf="@+id/textView3"
+            app:layout_constraintTop_toTopOf="@+id/seekSrcHfpSpkrVol" />
 
         <SeekBar
             android:id="@+id/seekAgHfpSpkrVol"

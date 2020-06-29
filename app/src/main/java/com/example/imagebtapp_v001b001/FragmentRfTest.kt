@@ -51,7 +51,6 @@ class FragmentRfTest : Fragment() {
 
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
             }
-
         })
 
         btnRfTestHfp0.setOnClickListener {

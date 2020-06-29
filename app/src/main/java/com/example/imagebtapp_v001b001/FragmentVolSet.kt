@@ -36,6 +36,7 @@ class FragmentVolSet : Fragment() {
         seekAgAvSpkrVol.visibility = View.INVISIBLE
         seekAgHfpMicVol.visibility = View.INVISIBLE
         textView6.visibility = View.INVISIBLE
+        chkSrcAvSpkrDecade.visibility = View.INVISIBLE
         if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
             rdHfpAllVolume.isEnabled = false
         }
