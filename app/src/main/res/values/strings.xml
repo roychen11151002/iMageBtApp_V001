@@ -73,7 +73,7 @@
     <string name="txvAudioParameter1">audio parameter 1</string>
     <string name="txvAudioParameter2">audio parameter 2(A7)</string>
     <string name="txvAudioParameter3">audio parameter 3(A6)</string>
-    <string name="txvAudioParameter4">audio parameter 4</string>
+    <string name="txvAudioParameter4">audio parameter 4(A6 AGC)</string>
     <string name="txvAudioParameter5">audio parameter 5</string>
     <string name="txvAudioParameter6">audio parameter 6</string>
     <string name="txvAudioParameter7">audio parameter 7</string>

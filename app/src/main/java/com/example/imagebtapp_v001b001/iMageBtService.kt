@@ -534,6 +534,24 @@ class iMageBtService : Service() {
                         Logger.d(LogService, "PAIRED_FOUND ${device.name} ${device.address}")
                     }
                 }
+                else {
+                    val sendMsg = BtDevMsg(0, 1)
+
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
+                    sendMsg.btCmd[5] = 7
+                    sendMsg.btCmd[6] = 0x00
+                    sendMsg.btCmd[7] = 0x00
+                    sendMsg.btCmd[8] = 0x00
+                    sendMsg.btCmd[9] = 0x00
+                    sendMsg.btCmd[10] = 0x00
+                    sendMsg.btCmd[11] = 0x00
+                    sendMsg.btCmd[12] = 0x00
+                    sendMainMsg(sendMsg)
+                }
             }
             else ->{
                 btDevArray[msg.btDevNo].rfcCmdSend(msg)

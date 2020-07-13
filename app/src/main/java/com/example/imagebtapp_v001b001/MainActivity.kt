@@ -397,7 +397,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
         editTextStaUpTime.setText(staUpdateInterval.toString())
         stateUpdateAuto(staUpdateInterval.toLong() * 1000)
-        Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.android_image_1).into(imgMainBackGround)
+        Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.img_background).into(imgMainBackGround)
         imgMainBackGround.alpha = preferData.getInt("MainIconAlpha", 3).toFloat() / seekMainAlpha.max
         seekMainAlpha.progress = preferData.getInt("MainIconAlpha", 3)
         initBt()
@@ -862,6 +862,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             var strList: List<String>
                             var sendMsg = BtDevMsg(0, 1)
 
+                            txvConSta0.text = applicationContext.resources.getString(R.string.txvStaEnable)
                             strList = preferData.getString("bdaddr0", "00:00:00:00:00:00")!!.split(':')
                             if(preferData.getString("bdaddr0", "00:00:00:00:00:00") == "00:00:00:00:00:00") {
                                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
