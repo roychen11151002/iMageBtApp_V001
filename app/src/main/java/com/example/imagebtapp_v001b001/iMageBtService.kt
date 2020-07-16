@@ -266,7 +266,7 @@ class iMageBtService : Service() {
 
                     for(i in 0 until maxBtDdev) {
                         if(btDevice.address == btDevArray[i].bdaddr) {
-                            var msg = BtDevMsg(0, 1)
+                            var msg = BtDevMsg(i, 1)
                             var strList = btDevice.address.split(':')
 
                             // btDevArray[i].connect()
@@ -554,8 +554,13 @@ class iMageBtService : Service() {
                 }
             }
             else ->{
+                var string = String.format("other command data: %02X %02X %02X ", msg.btCmd[2], msg.btCmd[3], msg.btCmd[4])
+
                 btDevArray[msg.btDevNo].rfcCmdSend(msg)
-                Logger.d(LogService, " other command data: ${msg.btCmd[2].toUByte().toString(16)} ${msg.btCmd[3].toUByte().toString(16)} ${msg.btCmd[4].toUByte().toString(16)} ${msg.btCmd[5].toUByte().toString(16)}")
+                for(i in 0 .. msg.btCmd[5].toInt()) {
+                    string += String.format("%02X ",msg.btCmd[i + 5])
+                }
+                Logger.d(LogService, " $string")
             }
         }
     }

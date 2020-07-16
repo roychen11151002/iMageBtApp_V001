@@ -200,7 +200,10 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
         // holder.itemView.imgViewMuSpkr.visibility = VISIBLE
         // holder.itemView.imgViewMuSpkr.setImageResource(android.R.drawable.ic_lock_silent_mode_off)
         // Glide.with(holder.imgViewIcon.context).load(btDevUnitList[position].imgIconUri).error(imgIconId[position % imgIconId.size]).into(holder.imgViewIcon)
-        Glide.with(holder.imgViewIcon.context).load(btDevUnitList[position].imgIconUri).error(R.drawable.img_icon).into(holder.imgViewIcon)
+        if(btDevUnitList[position].imgIconFlash) {
+            Glide.with(holder.imgViewIcon.context).load(btDevUnitList[position].imgIconUri).error(R.drawable.img_icon).into(holder.imgViewIcon)
+            btDevUnitList[position].imgIconFlash = false
+        }
         Logger.d(LogGbl, "imgIconUri$position: ${btDevUnitList[position].imgIconUri}")
         holder.imgViewStaCon.setBackgroundColor((
             if(btDevUnitList[position].stateCon.and(0x00000080) == 0x00000080)

@@ -124,6 +124,7 @@ class BtDevUnit {
         lateinit var resolver: ContentResolver
     }
     var imgIconUri = Uri.parse("")
+    var imgIconFlash = true
     var bdaddr = "00:00:00:00:00:00"
     var bdaddrPair = "00:00:00:00:00:00"
     var bdaddrFilterHfp = "00:00:00:00:00:00"

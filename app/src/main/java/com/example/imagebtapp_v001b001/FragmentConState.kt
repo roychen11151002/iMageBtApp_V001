@@ -322,6 +322,7 @@ class FragmentConState : Fragment() {
                 if(resultCode == Activity.RESULT_OK) {
                     preferDataEdit.putString("imgIconUri$positionEdit", data?.data.toString())
                     preferDataEdit.apply()
+                    (activity as DevUnitMsg).getBtDevUnitList()[positionEdit].imgIconFlash = true
                     (activity as DevUnitMsg).getBtDevUnitList()[positionEdit].imgIconUri = data?.data
                     updateData()
                     Logger.d(LogGbl, "result code OK; image icon URI: ${data?.data?.toString()}")
