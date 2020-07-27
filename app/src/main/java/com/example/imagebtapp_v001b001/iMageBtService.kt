@@ -139,6 +139,7 @@ class iMageBtService : Service() {
                             if(checkSum(btDevMsg.btCmd)) {
                                 // Logger.d(KotlinService, "Receiver iMage command")
                                 sendMainMsg(btDevMsg)
+                                Logger.d(LogService, "${String.format("receiver cmd ID: %02X len: %02X", btDevMsg.btCmd[4], btDevMsg.btCmd[5])}")
                                 // sendBroadcast(Intent("iMageBroadcastMain").putExtra("btServiceMsg", btDevMsg))
                                 // Handler().postDelayed({
                                 // }, 100)
@@ -182,6 +183,7 @@ class iMageBtService : Service() {
                             rfcSocket.connect()
                         } catch (e: IOException) {
                             Logger.d(LogService, "bluetooth connect fail ${btConNo}")
+                            break
                         }
                         if (rfcSocket.isConnected) {
                             thread = Thread(btReadThread)
@@ -259,7 +261,7 @@ class iMageBtService : Service() {
                     msg.btCmd[11] = parseInt(strList[0], 16).toByte()
                     msg.btCmd[12] = parseInt(strList[1], 16).toByte()
                     sendMainMsg(msg)
-                    Logger.d(LogService, "ACTION_ACL_CONNECTED ${btDevice.name} ${btDevice.address}")
+                    Logger.d(LogService, "ACTION_ACL_CONNECTED ${msg.btDevNo} ${btDevice.name} ${btDevice.address}")
                 }
                 BluetoothDevice.ACTION_ACL_DISCONNECTED -> {
                     val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)

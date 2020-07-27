@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.core.view.isInvisible
+import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_vol_set.*
 import kotlin.reflect.KVariance
 
@@ -423,5 +424,29 @@ class FragmentVolSet : Fragment() {
                         false
             }
         }
+        btnVolWrite.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnVolRead.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
     }
 }

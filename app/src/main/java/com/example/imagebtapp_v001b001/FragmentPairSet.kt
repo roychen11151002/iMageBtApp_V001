@@ -2,6 +2,7 @@ package com.example.imagebtapp_v001b001
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,7 @@ class FragmentPairSet : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val recyclerListAdapter = BtListAdapter((activity as DevUnitMsg).getBtList())
+        val recyclerListAdapter = BtListAdapter(BtDevUnit.BtList)
 
         recyclerListPair.layoutManager = LinearLayoutManager(context)
         recyclerListPair.adapter = recyclerListAdapter
@@ -52,7 +53,7 @@ class FragmentPairSet : Fragment() {
             val sendMsg = BtDevMsg(0, 1)
 
             /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList()) */
-            when((activity as DevUnitMsg).getPairState()) {
+            when(BtDevUnit.PairState) {
                 0x00 -> {
                     recyclerListPair.layoutManager!!.scrollToPosition(0)
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
@@ -81,7 +82,7 @@ class FragmentPairSet : Fragment() {
             override fun onItemClick(view: View, position: Int) {
                 val listItem = resources.getStringArray(R.array.txvDevName)
                 var sendMsg = BtDevMsg(0, 1)
-                var str = (activity as DevUnitMsg).getBtList()[position].removeRange(0, (activity as DevUnitMsg).getBtList()[position].lastIndexOf(" + ") + 3)
+                var str = BtDevUnit.BtList[position].removeRange(0, BtDevUnit.BtList[position].lastIndexOf(" + ") + 3)
                 var strList = str.split(':')
                 var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
 
@@ -111,7 +112,7 @@ class FragmentPairSet : Fragment() {
                     sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
                     sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
                     Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
-                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                    Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, 100)
                 }.setNegativeButton("Cancel") {
                     dialog, which ->
                 }.show()
@@ -152,7 +153,7 @@ class FragmentPairSet : Fragment() {
     fun updateData() {
         recyclerListPair.adapter!!.notifyDataSetChanged()
         txvPairTitle.text =
-            when((activity as DevUnitMsg).getPairState()) {
+            when(BtDevUnit.PairState) {
                 0 -> {
                     btnPair.isEnabled = true
                     btnDiscovery.isEnabled = true

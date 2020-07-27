@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SeekBar
+import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 import java.lang.Integer.parseInt
 
@@ -137,6 +138,20 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[12] = 0x00
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             }, 200)
+        }
+        btnFeatureDfu.setOnClickListener {
+            var sendMsg = BtDevMsg(0, 0)
+
+            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+            sendMsg.btCmd[4] = CmdId.SET_DISCOVERY_REQ.value
+            sendMsg.btCmd[5] = 0x02.toByte()
+            sendMsg.btCmd[6] = 0x70.toByte()
+            sendMsg.btCmd[7] = 0x20.toByte()
+
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
         }
         btnFeatureDfu.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
@@ -353,5 +368,41 @@ class FragmentFeatureSet : Fragment() {
         seekLedMfb.progress = ledLight[1]
         seekLedBcb.progress = ledLight[2]
         seekLedRev.progress = ledLight[3]
+        btnFeatureWrite.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnFeatureRead.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnFeatureDfu.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
     }
 }

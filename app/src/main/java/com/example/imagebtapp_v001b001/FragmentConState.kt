@@ -7,6 +7,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.fragment_con_state.*
@@ -350,5 +352,17 @@ class FragmentConState : Fragment() {
 
     fun updateData() {
         recyclerDevList.adapter!!.notifyDataSetChanged()
+        recyclerDevList.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                     VISIBLE
+                }
+                0x01.toByte() -> {
+                    INVISIBLE
+               }
+                else -> {
+                    INVISIBLE
+                }
+            }
     }
 }

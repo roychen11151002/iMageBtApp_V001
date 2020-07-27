@@ -9,6 +9,7 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.core.view.size
 import kotlinx.android.synthetic.main.fragment_audio_para_set.*
+import kotlinx.android.synthetic.main.fragment_con_state.*
 import java.lang.Integer.parseInt
 
 class FragmentAudioParaSet : Fragment() {
@@ -20,8 +21,8 @@ class FragmentAudioParaSet : Fragment() {
                                                        "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cb 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
                                                arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 0014 0002 0000 00cd 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
                                                        "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cd 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
-                                               arrayOf("227c 227d 00df e108 0466 f60c 6666 6603 6666 3333 e800 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cd 0000 0000 0000 0000 0000 001c 3300 3333 0003 2000 0000 0800 0000 00cd 0000 0108 0c06 cccc 5316 0000 0000 0006 7f00 ffff 0199",
-                                                       "227d 0000"))
+                                               arrayOf("227c 227d 00de e188 0466 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
+                                                       "227d 0000 de00 8000 0000 0199"))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,5 +187,29 @@ class FragmentAudioParaSet : Fragment() {
     }
 
     fun updateData() {
+        btnAudioParaWrite.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnAudioParaRead.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
     }
 }

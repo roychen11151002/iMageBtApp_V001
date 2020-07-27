@@ -6,8 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 import kotlinx.android.synthetic.main.fragment_rf_test.*
+import kotlinx.android.synthetic.main.fragment_vol_set.*
 import kotlin.experimental.or
 
 class FragmentRfTest : Fragment() {
@@ -306,5 +308,126 @@ class FragmentRfTest : Fragment() {
     }
 
     fun updateData() {
+        btnRfTestAg0.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestAg1.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestAg2.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp0.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp1.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp2.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp3.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp4.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestHfp5.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+        btnRfTestSrc.visibility =
+            when(BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    View.INVISIBLE
+                }
+                else -> {
+                    View.INVISIBLE
+                }
+            }
+
     }
 }

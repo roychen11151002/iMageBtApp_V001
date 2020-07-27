@@ -9,20 +9,19 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
-import android.view.Window
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_pair_set.*
 import java.lang.Integer.parseInt
 
 private const val LogMain = "testMain"
@@ -59,6 +58,8 @@ enum class CmdId(val value: Byte) {
     SET_AG_FEATURE_RSP(0x1f.toByte()),
     SET_HFP_DIAL_REQ(0x20.toByte()),
     SET_HFP_DIAL_RSP(0x21.toByte()),
+    SET_DISCOVERY_REQ(0x22.toByte()),
+    SET_DISCOVERY_RSP(0x23.toByte()),
     SET_HFP_TEST_REQ(0x34.toByte()),
     SET_HFP_TEST_RSP(0x35.toByte()),
     SET_AG_TEST_REQ(0x36.toByte()),
@@ -122,6 +123,15 @@ class BtDevMsg(var btDevNo: Int = 0, var btGroup: Int = 0) {
 class BtDevUnit {
     companion object {
         lateinit var resolver: ContentResolver
+        var sppStateCon: Byte = 1
+        var PairState = 0
+        val MaxBtDev = 2
+        var previousItem = 256
+        var isReconnect = true
+        var staUpdateInterval = 60
+        val BtPermissionReqCode = 1
+        val BtActionReqCode = 66
+        var BtList = ArrayList<String>()
     }
     var imgIconUri = Uri.parse("")
     var imgIconFlash = true
@@ -183,10 +193,8 @@ class BtDevUnit {
 
 interface DevUnitMsg {
     fun getpreferData(): SharedPreferences
-    fun getBtList(): ArrayList<String>
     fun getBtDevUnitList(): ArrayList<BtDevUnit>
     fun sendBtServiceMsg(msg: BtDevMsg)
-    fun getPairState(): Int
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(),
@@ -197,16 +205,8 @@ val ViewPagerArray = arrayOf(FragmentConState(),
                                               FragmentRfTest())
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
-    private var BtList = ArrayList<String>()
     private var BtDevUnitList = ArrayList<BtDevUnit>()
-    private val MaxBtDev = 2
-    private var PairState = 0
-    private var previousItem = 256
-    private var isReconnect = true
     private val adapterPager = ViewPagerAdapter(supportFragmentManager)
-    private var staUpdateInterval = 60
-    private val BtPermissionReqCode = 1
-    private val BtActionReqCode = 66
     private val MainBackGroundImage = 88
     private lateinit var preferData: SharedPreferences
     private var iMageBtServiceBind = false
@@ -274,6 +274,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             is FragmentAudioParaSet -> {
                 (ViewPagerArray[it.what] as FragmentAudioParaSet).updateData()
                 Logger.d(LogMain, "FragmentAudioParaSet fragment update")
+            }
+            is FragmentRfTest -> {
+                (ViewPagerArray[it.what] as FragmentRfTest).updateData()
+                Logger.d(LogMain, "FragmentRfTest fragment update")
             }
         }
         true
@@ -370,8 +374,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
                 imm.hideSoftInputFromWindow(editTextStaUpTime.getWindowToken(), 0)
                 editTextStaUpTime.clearFocus()
-                staUpdateInterval = parseInt(editTextStaUpTime.text.toString())
-                preferDataEdit.putInt("staUpdateInterval", staUpdateInterval)
+                BtDevUnit.staUpdateInterval = parseInt(editTextStaUpTime.text.toString())
+                preferDataEdit.putInt("staUpdateInterval", BtDevUnit.staUpdateInterval)
                 preferDataEdit.apply()
                 true
             }
@@ -395,22 +399,18 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             }
         })
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
-        staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
-        editTextStaUpTime.setText(staUpdateInterval.toString())
-        stateUpdateAuto(staUpdateInterval.toLong() * 1000)
+        BtDevUnit.staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
+        editTextStaUpTime.setText(BtDevUnit.staUpdateInterval.toString())
+        stateUpdateAuto(BtDevUnit.staUpdateInterval.toLong() * 1000)
         Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.img_background).into(imgMainBackGround)
         imgMainBackGround.alpha = preferData.getInt("MainIconAlpha", 3).toFloat() / seekMainAlpha.max
         seekMainAlpha.progress = preferData.getInt("MainIconAlpha", 3)
         initBt()
-        Logger.d(LogMain, "state update interval $staUpdateInterval")
+        Logger.d(LogMain, "state update interval ${BtDevUnit.staUpdateInterval}")
     }
 
     override fun onStart() {
         super.onStart()
-        var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
-        imm.hideSoftInputFromWindow(editTextStaUpTime.getWindowToken(), 0)
-        editTextStaUpTime.clearFocus()
         Logger.d(LogMain, "main activity onStart")
     }
 
@@ -447,7 +447,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Logger.d(LogMain, "request permission result")
-        if(requestCode == BtPermissionReqCode) {
+        if(requestCode == BtDevUnit.BtPermissionReqCode) {
             if(grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED))
                 initBt()
         }
@@ -457,7 +457,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         super.onActivityResult(requestCode, resultCode, data)
         Logger.d(LogMain, " activity result:$resultCode requestCode:$requestCode")
         when(requestCode) {
-            BtActionReqCode -> {
+            BtDevUnit.BtActionReqCode -> {
                 if(resultCode == Activity.RESULT_OK) {
                     Logger.d(LogMain, "bluetooth enabled")
                     initBt()
@@ -501,7 +501,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         Logger.d(LogMain, "initBt")
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) && (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
             Logger.d(LogMain, "bluetooth permission request")
-            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), BtPermissionReqCode)
+            ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION), BtDevUnit.BtPermissionReqCode)
         } else if (BluetoothAdapter.getDefaultAdapter().isEnabled) {
             Logger.d(LogMain, "bluetooth enabled")
             // txvConSta0.text = "Enable"
@@ -542,7 +542,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             }
         } else {
             Logger.d(LogMain, "bluetooth action request")
-            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), BtActionReqCode)
+            startActivityForResult(Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE), BtDevUnit.BtActionReqCode)
         }
     }
 
@@ -574,16 +574,14 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
  */
     }
 
-    override fun getBtList(): ArrayList<String> = BtList
     override fun getBtDevUnitList(): ArrayList<BtDevUnit> = BtDevUnitList
     override fun getpreferData(): SharedPreferences = preferData
-    override fun getPairState(): Int = PairState
 
     fun viewM6UpdateNest() {
         Handler().postDelayed({
-            if(previousItem != viewPagerM6.currentItem) {
+            if(BtDevUnit.previousItem != viewPagerM6.currentItem) {
                 viewM6Update()
-                previousItem = viewPagerM6.currentItem
+                BtDevUnit.previousItem = viewPagerM6.currentItem
             }
             viewM6UpdateNest()
         }, 1000)
@@ -594,8 +592,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     fun stateUpdateAuto(time: Long) {
         Handler().postDelayed({
             stateUpdate()
-            if(staUpdateInterval >= 3)
-                stateUpdateAuto(staUpdateInterval.toLong() * 1000)
+            if(BtDevUnit.staUpdateInterval >= 3)
+                stateUpdateAuto(BtDevUnit.staUpdateInterval.toLong() * 1000)
         }, time)
     }
 
@@ -857,12 +855,40 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     if (id.and(0x1) == 0x1)
                         BtDevUnitList[id + 1].bdaddr = bdaddrTranslate(msg, 7)
                 }
+                CmdId.SET_DISCOVERY_RSP.value -> {
+                    var str = ""
+
+                    when(msg.btCmd[6]) {
+                        0x00.toByte() -> {
+                            Logger.d(LogMain, "discovery finished")
+                        }
+                        0x01.toByte() -> {
+                            str += bdaddrTranslate(msg, 7)
+                            Logger.d(LogMain, "discovery BDA: $str")
+                            Logger.d(LogMain, "discovery eir type: ${msg.btCmd[13].toString(16)}")
+                            str = ""
+                            for(i: Int in 0 until msg.btCmd[5] - 8) {
+                                str += msg.btCmd[14 + i].toChar().toString()
+                            }
+                            Logger.d(LogMain, "discovery local name: $str")
+                        }
+                        0x02.toByte() -> {
+                            Logger.d(LogMain, "discovery start")
+                        }
+                        else -> {
+
+                        }
+                    }
+                }
                 CmdId.SET_INT_SERVICE_RSP.value ->
                     when (msg.btCmd[6]) {
                         0x00.toByte() -> {
                             var strList: List<String>
                             var sendMsg = BtDevMsg(0, 1)
+                            var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
+                            editTextStaUpTime.clearFocus()
+                            imm.hideSoftInputFromWindow(editTextStaUpTime.getWindowToken(), 0)
                             txvConSta0.text = applicationContext.resources.getString(R.string.txvStaEnable)
                             strList = preferData.getString("bdaddr0", "00:00:00:00:00:00")!!.split(':')
                             if(preferData.getString("bdaddr0", "00:00:00:00:00:00") == "00:00:00:00:00:00") {
@@ -929,62 +955,73 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         }
                     }
                 CmdId.SET_INT_CON_RSP.value -> when (msg.btDevNo) {
-                    0 -> txvConSta0.text =
-                        when (msg.btCmd[6]) {
-                            0x00.toByte() -> {
-                                var sendMsg = BtDevMsg(0, 0)
+                    0 -> {
+                        BtDevUnit.sppStateCon = msg.btCmd[6]
+                        txvConSta0.text =
+                            when (BtDevUnit.sppStateCon) {
+                                0x00.toByte() -> {
+                                    var sendMsg = BtDevMsg(0, 0)
 
-                                isReconnect = true
-                                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                                sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
-                                sendMsg.btCmd[4] = CmdId.GET_SRC_DEV_NO_REQ.value
-                                sendMsg.btCmd[5] = 0x01
-                                sendMsg.btCmd[6] = 0x00
-                                sendBtServiceMsg(sendMsg)
-                                for(i in 0 until ViewPagerArray.size) {
-                                    if(ViewPagerArray[i] is FragmentConState) {
-                                        viewPagerM6.setCurrentItem(i)
-                                        break
+                                    // viewPagerM6.visibility = VISIBLE
+                                    BtDevUnit.isReconnect = true
+                                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                    sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+                                    sendMsg.btCmd[4] = CmdId.GET_SRC_DEV_NO_REQ.value
+                                    sendMsg.btCmd[5] = 0x01
+                                    sendMsg.btCmd[6] = 0x00
+                                    sendBtServiceMsg(sendMsg)
+                                    for (i in 0 until ViewPagerArray.size) {
+                                        if (ViewPagerArray[i] is FragmentConState) {
+                                            viewPagerM6.setCurrentItem(i)
+                                            break
+                                        }
                                     }
+                                    applicationContext.resources.getString(R.string.txvStaConnected)
                                 }
-                                applicationContext.resources.getString(R.string.txvStaConnected)
-                            }
-                            0x01.toByte() -> {
-                                var strList: List<String>
+                                0x01.toByte() -> {
+                                    var strList: List<String>
 
-                                if (isReconnect == true) {
-                                    isReconnect = false
-                                    for (i in 0 until MaxBtDev) {
-                                        var sendMsg = BtDevMsg(0, 1)
+                                    // viewPagerM6.visibility = INVISIBLE
+                                    if (BtDevUnit.isReconnect == true) {
+                                        BtDevUnit.isReconnect = false
+                                        for (i in 0 until BtDevUnit.MaxBtDev) {
+                                            var sendMsg = BtDevMsg(0, 1)
 
-                                        strList = preferData.getString("bdaddr${i}", "00:00:00:00:00:00")!!.split(':')
-                                        sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                                        sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                                        sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                                        sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                                        sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
-                                        sendMsg.btCmd[5] = 0x07
-                                        sendMsg.btCmd[6] = 0x01
-                                        sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
-                                        sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
-                                        sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
-                                        sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
-                                        sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
-                                        sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
-                                        Logger.d(LogMain, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
-                                        sendMsg.btDevNo = i
-                                        sendBtServiceMsg(sendMsg)
+                                            strList = preferData.getString(
+                                                "bdaddr${i}",
+                                                "00:00:00:00:00:00"
+                                            )!!.split(':')
+                                            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                                            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                                            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                                            sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                                            sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                                            sendMsg.btCmd[5] = 0x07
+                                            sendMsg.btCmd[6] = 0x01
+                                            sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
+                                            sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
+                                            sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
+                                            sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
+                                            sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
+                                            sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                                            Logger.d(
+                                                LogMain,
+                                                "bdaddr ${bdaddrTranslate(sendMsg, 7)}"
+                                            )
+                                            sendMsg.btDevNo = i
+                                            sendBtServiceMsg(sendMsg)
+                                        }
+                                        Logger.d(LogMain, "bluetooth reconnecct")
                                     }
-                                    Logger.d(LogMain, "bluetooth reconnecct")
+                                    Logger.d(LogMain, "bluetooth disconnect")
+                                    applicationContext.resources.getString(R.string.txvStaDiscon)
                                 }
-                                Logger.d(LogMain, "bluetooth disconnect")
-                                applicationContext.resources.getString(R.string.txvStaDiscon)
+                                0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
+                                else -> applicationContext.resources.getString(R.string.txvStaEnable)
                             }
-                            0x02.toByte() -> applicationContext.resources.getString(R.string.txvStaConnecting)
-                            else -> applicationContext.resources.getString(R.string.txvStaEnable)
-                        }
+                    }
                     1 -> txvConSta1.text =
                         when (msg.btCmd[6]) {
                             0x00.toByte() -> applicationContext.resources.getString(R.string.txvStaConnected)
@@ -998,26 +1035,26 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 CmdId.SET_INT_DISCOVERY_RSP.value -> {
                     when (msg.btCmd[6]) {
                         0x00.toByte() -> {
-                            PairState = 0
+                            BtDevUnit.PairState = 0
                         }
                         0x01.toByte() -> {
                             var str = ""
 
-                            PairState = 1
+                            BtDevUnit.PairState = 1
                             for (i in 0 until (msg.btCmd[5] - 7) / 2) {
                                 str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                             }
                             str += " + " + bdaddrTranslate(msg, 7)
                             if(str.substring(0, 6).compareTo("iMage ") == 0) {
-                                if(!BtList.contains(str))
-                                BtList.add(str)
+                                if(!BtDevUnit.BtList.contains(str))
+                                BtDevUnit.BtList.add(str)
                                 Logger.d(LogMain, "$str has iMage")
                             }
                         }
                         0x02.toByte() -> {
-                            PairState = 2
-                            BtList.removeAll(BtList)
-                            BtList.add("clear paired device + 00:00:00:00:00:00")
+                            BtDevUnit.PairState = 2
+                            BtDevUnit.BtList.removeAll(BtDevUnit.BtList)
+                            BtDevUnit.BtList.add("clear paired device + 00:00:00:00:00:00")
                         }
                     }
                     Logger.d(LogMain, " cmmmand SET_INT_DISCOVERY_RSP")
@@ -1025,13 +1062,13 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 CmdId.SET_INT_PAIR_RSP.value -> {
                     var str = ""
 
-                    PairState =
+                    BtDevUnit.PairState =
                         when(msg.btCmd[6]) {
                             0x00.toByte() -> 0
                             0x01.toByte() -> 3
                             0x02.toByte() -> {
-                                BtList.removeAll(BtList)
-                                BtList.add("clear paired device + 00:00:00:00:00:00")
+                                BtDevUnit.BtList.removeAll(BtDevUnit.BtList)
+                                BtDevUnit.BtList.add("clear paired device + 00:00:00:00:00:00")
                                 3
                             }
                             else -> 0
@@ -1041,7 +1078,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     }
                     str += " + " + bdaddrTranslate(msg, 7)
                     if(str.substring(0, 6).compareTo("iMage ") == 0) {
-                        BtList.add(str)
+                        BtDevUnit.BtList.add(str)
                         Logger.d(LogMain, "$str has iMage")
                     }
                     Logger.d(LogMain, "command SET_INT_PAIR_RSP")
