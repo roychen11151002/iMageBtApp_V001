@@ -368,41 +368,22 @@ class FragmentFeatureSet : Fragment() {
         seekLedMfb.progress = ledLight[1]
         seekLedBcb.progress = ledLight[2]
         seekLedRev.progress = ledLight[3]
-        btnFeatureWrite.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+        when(BtDevUnit.sppStateCon) {
+            0x00.toByte() -> {
+                btnFeatureWrite.visibility = View.VISIBLE
+                btnFeatureRead.visibility = View.VISIBLE
+                btnFeatureDfu.visibility = View.VISIBLE
             }
-        btnFeatureRead.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+            0x01.toByte() -> {
+                btnFeatureWrite.visibility = View.INVISIBLE
+                btnFeatureRead.visibility = View.INVISIBLE
+                btnFeatureDfu.visibility = View.INVISIBLE
             }
-        btnFeatureDfu.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+            else -> {
+                btnFeatureWrite.visibility = View.INVISIBLE
+                btnFeatureRead.visibility = View.INVISIBLE
+                btnFeatureDfu.visibility = View.INVISIBLE
             }
+        }
     }
 }

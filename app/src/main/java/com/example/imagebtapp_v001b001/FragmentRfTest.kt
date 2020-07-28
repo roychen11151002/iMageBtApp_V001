@@ -308,126 +308,43 @@ class FragmentRfTest : Fragment() {
     }
 
     fun updateData() {
-        btnRfTestAg0.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+        when(BtDevUnit.sppStateCon) {
+            0x00.toByte() -> {
+                btnRfTestSrc.visibility = View.VISIBLE
+                btnRfTestAg0.visibility = View.VISIBLE
+                btnRfTestAg1.visibility = View.VISIBLE
+                btnRfTestAg2.visibility = View.VISIBLE
+                btnRfTestHfp0.visibility = View.VISIBLE
+                btnRfTestHfp1.visibility = View.VISIBLE
+                btnRfTestHfp2.visibility = View.VISIBLE
+                btnRfTestHfp3.visibility = View.VISIBLE
+                btnRfTestHfp4.visibility = View.VISIBLE
+                btnRfTestHfp5.visibility = View.VISIBLE
             }
-        btnRfTestAg1.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+            0x01.toByte() -> {
+                btnRfTestSrc.visibility = View.INVISIBLE
+                btnRfTestAg0.visibility = View.INVISIBLE
+                btnRfTestAg1.visibility = View.INVISIBLE
+                btnRfTestAg2.visibility = View.INVISIBLE
+                btnRfTestHfp0.visibility = View.INVISIBLE
+                btnRfTestHfp1.visibility = View.INVISIBLE
+                btnRfTestHfp2.visibility = View.INVISIBLE
+                btnRfTestHfp3.visibility = View.INVISIBLE
+                btnRfTestHfp4.visibility = View.INVISIBLE
+                btnRfTestHfp5.visibility = View.INVISIBLE
             }
-        btnRfTestAg2.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+            else -> {
+                btnRfTestSrc.visibility = View.INVISIBLE
+                btnRfTestAg0.visibility = View.INVISIBLE
+                btnRfTestAg1.visibility = View.INVISIBLE
+                btnRfTestAg2.visibility = View.INVISIBLE
+                btnRfTestHfp0.visibility = View.INVISIBLE
+                btnRfTestHfp1.visibility = View.INVISIBLE
+                btnRfTestHfp2.visibility = View.INVISIBLE
+                btnRfTestHfp3.visibility = View.INVISIBLE
+                btnRfTestHfp4.visibility = View.INVISIBLE
+                btnRfTestHfp5.visibility = View.INVISIBLE
             }
-        btnRfTestHfp0.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestHfp1.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestHfp2.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestHfp3.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestHfp4.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestHfp5.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-        btnRfTestSrc.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
-            }
-
+        }
     }
 }

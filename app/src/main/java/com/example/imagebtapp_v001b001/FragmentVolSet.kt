@@ -424,29 +424,19 @@ class FragmentVolSet : Fragment() {
                         false
             }
         }
-        btnVolWrite.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+        when(BtDevUnit.sppStateCon) {
+            0x00.toByte() -> {
+                btnVolWrite.visibility = View.VISIBLE
+                btnVolRead.visibility = View.VISIBLE
             }
-        btnVolRead.visibility =
-            when(BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    View.INVISIBLE
-                }
-                else -> {
-                    View.INVISIBLE
-                }
+            0x01.toByte() -> {
+                btnVolWrite.visibility = View.INVISIBLE
+                btnVolRead.visibility = View.INVISIBLE
             }
+            else -> {
+                btnVolWrite.visibility = View.INVISIBLE
+                btnVolRead.visibility = View.INVISIBLE
+            }
+        }
     }
 }
