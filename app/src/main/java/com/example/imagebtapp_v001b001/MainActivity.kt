@@ -9,8 +9,6 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
-import android.view.View.INVISIBLE
-import android.view.View.VISIBLE
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -132,6 +130,9 @@ class BtDevUnit {
         val BtPermissionReqCode = 1
         val BtActionReqCode = 66
         var BtList = ArrayList<String>()
+        var maxTalkNo = 0
+        var maxAgNo = 0
+        var deviceNo = 6
     }
     var imgIconUri = Uri.parse("")
     var imgIconFlash = true
@@ -139,8 +140,6 @@ class BtDevUnit {
     var bdaddrPair = "00:00:00:00:00:00"
     var bdaddrFilterHfp = "00:00:00:00:00:00"
     var bdaddrFilterAg = "00:00:00:00:00:00"
-    var maxTalkNo = 0
-    var maxAgNo = 0
     var ledLightHfp = arrayOf(0, 0, 0, 0)
     var ledLightAg = arrayOf(0, 0, 0, 0)
     var verFirmwareHfp = ""
@@ -198,7 +197,8 @@ interface DevUnitMsg {
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(),
-                                              FragmentAudioParaSet(),
+                                              FragmentAudioParaSetA6(),
+                                              FragmentAudioParaSetA7(),
                                               FragmentPairSet(),
                                               FragmentFeatureSet(),
                                               FragmentVolSet(),
@@ -271,9 +271,13 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 (ViewPagerArray[it.what] as FragmentVolSet).updateData()
                 Logger.d(LogMain, "FragmentVolSet fragment update")
             }
-            is FragmentAudioParaSet -> {
-                (ViewPagerArray[it.what] as FragmentAudioParaSet).updateData()
-                Logger.d(LogMain, "FragmentAudioParaSet fragment update")
+            is FragmentAudioParaSetA6 -> {
+                (ViewPagerArray[it.what] as FragmentAudioParaSetA6).updateData()
+                Logger.d(LogMain, "FragmentAudioParaSetA6 fragment update")
+            }
+            is FragmentAudioParaSetA7 -> {
+                (ViewPagerArray[it.what] as FragmentAudioParaSetA7).updateData()
+                Logger.d(LogMain, "FragmentAudioParaSetA7 fragment update")
             }
             is FragmentRfTest -> {
                 (ViewPagerArray[it.what] as FragmentRfTest).updateData()
@@ -506,8 +510,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             Logger.d(LogMain, "bluetooth enabled")
             // txvConSta0.text = "Enable"
             // txvConSta1.text = "Enable"
-            preferData.getInt("deviceNo", 0)
-            initHfpDevice(preferData.getInt("deviceNo", 0))
+            initHfpDevice(BtDevUnit.deviceNo)
             viewPagerM6.adapter = adapterPager
             if (!iMageBtServiceBind) {
                 // startService(Intent(this, iMageBtService::class.java))
@@ -807,21 +810,18 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         BtDevUnitList[id + 1].nameLocalAg = String(msg.btCmd, 6, msg.btCmd[5].toInt())
                 }
                 CmdId.GET_SRC_DEV_NO_RSP.value -> {
-                    val preferDataEdit = preferData.edit()
-
                     Logger.d(LogMain, "${String.format("src:%02X source device number:%02d", msg.btCmd[2], msg.btCmd[6])}")
                     if (msg.btCmd[2] == 0x30.toByte()) {
                         initHfpDevice(msg.btCmd[6].toUByte().toInt())
-                        preferDataEdit.putInt("deviceNo", msg.btCmd[6].toUByte().toInt())
-                        preferDataEdit.apply()
+                        BtDevUnit.deviceNo = msg.btCmd[6].toUByte().toInt()
                     }
                     setUpdate()
                     stateUpdate()
                 }
                 CmdId.GET_HFP_FEATURE_RSP.value -> {
                     BtDevUnitList[id].featureHfp = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
-                    BtDevUnitList[id].maxAgNo = msg.btCmd[8].toInt()
-                    BtDevUnitList[id].maxTalkNo = msg.btCmd[9].toInt()
+                    BtDevUnit.maxAgNo = msg.btCmd[8].toInt()
+                    BtDevUnit.maxTalkNo = msg.btCmd[9].toInt()
                     BtDevUnitList[id].bdaddrFilterHfp = bdaddrTranslate(msg, 11)
                     for (i in 0 until 4) {
                         BtDevUnitList[id].ledLightHfp[i] = msg.btCmd[17 + i * 2].toUByte().toInt().shl(8) + msg.btCmd[17 + i * 2 + 1].toUByte().toInt()

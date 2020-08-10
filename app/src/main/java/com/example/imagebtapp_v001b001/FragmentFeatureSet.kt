@@ -102,8 +102,8 @@ class FragmentFeatureSet : Fragment() {
             sendMsg.btCmd[5] = 0x13
             sendMsg.btCmd[6] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.shr(8).toByte()
             sendMsg.btCmd[7] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.and(0xff).toByte()
-            sendMsg.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].maxAgNo.and(0xff).toByte()
-            sendMsg.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].maxTalkNo.and(0xff).toByte()
+            sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+            sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
             sendMsg.btCmd[10] = 0x00
             sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
             sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
