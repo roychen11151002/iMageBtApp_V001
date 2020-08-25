@@ -157,7 +157,7 @@ class FragmentConState : Fragment() {
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                    sendMsg.btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HFP_ALL.value
                     sendMsg.btCmd[4] = CmdId.SET_HFP_VOL_REQ.value
                     sendMsg.btCmd[5] = 0x01
                     sendMsg.btCmd[6] =

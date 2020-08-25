@@ -134,6 +134,8 @@ class BtDevUnit {
         var maxTalkNo = 0
         var maxAgNo = 0
         var deviceNo = 6
+        var featureMaxTalkNo = 4
+        var featuerMaxAgNo = 0x10
         val featuerM6Src = 0xa2a2
         val ledPwrM6Src = 0x03ff
         val ledMfbM6Src = 0x03ff

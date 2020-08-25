@@ -164,8 +164,8 @@ class FragmentFeatureSet : Fragment() {
                     sendMsg.btCmd[5] = 0x13
                     sendMsg.btCmd[6] = BtDevUnit.featuerA6.shr(8).toByte()
                     sendMsg.btCmd[7] = BtDevUnit.featuerA6.and(0xff).toByte()
-                    sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                    sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                    sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                    sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                     sendMsg.btCmd[10] = 0x00
                     sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                     sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
@@ -204,8 +204,8 @@ class FragmentFeatureSet : Fragment() {
                     sendMsg.btCmd[5] = 0x13
                     sendMsg.btCmd[6] = BtDevUnit.featuerA7.shr(8).toByte()
                     sendMsg.btCmd[7] = BtDevUnit.featuerA7.and(0xff).toByte()
-                    sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                    sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                    sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                    sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                     sendMsg.btCmd[10] = 0x00
                     sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                     sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
@@ -238,8 +238,8 @@ class FragmentFeatureSet : Fragment() {
                 sendAgMsg.btCmd[5] = 0x13
                 sendAgMsg.btCmd[6] = BtDevUnit.featuerM6Ag.shr(8).toByte()
                 sendAgMsg.btCmd[7] = BtDevUnit.featuerM6Ag.and(0xff).toByte()
-                sendAgMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                sendAgMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                 sendAgMsg.btCmd[10] = 0x00
                 sendAgMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                 sendAgMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
@@ -266,8 +266,8 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[5] = 0x13
                 sendMsg.btCmd[6] = BtDevUnit.featuerM6Src.shr(8).toByte()
                 sendMsg.btCmd[7] = BtDevUnit.featuerM6Src.and(0xff).toByte()
-                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                 sendMsg.btCmd[10] = 0x00
                 sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                 sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
@@ -297,8 +297,8 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[5] = 0x13
                 sendMsg.btCmd[6] = BtDevUnit.featuerDg.shr(8).toByte()
                 sendMsg.btCmd[7] = BtDevUnit.featuerDg.and(0xff).toByte()
-                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                 sendMsg.btCmd[10] = 0x00
                 sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                 sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
@@ -328,8 +328,8 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[5] = 0x13
                 sendMsg.btCmd[6] = BtDevUnit.featuerVc.shr(8).toByte()
                 sendMsg.btCmd[7] = BtDevUnit.featuerVc.and(0xff).toByte()
-                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
-                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.featuerMaxAgNo.toByte()
+                sendMsg.btCmd[9] = BtDevUnit.featureMaxTalkNo.toByte()
                 sendMsg.btCmd[10] = 0x00
                 sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
                 sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
