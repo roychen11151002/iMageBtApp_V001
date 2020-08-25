@@ -32,6 +32,7 @@ enum class CmdId(val value: Byte) {
     CMD_DEV_SRC(0x30.toByte()),
     CMD_DEV_AG(0x00.toByte()),
     CMD_DEV_AG_ALL(0x38.toByte()),
+    CMD_DEV_HFP_ALL(0x38.toByte()),
     SET_HFP_PAIR_REQ(0x02.toByte()),
     SET_HFP_PAIR_RSP(0x03.toByte()),
     SET_AG_VOL_REQ(0x06.toByte()),
@@ -133,6 +134,36 @@ class BtDevUnit {
         var maxTalkNo = 0
         var maxAgNo = 0
         var deviceNo = 6
+        val featuerM6Src = 0xa2a2
+        val ledPwrM6Src = 0x03ff
+        val ledMfbM6Src = 0x03ff
+        val ledBcbM6Src =0x03ff
+        val ledRevM6Src = 0x03ff
+        val featuerM6Ag = 0xa220
+        val ledPwrM6Ag = 0x03ff
+        val ledMfbM6Ag = 0x03ff
+        val ledBcbM6Ag =0x03ff
+        val ledRevM6Ag = 0x03ff
+        val featuerDg = 0xa221
+        val ledPwrDg = 0x03ff
+        val ledMfbDg = 0x03ff
+        val ledBcbDg =0x03ff
+        val ledRevDg = 0x03ff
+        val featuerVc = 0xa220
+        val ledPwrVc = 0x03ff
+        val ledMfbVc = 0x03ff
+        val ledBcbVc =0x03ff
+        val ledRevVc = 0x03ff
+        val featuerA6 = 0x8002
+        val ledPwrA6 = 0x03ff
+        val ledMfbA6 = 0x03ff
+        val ledBcbA6 =0x03ff
+        val ledRevA6 = 0x03ff
+        val featuerA7 = 0x8003
+        val ledPwrA7 = 0x03ff
+        val ledMfbA7 = 0x03ff
+        val ledBcbA7 =0x03ff
+        val ledRevA7 = 0x03ff
     }
     var imgIconUri = Uri.parse("")
     var imgIconFlash = true
@@ -693,11 +724,11 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         for(i: Int in 0..len)
             cmdStr += String.format("%02X ", msg.btCmd[i])
         Logger.d(LogMain, "${cmdStr}")
- */
+*/
         // Logger.d(LogMain, "${String.format("command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
         var id = getBtDevId(msg.btCmd[2])
 
-        if ((id <= BtDevUnitList.size) || (id == 0x80)) {
+        if ((id < BtDevUnitList.size) || (id == 0x80)) {
             when (msg.btCmd[4]) {
                 CmdId.SET_AG_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X AG volume set", msg.btCmd[2])}")
                 CmdId.SET_HFP_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X HFP volume set", msg.btCmd[2])}")

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SeekBar
+import kotlinx.android.synthetic.main.fragment_audio_para_set_a6.*
 import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 import java.lang.Integer.parseInt
@@ -138,6 +139,216 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[12] = 0x00
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             }, 200)
+        }
+        btnFeatureWrite.setOnLongClickListener {
+            val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
+
+            for(dev in 0 .. BtDevUnit.deviceNo) {
+                if ((activity as DevUnitMsg).getBtDevUnitList()[dev].nameLocalHfp.substring(0, 11).compareTo("iMage A6_BT") == 0) {
+                    val sendMsg = BtDevMsg(0, 0)
+
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = when(dev) {
+                        0 -> 0x30
+                        1 -> 0x00
+                        2 -> 0x08
+                        3 -> 0x10
+                        4 -> 0x18
+                        5 -> 0x20
+                        6 -> 0x28
+                        else -> 0x38
+                    }
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                    sendMsg.btCmd[5] = 0x13
+                    sendMsg.btCmd[6] = BtDevUnit.featuerA6.shr(8).toByte()
+                    sendMsg.btCmd[7] = BtDevUnit.featuerA6.and(0xff).toByte()
+                    sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                    sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                    sendMsg.btCmd[10] = 0x00
+                    sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                    sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                    sendMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                    sendMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                    sendMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                    sendMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                    sendMsg.btCmd[17] = BtDevUnit.ledPwrA6.shr(8).toByte()
+                    sendMsg.btCmd[18] = BtDevUnit.ledPwrA6.and(0xff).toByte()
+                    sendMsg.btCmd[19] = BtDevUnit.ledMfbA6.shr(8).toByte()
+                    sendMsg.btCmd[20] = BtDevUnit.ledMfbA6.and(0xff).toByte()
+                    sendMsg.btCmd[21] = BtDevUnit.ledBcbA6.shr(8).toByte()
+                    sendMsg.btCmd[22] = BtDevUnit.ledBcbA6.and(0xff).toByte()
+                    sendMsg.btCmd[23] = BtDevUnit.ledRevA6.shr(8).toByte()
+                    sendMsg.btCmd[24] = BtDevUnit.ledRevA6.and(0xff).toByte()
+                    Logger.d(LogGbl, "A6 feature parameter $dev send")
+                    Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * dev).toLong())
+                }
+                else if ((activity as DevUnitMsg).getBtDevUnitList()[dev].nameLocalHfp.substring(0, 11).compareTo("iMage A7_BT") == 0) {
+                    val sendMsg = BtDevMsg(0, 0)
+
+                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg.btCmd[3] = when(dev) {
+                        0 -> 0x30
+                        1 -> 0x00
+                        2 -> 0x08
+                        3 -> 0x10
+                        4 -> 0x18
+                        5 -> 0x20
+                        6 -> 0x28
+                        else -> 0x38
+                    }
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                    sendMsg.btCmd[5] = 0x13
+                    sendMsg.btCmd[6] = BtDevUnit.featuerA7.shr(8).toByte()
+                    sendMsg.btCmd[7] = BtDevUnit.featuerA7.and(0xff).toByte()
+                    sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                    sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                    sendMsg.btCmd[10] = 0x00
+                    sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                    sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                    sendMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                    sendMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                    sendMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                    sendMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                    sendMsg.btCmd[17] = BtDevUnit.ledPwrA7.shr(8).toByte()
+                    sendMsg.btCmd[18] = BtDevUnit.ledPwrA7.and(0xff).toByte()
+                    sendMsg.btCmd[19] = BtDevUnit.ledMfbA7.shr(8).toByte()
+                    sendMsg.btCmd[20] = BtDevUnit.ledMfbA7.and(0xff).toByte()
+                    sendMsg.btCmd[21] = BtDevUnit.ledBcbA7.shr(8).toByte()
+                    sendMsg.btCmd[22] = BtDevUnit.ledBcbA7.and(0xff).toByte()
+                    sendMsg.btCmd[23] = BtDevUnit.ledRevA7.shr(8).toByte()
+                    sendMsg.btCmd[24] = BtDevUnit.ledRevA7.and(0xff).toByte()
+                    Logger.d(LogGbl, "A7 feature parameter $dev send")
+                    Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * dev).toLong())
+                }
+            }
+
+            if ((activity as DevUnitMsg).getBtDevUnitList()[0].nameLocalHfp.substring(0, 11).compareTo("iMage M6_SRC") == 0) {
+                val sendMsg = BtDevMsg(0, 0)
+                val sendAgMsg = BtDevMsg(0, 0)
+
+                sendAgMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendAgMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendAgMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendAgMsg.btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+                sendAgMsg.btCmd[4] = CmdId.SET_AG_FEATURE_REQ.value
+                sendAgMsg.btCmd[5] = 0x13
+                sendAgMsg.btCmd[6] = BtDevUnit.featuerM6Ag.shr(8).toByte()
+                sendAgMsg.btCmd[7] = BtDevUnit.featuerM6Ag.and(0xff).toByte()
+                sendAgMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                sendAgMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendAgMsg.btCmd[10] = 0x00
+                sendAgMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                sendAgMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                sendAgMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                sendAgMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                sendAgMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                sendAgMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                sendAgMsg.btCmd[17] = BtDevUnit.ledPwrM6Ag.shr(8).toByte()
+                sendAgMsg.btCmd[18] = BtDevUnit.ledPwrM6Ag.and(0xff).toByte()
+                sendAgMsg.btCmd[19] = BtDevUnit.ledMfbM6Ag.shr(8).toByte()
+                sendAgMsg.btCmd[20] = BtDevUnit.ledMfbM6Ag.and(0xff).toByte()
+                sendAgMsg.btCmd[21] = BtDevUnit.ledBcbM6Ag.shr(8).toByte()
+                sendAgMsg.btCmd[22] = BtDevUnit.ledBcbM6Ag.and(0xff).toByte()
+                sendAgMsg.btCmd[23] = BtDevUnit.ledRevM6Ag.shr(8).toByte()
+                sendAgMsg.btCmd[24] = BtDevUnit.ledRevM6Ag.and(0xff).toByte()
+                Logger.d(LogGbl, "M6 AG feature parameter send")
+                Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * BtDevUnit.deviceNo + 1).toLong())
+
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+                sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                sendMsg.btCmd[5] = 0x13
+                sendMsg.btCmd[6] = BtDevUnit.featuerM6Src.shr(8).toByte()
+                sendMsg.btCmd[7] = BtDevUnit.featuerM6Src.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[10] = 0x00
+                sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                sendMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                sendMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                sendMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                sendMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                sendMsg.btCmd[17] = BtDevUnit.ledPwrM6Src.shr(8).toByte()
+                sendMsg.btCmd[18] = BtDevUnit.ledPwrM6Src.and(0xff).toByte()
+                sendMsg.btCmd[19] = BtDevUnit.ledMfbM6Src.shr(8).toByte()
+                sendMsg.btCmd[20] = BtDevUnit.ledMfbM6Src.and(0xff).toByte()
+                sendMsg.btCmd[21] = BtDevUnit.ledBcbM6Src.shr(8).toByte()
+                sendMsg.btCmd[22] = BtDevUnit.ledBcbM6Src.and(0xff).toByte()
+                sendMsg.btCmd[23] = BtDevUnit.ledRevM6Src.shr(8).toByte()
+                sendMsg.btCmd[24] = BtDevUnit.ledRevM6Src.and(0xff).toByte()
+                Logger.d(LogGbl, "M6 SRC feature parameter send")
+                Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * BtDevUnit.deviceNo + 2).toLong())
+            }
+            else if ((activity as DevUnitMsg).getBtDevUnitList()[0].nameLocalHfp.substring(0, 11).compareTo("iMage DG_BT") == 0) {
+                val sendMsg = BtDevMsg(0, 0)
+
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+                sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                sendMsg.btCmd[5] = 0x13
+                sendMsg.btCmd[6] = BtDevUnit.featuerDg.shr(8).toByte()
+                sendMsg.btCmd[7] = BtDevUnit.featuerDg.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[10] = 0x00
+                sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                sendMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                sendMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                sendMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                sendMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                sendMsg.btCmd[17] = BtDevUnit.ledPwrDg.shr(8).toByte()
+                sendMsg.btCmd[18] = BtDevUnit.ledPwrDg.and(0xff).toByte()
+                sendMsg.btCmd[19] = BtDevUnit.ledMfbDg.shr(8).toByte()
+                sendMsg.btCmd[20] = BtDevUnit.ledMfbDg.and(0xff).toByte()
+                sendMsg.btCmd[21] = BtDevUnit.ledBcbDg.shr(8).toByte()
+                sendMsg.btCmd[22] = BtDevUnit.ledBcbDg.and(0xff).toByte()
+                sendMsg.btCmd[23] = BtDevUnit.ledRevDg.shr(8).toByte()
+                sendMsg.btCmd[24] = BtDevUnit.ledRevDg.and(0xff).toByte()
+                Logger.d(LogGbl, "DG feature parameter send")
+                Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * BtDevUnit.deviceNo + 1).toLong())
+            }
+            else if ((activity as DevUnitMsg).getBtDevUnitList()[0].nameLocalHfp.substring(0, 11).compareTo("iMage VC_BT") == 0) {
+                val sendMsg = BtDevMsg(0, 0)
+
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+                sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                sendMsg.btCmd[5] = 0x13
+                sendMsg.btCmd[6] = BtDevUnit.featuerVc.shr(8).toByte()
+                sendMsg.btCmd[7] = BtDevUnit.featuerVc.and(0xff).toByte()
+                sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
+                sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
+                sendMsg.btCmd[10] = 0x00
+                sendMsg.btCmd[11] = Integer.parseInt(strList[3], 16).toByte()
+                sendMsg.btCmd[12] = Integer.parseInt(strList[4], 16).toByte()
+                sendMsg.btCmd[13] = Integer.parseInt(strList[5], 16).toByte()
+                sendMsg.btCmd[14] = Integer.parseInt(strList[2], 16).toByte()
+                sendMsg.btCmd[15] = Integer.parseInt(strList[0], 16).toByte()
+                sendMsg.btCmd[16] = Integer.parseInt(strList[1], 16).toByte()
+                sendMsg.btCmd[17] = BtDevUnit.ledPwrVc.shr(8).toByte()
+                sendMsg.btCmd[18] = BtDevUnit.ledPwrVc.and(0xff).toByte()
+                sendMsg.btCmd[19] = BtDevUnit.ledMfbVc.shr(8).toByte()
+                sendMsg.btCmd[20] = BtDevUnit.ledMfbVc.and(0xff).toByte()
+                sendMsg.btCmd[21] = BtDevUnit.ledBcbVc.shr(8).toByte()
+                sendMsg.btCmd[22] = BtDevUnit.ledBcbVc.and(0xff).toByte()
+                sendMsg.btCmd[23] = BtDevUnit.ledRevVc.shr(8).toByte()
+                sendMsg.btCmd[24] = BtDevUnit.ledRevVc.and(0xff).toByte()
+                Logger.d(LogGbl, "VC feature parameter send")
+                Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * BtDevUnit.deviceNo + 1).toLong())
+            }
+            true
         }
         btnFeatureDfu.setOnClickListener {
             var sendMsg = BtDevMsg(0, 0)

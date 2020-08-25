@@ -184,7 +184,7 @@ class FragmentAudioParaSetA6 : Fragment() {
                             Logger.d(LogGbl, "${strList[j]}")
                         }
                         Logger.d(LogGbl, "audio parameter send")
-                        Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, 500)
+                        Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, (100 * dev).toLong())
                     }
                 }
             }
