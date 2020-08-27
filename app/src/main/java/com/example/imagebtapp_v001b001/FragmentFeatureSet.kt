@@ -36,6 +36,11 @@ class FragmentFeatureSet : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        rdAgAllFeature.visibility =
+            if ((activity as DevUnitMsg).getBtDevUnitList()[0].nameLocalHfp.substring(0, 11).compareTo("iMage M6_SRC") == 0)
+                View.VISIBLE
+            else
+                View.GONE
         if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
             rdAgAllFeature.isEnabled = false
             rdHfpAllFeature.isEnabled = false
@@ -69,7 +74,7 @@ class FragmentFeatureSet : Fragment() {
         btnFeatureWrite.setOnClickListener {
             val sendMsgMode = BtDevMsg(0, 0)
             val sendMsg = BtDevMsg(0, 0)
-            val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
+            val strList = BtDevUnit.featureBdaddrFilter.split(':')
 
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode =

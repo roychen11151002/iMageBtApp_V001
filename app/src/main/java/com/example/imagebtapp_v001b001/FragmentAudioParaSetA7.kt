@@ -40,7 +40,7 @@ class FragmentAudioParaSetA7 : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        rdGpDevAudioParaA7.visibility = INVISIBLE
+        rdGpDevAudioParaA7.visibility = GONE
         for(i in paraData.size until rdGpParaAudioPara.size) {
             when (i) {
                 0 -> rdAudioPara0A7.visibility = GONE

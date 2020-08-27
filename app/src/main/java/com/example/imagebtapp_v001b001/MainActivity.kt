@@ -121,21 +121,22 @@ class BtDevMsg(var btDevNo: Int = 0, var btGroup: Int = 0) {
 
 class BtDevUnit {
     companion object {
-        lateinit var resolver: ContentResolver
+        // lateinit var resolver: ContentResolver
         var sppStateCon: Byte = 1
         var PairState = 0
         val MaxBtDev = 2
         var previousItem = 256
         var isReconnect = true
-        var staUpdateInterval = 60
+        var staUpdateInterval = 600
         val BtPermissionReqCode = 1
         val BtActionReqCode = 66
         var BtList = ArrayList<String>()
         var maxTalkNo = 0
         var maxAgNo = 0
         var deviceNo = 6
-        var featureMaxTalkNo = 4
-        var featuerMaxAgNo = 0x10
+        val featureMaxTalkNo = 4
+        val featuerMaxAgNo = 0x10
+        val featureBdaddrFilter = "C4:FF:BC:00:00:00"
         val featuerM6Src = 0xa2a2
         val ledPwrM6Src = 0x03ff
         val ledMfbM6Src = 0x03ff
@@ -436,7 +437,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             }
         })
         preferData = getSharedPreferences("iMageBdaList", Context.MODE_PRIVATE)     // create prefer data
-        BtDevUnit.staUpdateInterval = preferData.getInt("staUpdateInterval", 60)
+        BtDevUnit.staUpdateInterval = preferData.getInt("staUpdateInterval", 600)
         editTextStaUpTime.setText(BtDevUnit.staUpdateInterval.toString())
         stateUpdateAuto(BtDevUnit.staUpdateInterval.toLong() * 1000)
         Glide.with(applicationContext).load(Uri.parse(preferData.getString("imgIconUri", ""))).error(R.drawable.img_background).into(imgMainBackGround)
