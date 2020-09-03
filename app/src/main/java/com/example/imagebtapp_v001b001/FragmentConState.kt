@@ -69,10 +69,8 @@ class FragmentConState : Fragment() {
                                                     String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
                                                     String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}"))
 
-                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) {
-                    dialog, which ->
-                }.setPositiveButton("OK") {
-                    dialog, which ->
+                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) { dialog, which ->
+                }.setPositiveButton("OK") { dialog, which ->
                 }.show()
                 Logger.d(LogGbl, "btdevunit on item click")
                 // Toast.makeText(activity, "${btDevUnit.verFirmwareAg}\n${btDevUnit.localNameHfp}", Toast.LENGTH_LONG).show()

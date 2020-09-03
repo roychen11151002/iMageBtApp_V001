@@ -1,6 +1,7 @@
 package com.example.imagebtapp_v001b001
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothAdapter.STATE_OFF
 import android.bluetooth.BluetoothAdapter.STATE_ON
@@ -394,21 +395,21 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             true
  */
             val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
-            var toast = Toast.makeText(this, "Set Device power off", Toast.LENGTH_LONG)
 
-            toast.setGravity(Gravity.CENTER, 0, 0)
-            toast.show()
-            sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
-            sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
-            for(i in 0 until sendMsg.size) {
-                sendMsg[i].btCmd[0] = CmdId.CMD_HEAD_FF.value
-                sendMsg[i].btCmd[1] = CmdId.CMD_HEAD_55.value
-                sendMsg[i].btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg[i].btCmd[4] = CmdId.SET_HFP_POWER_REQ.value
-                sendMsg[i].btCmd[5] = 0x01.toByte()
-                sendMsg[i].btCmd[6] = 0x00.toByte()
-                Handler().postDelayed({sendBtServiceMsg(sendMsg[i])}, i.toLong() * 1000)
-            }
+            AlertDialog.Builder(this).setTitle("Set Device power off").setPositiveButton("OK") { dialog, which ->
+                sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+                sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
+                for (i in 0 until sendMsg.size) {
+                    sendMsg[i].btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsg[i].btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsg[i].btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsg[i].btCmd[4] = CmdId.SET_HFP_POWER_REQ.value
+                    sendMsg[i].btCmd[5] = 0x01.toByte()
+                    sendMsg[i].btCmd[6] = 0x00.toByte()
+                    Handler().postDelayed({ sendBtServiceMsg(sendMsg[i]) }, i.toLong() * 1000)
+                }
+            }.setNegativeButton("CANCEL") {dialog, which ->
+            }.show()
             true
         }
         editTextStaUpTime.setOnEditorActionListener { v, actionId, event ->
