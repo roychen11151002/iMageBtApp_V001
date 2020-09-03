@@ -9,10 +9,12 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
+import android.view.Gravity
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -137,7 +139,7 @@ class BtDevUnit {
         val featureMaxTalkNo = 4
         val featuerMaxAgNo = 0x10
         val featureBdaddrFilter = "C4:FF:BC:00:00:00"
-        val featuerM6Src = 0xa2a2
+        val featuerM6Src = 0xa222
         val ledPwrM6Src = 0x03ff
         val ledMfbM6Src = 0x03ff
         val ledBcbM6Src =0x03ff
@@ -228,6 +230,7 @@ interface DevUnitMsg {
     fun getpreferData(): SharedPreferences
     fun getBtDevUnitList(): ArrayList<BtDevUnit>
     fun sendBtServiceMsg(msg: BtDevMsg)
+    fun getDevType(devNo: Int): String
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(),
@@ -391,7 +394,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             true
  */
             val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
+            var toast = Toast.makeText(this, "Set Device power off", Toast.LENGTH_LONG)
 
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
             sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
             sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
             for(i in 0 until sendMsg.size) {
@@ -609,6 +615,27 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             else -> Logger.d(LogMain, "send broadcast other message")
         }
  */
+    }
+
+    override fun getDevType(devNo: Int): String {
+        return if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 12).compareTo("iMage M6_SRC") == 0) {
+            "M6_SRC"
+        }
+        else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 11).compareTo("iMage DG_BT") == 0) {
+            "DG_BT"
+        }
+        else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 11).compareTo("iMage VC_BT") == 0) {
+            "VC_BT"
+        }
+        else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 11).compareTo("iMage A6_BT") == 0) {
+            "A6"
+        }
+        else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 11).compareTo("iMage A7_BT") == 0) {
+            "A7"
+        }
+        else {
+            "UNKNOW"
+        }
     }
 
     override fun getBtDevUnitList(): ArrayList<BtDevUnit> = BtDevUnitList
