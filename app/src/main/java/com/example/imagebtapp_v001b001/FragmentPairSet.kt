@@ -87,7 +87,7 @@ class FragmentPairSet : Fragment() {
                 var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
 
                 AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevPair)).setItems(listItem) {
-                    dialog, which ->
+                    _, which ->
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -114,7 +114,7 @@ class FragmentPairSet : Fragment() {
                     Logger.d(LogGbl, "${String.format("bdaddr %02X %02X %02X %02X %02X %02X ", sendMsg.btCmd[11], sendMsg.btCmd[12], sendMsg.btCmd[10], sendMsg.btCmd[7], sendMsg.btCmd[8], sendMsg.btCmd[9])}")
                     Handler().postDelayed({(activity as DevUnitMsg).sendBtServiceMsg(sendMsg)}, 100)
                 }.setNegativeButton("Cancel") {
-                    dialog, which ->
+                    _, _ ->
                 }.show()
             }
         })
@@ -176,7 +176,6 @@ class FragmentPairSet : Fragment() {
                     btnPair.isEnabled = true
                     btnDiscovery.isEnabled = true
                     context!!.resources.getString(R.string.txvPairTitle)
-
                 }
         }
     }

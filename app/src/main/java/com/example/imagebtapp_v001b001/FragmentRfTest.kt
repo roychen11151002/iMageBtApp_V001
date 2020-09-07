@@ -33,7 +33,7 @@ class FragmentRfTest : Fragment() {
         var rfTestMode: Byte = 0x02
 
         txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
-        rdGpRfTestFreq.setOnCheckedChangeListener { group, checkedId ->
+        rdGpRfTestFreq.setOnCheckedChangeListener { _, checkedId ->
             rfTestMode =
                 when(checkedId) {
                     R.id.rdRfTestFreqHi -> 3

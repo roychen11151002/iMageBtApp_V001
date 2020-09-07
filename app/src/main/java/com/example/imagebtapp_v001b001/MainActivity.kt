@@ -10,12 +10,10 @@ import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
-import android.view.Gravity
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -170,6 +168,34 @@ class BtDevUnit {
         val ledMfbA7 = 0x03ff
         val ledBcbA7 =0x03ff
         val ledRevA7 = 0x03ff
+        val paraDataA6 = arrayOf(
+            arrayOf("227c 227d 00de e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
+                "227d 0000 de00 8000 0000 0199"),
+            arrayOf("227c 227d 00de e188 0466 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
+                "227d 0000 de00 8000 0000 0199"),
+            arrayOf("227c 227d 00de e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0600 cccc 0004 197f 9999 ffff 0000 0014 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0108 2802 7a26 0000 0000 0000 0004 0000 0b53",
+                "227d 0000 de00 8080 0000 0199 0109"),
+            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 0c7f cccc ffff 0000 0014 0002 0000 00cb 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cb 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
+            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 0014 0002 0000 00cd 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cd 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
+            arrayOf("2284 2285 0041 e18a 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 1000 0000 7ee0 00f2 0004 b659 2000 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "2285 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 80c9 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109")
+        )
+        val paraDataA7 = arrayOf(
+            arrayOf("227c 227d 00de e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
+                "227d 0000 de00 8000 0000 0199"),
+            arrayOf("227c 227d 00de e188 0466 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
+                "227d 0000 de00 8000 0000 0199"),
+            arrayOf("227c 227d 00de e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0600 cccc 0004 197f 9999 ffff 0000 0014 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0108 2802 7a26 0000 0000 0000 0004 0000 0b53",
+                "227d 0000 de00 8080 0000 0199 0109"),
+            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 0c7f cccc ffff 0000 0014 0002 0000 00cb 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cb 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
+            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 0014 0002 0000 00cd 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cd 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
+            arrayOf("2284 2285 0041 e18a 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 1000 0000 7ee0 00f2 0004 b659 2000 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
+                "2285 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 80c9 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109")
+        )
     }
     var imgIconUri = Uri.parse("")
     var imgIconFlash = true
@@ -235,8 +261,7 @@ interface DevUnitMsg {
 }
 
 val ViewPagerArray = arrayOf(FragmentConState(),
-                                              FragmentAudioParaSetA6(),
-                                              FragmentAudioParaSetA7(),
+                                              FragmentAudioParaSet(),
                                               FragmentPairSet(),
                                               FragmentFeatureSet(),
                                               FragmentVolSet(),
@@ -309,13 +334,9 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 (ViewPagerArray[it.what] as FragmentVolSet).updateData()
                 Logger.d(LogMain, "FragmentVolSet fragment update")
             }
-            is FragmentAudioParaSetA6 -> {
-                (ViewPagerArray[it.what] as FragmentAudioParaSetA6).updateData()
+            is FragmentAudioParaSet -> {
+                (ViewPagerArray[it.what] as FragmentAudioParaSet).updateData()
                 Logger.d(LogMain, "FragmentAudioParaSetA6 fragment update")
-            }
-            is FragmentAudioParaSetA7 -> {
-                (ViewPagerArray[it.what] as FragmentAudioParaSetA7).updateData()
-                Logger.d(LogMain, "FragmentAudioParaSetA7 fragment update")
             }
             is FragmentRfTest -> {
                 (ViewPagerArray[it.what] as FragmentRfTest).updateData()
@@ -396,7 +417,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
  */
             val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
 
-            AlertDialog.Builder(this).setTitle("Set Device power off").setPositiveButton("OK") { dialog, which ->
+            AlertDialog.Builder(this).setTitle("Set Device power off").setPositiveButton("OK") { _, _ ->
                 sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
                 sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
                 for (i in 0 until sendMsg.size) {
@@ -408,11 +429,11 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                     sendMsg[i].btCmd[6] = 0x00.toByte()
                     Handler().postDelayed({ sendBtServiceMsg(sendMsg[i]) }, i.toLong() * 1000)
                 }
-            }.setNegativeButton("CANCEL") {dialog, which ->
+            }.setNegativeButton("CANCEL") {_, _ ->
             }.show()
             true
         }
-        editTextStaUpTime.setOnEditorActionListener { v, actionId, event ->
+        editTextStaUpTime.setOnEditorActionListener { _, actionId, _ ->
             if(actionId == EditorInfo.IME_ACTION_DONE) {
                 var imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 val preferDataEdit = preferData.edit()
@@ -593,12 +614,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     fun initHfpDevice(dev: Int) {
         BtDevUnitList.removeAll(BtDevUnitList)
         BtDevUnitList.add(BtDevUnit())
-        BtDevUnitList[0].nameAlias = preferData!!.getString("nameAlias0", "alias name src")
+        BtDevUnitList[0].nameAlias = preferData.getString("nameAlias0", "alias name src") ?: ""
         BtDevUnitList[0].imgIconUri = Uri.parse(preferData.getString("imgIconUri0", ""))
         Logger.d(LogMain, "imgIconUri0: ${BtDevUnitList[0].imgIconUri}")
         for (i in 0 until dev) {
             BtDevUnitList.add(BtDevUnit())
-            BtDevUnitList[i + 1].nameAlias = preferData!!.getString("nameAlias${i + 1}", "alias name hfp$i")
+            BtDevUnitList[i + 1].nameAlias = preferData.getString("nameAlias${i + 1}", "alias name hfp$i") ?: ""
             BtDevUnitList[i + 1].imgIconUri = Uri.parse(preferData.getString("imgIconUri${i + 1}", ""))
             BtDevUnitList[i + 1].nameLocalHfp = BtDevUnitList[i + 1].nameAlias
         }
@@ -677,28 +698,30 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             CmdId.GET_HFP_PAIR_REQ.value)
 
         for(j in 0 until srcDevId.size) {
-            var srcDevId = srcDevId[j]
+            var devId = srcDevId[j]
+
             for (i in 0 until cmdId.size) {
                 var sendMsg = BtDevMsg(0, 0)
 
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = srcDevId
+                sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = cmdId[i]
                 sendMsg.btCmd[5] = 0x00
                 sendBtServiceMsg(sendMsg)
             }
         }
         for(j in 0 until srcDevId.size) {
-            var srcDevId = srcDevId[j]
+            var devId = srcDevId[j]
+
             for(i in 0 until pskey.size) {
                 var sendMsg = BtDevMsg(0, 0)
 
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = srcDevId
+                sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
                 sendMsg.btCmd[5] = 0x02
                 sendMsg.btCmd[6] = 0x00
@@ -718,14 +741,15 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             CmdId.GET_HFP_RSSI_REQ.value)
 
         for(j in 0 until srcDevId.size) {
-            var srcDevId = srcDevId[j]
+            var devId = srcDevId[j]
+
             for (i in 0 until cmdId.size) {
                 var sendMsg = BtDevMsg(0, 0)
 
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = srcDevId
+                sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = cmdId[i]
                 sendMsg.btCmd[5] = 0x00
                 sendBtServiceMsg(sendMsg)

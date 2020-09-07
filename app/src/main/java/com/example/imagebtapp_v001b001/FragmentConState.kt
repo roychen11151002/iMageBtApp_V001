@@ -60,17 +60,19 @@ class FragmentConState : Fragment() {
 
         devUnitAdapter.setOnkItemImageListener(object : BtDevUnitAdapter.OnItemImageListener {
             override fun onItemImage(position: Int, btDevUnit: BtDevUnit) {
-                val txvMsgName = resources.getStringArray(R.array.txvStaName)
-                val msgItem = arrayOf(String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
-                                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}"))
+                // val txvMsgName = resources.getStringArray(R.array.txvStaName)
+                val msgItem = arrayOf(
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                        String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
+                    )
 
-                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) { dialog, which ->
-                }.setPositiveButton("OK") { dialog, which ->
+                AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) { _, _ ->
+                }.setPositiveButton("OK") { _, _ ->
                 }.show()
                 Logger.d(LogGbl, "btdevunit on item click")
                 // Toast.makeText(activity, "${btDevUnit.verFirmwareAg}\n${btDevUnit.localNameHfp}", Toast.LENGTH_LONG).show()

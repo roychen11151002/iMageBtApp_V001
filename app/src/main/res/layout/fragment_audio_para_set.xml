@@ -4,45 +4,45 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".FragmentAudioParaSetA6">
+    tools:context=".FragmentAudioParaSet">
 
 
     <TextView
-        android:id="@+id/txvAudioParaSetTitleA6"
+        android:id="@+id/txvAudioParaSetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="@string/txvAudioParaTitleA6"
+        android:text="@string/txvAudioParaTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioGroup
-        android:id="@+id/rdGpDevAudioParaA6"
+        android:id="@+id/rdGpDevAudioPara"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_rectangle"
-        android:checkedButton="@id/rdAllAudioParaA6"
+        android:checkedButton="@id/rdAllAudioPara"
         android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txvAudioParaSetTitleA6">
+        app:layout_constraintTop_toBottomOf="@+id/txvAudioParaSetTitle">
 
         <RadioButton
-            android:id="@+id/rdA6AudioParaA6"
+            android:id="@+id/rdA6AudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvDevA6"
             app:layout_constraintStart_toStartOf="parent" />
 
         <RadioButton
-            android:id="@+id/rdA7AudioParaA6"
+            android:id="@+id/rdA7AudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/txvDevA7" />
 
         <RadioButton
-            android:id="@+id/rdAllAudioParaA6"
+            android:id="@+id/rdAllAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -50,37 +50,37 @@
     </RadioGroup>
 
     <RadioGroup
-        android:id="@+id/rdGpModeAudioParaA6"
+        android:id="@+id/rdGpModeAudioPara"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_rectangle"
-        android:checkedButton="@id/rdModeVcsAudioParaA6"
+        android:checkedButton="@id/rdModeVcsAudioPara"
         android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="@+id/rdGpDevAudioParaA6"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpDevAudioParaA6">
+        app:layout_constraintStart_toStartOf="@+id/rdGpDevAudioPara"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpDevAudioPara">
 
         <RadioButton
-            android:id="@+id/rdModeWireAudioParaA6"
+            android:id="@+id/rdModeWireAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvModeWired" />
 
         <RadioButton
-            android:id="@+id/rdModeUsbAudioParaA6"
+            android:id="@+id/rdModeUsbAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvModeUsb" />
 
         <RadioButton
-            android:id="@+id/rdModeBtAudioParaA6"
+            android:id="@+id/rdModeBtAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/txvModeBt" />
 
         <RadioButton
-            android:id="@+id/rdModeVcsAudioParaA6"
+            android:id="@+id/rdModeVcsAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -93,10 +93,10 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/shape_rectangle"
-        app:layout_constraintBottom_toTopOf="@+id/btnAudioParaWriteA6"
+        app:layout_constraintBottom_toTopOf="@+id/btnAudioParaWrite"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpModeAudioParaA6"
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeAudioPara"
         app:layout_constraintVertical_bias="0.537">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,7 +108,7 @@
                 android:id="@+id/rdGpParaAudioPara"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:checkedButton="@id/rdAudioPara0A6"
+                android:checkedButton="@id/rdAudioPara0"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -118,109 +118,109 @@
                 app:layout_constraintVertical_bias="1.0">
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara0A6"
+                    android:id="@+id/rdAudioPara0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter0A6" />
+                    android:text="@string/txvAudioParameter0" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara1A6"
+                    android:id="@+id/rdAudioPara1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter1A6" />
+                    android:text="@string/txvAudioParameter1" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara2A6"
+                    android:id="@+id/rdAudioPara2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter2A6" />
+                    android:text="@string/txvAudioParameter2" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara3A6"
+                    android:id="@+id/rdAudioPara3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter3A6" />
+                    android:text="@string/txvAudioParameter3" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara4A6"
+                    android:id="@+id/rdAudioPara4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter4A6" />
+                    android:text="@string/txvAudioParameter4" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara5A6"
+                    android:id="@+id/rdAudioPara5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter5A6" />
+                    android:text="@string/txvAudioParameter5" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara6A6"
+                    android:id="@+id/rdAudioPara6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter6A6" />
+                    android:text="@string/txvAudioParameter6" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara7A6"
+                    android:id="@+id/rdAudioPara7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter7A6" />
+                    android:text="@string/txvAudioParameter7" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara8A6"
+                    android:id="@+id/rdAudioPara8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter8A6" />
+                    android:text="@string/txvAudioParameter8" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara9A6"
+                    android:id="@+id/rdAudioPara9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter9A6"
+                    android:text="@string/txvAudioParameter9"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara10A6"
+                    android:id="@+id/rdAudioPara10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter10A6" />
+                    android:text="@string/txvAudioParameter10" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara11A6"
+                    android:id="@+id/rdAudioPara11"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter11A6" />
+                    android:text="@string/txvAudioParameter11" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara12A6"
+                    android:id="@+id/rdAudioPara12"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter12A6" />
+                    android:text="@string/txvAudioParameter12" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara13A6"
+                    android:id="@+id/rdAudioPara13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter13A6"
+                    android:text="@string/txvAudioParameter13"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara14A6"
+                    android:id="@+id/rdAudioPara14"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter14A6" />
+                    android:text="@string/txvAudioParameter14" />
 
                 <RadioButton
-                    android:id="@+id/rdAudioPara15A6"
+                    android:id="@+id/rdAudioPara15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter15A6"
+                    android:text="@string/txvAudioParameter15"
                     android:visibility="visible" />
             </RadioGroup>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/btnAudioParaReadA6"
+        android:id="@+id/btnAudioParaRead"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -231,7 +231,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnAudioParaWriteA6"
+        android:id="@+id/btnAudioParaWrite"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

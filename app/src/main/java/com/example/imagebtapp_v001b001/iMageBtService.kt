@@ -292,7 +292,7 @@ class iMageBtService : Service() {
                     Logger.d(LogService, "ACTION_ACL_DISCONNECTED ${btDevice.name} ${btDevice.address}")
                 }
                 BluetoothAdapter.ACTION_CONNECTION_STATE_CHANGED -> {
-                    val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    // val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val btState = intent.getIntExtra(BluetoothAdapter.EXTRA_CONNECTION_STATE, BluetoothDevice.ERROR)
                     val btPrevState = intent.getIntExtra(BluetoothAdapter.EXTRA_PREVIOUS_CONNECTION_STATE, BluetoothDevice.ERROR)
 
@@ -327,7 +327,7 @@ class iMageBtService : Service() {
                 BluetoothDevice.ACTION_FOUND -> {
                     val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val btClass = intent.getIntExtra(BluetoothDevice.EXTRA_CLASS, BluetoothDevice.ERROR)
-                    val btRssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
+                    // val btRssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, Short.MIN_VALUE)
                     val sendMsg = BtDevMsg(0, 1)
                     var strList = btDevice.address.split(':')
                     var s: Int
@@ -359,13 +359,13 @@ class iMageBtService : Service() {
                     Logger.d(LogService, "ACTION_FOUND ${btDevice.name} ${btDevice.address} ${btClass.toUInt().toString(16)}")
                 }
                 BluetoothDevice.ACTION_NAME_CHANGED -> {
-                    val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-                    var str = btDevice.address.split(":")
+                    // val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    // var str = btDevice.address.split(":")
 
                     Logger.d(LogService, "ACTION_NAME_CHANGED")
                 }
                 BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
-                    val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                    // val btDevice: BluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                     val btState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR)
                     val btPrevState = intent.getIntExtra(BluetoothDevice.EXTRA_PREVIOUS_BOND_STATE, BluetoothDevice.ERROR)
 
@@ -502,57 +502,57 @@ class iMageBtService : Service() {
 
                 if(paired.size > 0) {
                     for (device in paired) {
-                        val sendMsg = BtDevMsg(0, 1)
+                        val sendMsgPair = BtDevMsg(0, 1)
 
-                        sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                        sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                        sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                        sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                        sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
-                        sendMsg.btCmd[6] =
+                        sendMsgPair.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                        sendMsgPair.btCmd[1] = CmdId.CMD_HEAD_55.value
+                        sendMsgPair.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                        sendMsgPair.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                        sendMsgPair.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
+                        sendMsgPair.btCmd[6] =
                             if(device == paired.last())
                                 0x00
                             else
                                 0x01
                         strList = device.address.split(':')
-                        sendMsg.btCmd[7] = parseInt(strList[3], 16).toByte()
-                        sendMsg.btCmd[8] = parseInt(strList[4], 16).toByte()
-                        sendMsg.btCmd[9] = parseInt(strList[5], 16).toByte()
-                        sendMsg.btCmd[10] = parseInt(strList[2], 16).toByte()
-                        sendMsg.btCmd[11] = parseInt(strList[0], 16).toByte()
-                        sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
+                        sendMsgPair.btCmd[7] = parseInt(strList[3], 16).toByte()
+                        sendMsgPair.btCmd[8] = parseInt(strList[4], 16).toByte()
+                        sendMsgPair.btCmd[9] = parseInt(strList[5], 16).toByte()
+                        sendMsgPair.btCmd[10] = parseInt(strList[2], 16).toByte()
+                        sendMsgPair.btCmd[11] = parseInt(strList[0], 16).toByte()
+                        sendMsgPair.btCmd[12] = parseInt(strList[1], 16).toByte()
                         Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(msg, 7)}")
                         if (device.name != null) {
-                            sendMsg.btCmd[5] = (device.name.length * 2 + 7).toByte()
+                            sendMsgPair.btCmd[5] = (device.name.length * 2 + 7).toByte()
                             for (i in 0 until device.name.length) {
                                 s = device.name[i].toInt()
-                                sendMsg.btCmd[i * 2 + 13] = s.shr(8).toByte()
-                                sendMsg.btCmd[i * 2 + 13 + 1] = s.and(0x00ff).toByte()
+                                sendMsgPair.btCmd[i * 2 + 13] = s.shr(8).toByte()
+                                sendMsgPair.btCmd[i * 2 + 13 + 1] = s.and(0x00ff).toByte()
                             }
                         }
                         else
-                            sendMsg.btCmd[5] = 7
-                        sendMainMsg(sendMsg)
+                            sendMsgPair.btCmd[5] = 7
+                        sendMainMsg(sendMsgPair)
                         Logger.d(LogService, "PAIRED_FOUND ${device.name} ${device.address}")
                     }
                 }
                 else {
-                    val sendMsg = BtDevMsg(0, 1)
+                    val sendMsgPair = BtDevMsg(0, 1)
 
-                    sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                    sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                    sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                    sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                    sendMsg.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
-                    sendMsg.btCmd[5] = 7
-                    sendMsg.btCmd[6] = 0x00
-                    sendMsg.btCmd[7] = 0x00
-                    sendMsg.btCmd[8] = 0x00
-                    sendMsg.btCmd[9] = 0x00
-                    sendMsg.btCmd[10] = 0x00
-                    sendMsg.btCmd[11] = 0x00
-                    sendMsg.btCmd[12] = 0x00
-                    sendMainMsg(sendMsg)
+                    sendMsgPair.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsgPair.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsgPair.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsgPair.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsgPair.btCmd[4] = CmdId.SET_INT_PAIR_RSP.value
+                    sendMsgPair.btCmd[5] = 7
+                    sendMsgPair.btCmd[6] = 0x00
+                    sendMsgPair.btCmd[7] = 0x00
+                    sendMsgPair.btCmd[8] = 0x00
+                    sendMsgPair.btCmd[9] = 0x00
+                    sendMsgPair.btCmd[10] = 0x00
+                    sendMsgPair.btCmd[11] = 0x00
+                    sendMsgPair.btCmd[12] = 0x00
+                    sendMainMsg(sendMsgPair)
                 }
             }
             else ->{

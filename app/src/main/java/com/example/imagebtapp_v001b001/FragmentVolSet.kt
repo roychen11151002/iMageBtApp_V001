@@ -111,7 +111,7 @@ class FragmentVolSet : Fragment() {
             sendMsgAg.btCmd[21] = 0x00
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
         }
-        rdGpDevVolume.setOnCheckedChangeListener { group, checkedId ->
+        rdGpDevVolume.setOnCheckedChangeListener { _, checkedId ->
             srcDevId =
                 when (checkedId) {
                     R.id.rdSrcVolume -> {
@@ -129,7 +129,7 @@ class FragmentVolSet : Fragment() {
                 }
             updateData()
         }
-        rdGpModeVolume.setOnCheckedChangeListener { group, checkedId ->
+        rdGpModeVolume.setOnCheckedChangeListener { _, checkedId ->
             mode = when (checkedId) {
                     R.id.rdModeWireVolume -> 1
                     R.id.rdModeUsbVolume -> 2
@@ -252,7 +252,7 @@ class FragmentVolSet : Fragment() {
             }
         })
  */
-        chkSrcHfpSpkrDecade.setOnCheckedChangeListener { buttonView, isChecked ->
+        chkSrcHfpSpkrDecade.setOnCheckedChangeListener { _, isChecked ->
             when (mode) {
                 1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade =
                     if(isChecked)
@@ -276,7 +276,7 @@ class FragmentVolSet : Fragment() {
                         (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade.and(0x08.inv())
             }
         }
-        chkSrcAvSpkrDecade.setOnCheckedChangeListener { buttonView, isChecked ->
+        chkSrcAvSpkrDecade.setOnCheckedChangeListener { _, isChecked ->
             when (mode) {
                 1 -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].modeSrcSpkrDecade =
                     if(isChecked)

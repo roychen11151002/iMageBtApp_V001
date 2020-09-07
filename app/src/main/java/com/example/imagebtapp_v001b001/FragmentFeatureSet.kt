@@ -1,21 +1,15 @@
 package com.example.imagebtapp_v001b001
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.SeekBar
-import android.widget.Toast
-import kotlinx.android.synthetic.main.fragment_audio_para_set_a6.*
-import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlinx.android.synthetic.main.fragment_feature_set.*
-import java.lang.Integer.parseInt
 
 class FragmentFeatureSet : Fragment() {
     var srcDevItme = 0
@@ -133,28 +127,28 @@ class FragmentFeatureSet : Fragment() {
             sendMsg.btCmd[24] = seekLedRev.progress.and(0xff).toByte()
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             Handler().postDelayed({
-                var sendMsg = BtDevMsg(0, 1)
+                var sendMsgCon = BtDevMsg(0, 1)
 
-                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[4] = CmdId.SET_INT_CON_REQ.value
-                sendMsg.btCmd[5] = 0x07
-                sendMsg.btCmd[6] = 0x00
-                sendMsg.btCmd[7] = 0x00
-                sendMsg.btCmd[8] = 0x00
-                sendMsg.btCmd[9] = 0x00
-                sendMsg.btCmd[10] = 0x00
-                sendMsg.btCmd[11] = 0x00
-                sendMsg.btCmd[12] = 0x00
-                (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                sendMsgCon.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsgCon.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsgCon.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsgCon.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                sendMsgCon.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                sendMsgCon.btCmd[5] = 0x07
+                sendMsgCon.btCmd[6] = 0x00
+                sendMsgCon.btCmd[7] = 0x00
+                sendMsgCon.btCmd[8] = 0x00
+                sendMsgCon.btCmd[9] = 0x00
+                sendMsgCon.btCmd[10] = 0x00
+                sendMsgCon.btCmd[11] = 0x00
+                sendMsgCon.btCmd[12] = 0x00
+                (activity as DevUnitMsg).sendBtServiceMsg(sendMsgCon)
             }, 200)
         }
         btnFeatureWrite.setOnLongClickListener {
             val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
 
-            AlertDialog.Builder(activity).setTitle("Set device default function").setPositiveButton("OK") { dialog, which ->
+            AlertDialog.Builder(activity).setTitle("Set device default function").setPositiveButton("OK") { _, _ ->
                 for(dev in 0 .. BtDevUnit.deviceNo) {
                     when ((activity as DevUnitMsg).getDevType(dev)) {
                         "A6" -> {
@@ -366,7 +360,7 @@ class FragmentFeatureSet : Fragment() {
                         Logger.d(LogGbl, "other source feature parameter send")
                     }
                 }
-            }.setNegativeButton("CANCEL") { dialog, which ->
+            }.setNegativeButton("CANCEL") { _, _ ->
             }.show()
             true
         }
@@ -387,7 +381,7 @@ class FragmentFeatureSet : Fragment() {
         btnFeatureDfu.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
-            AlertDialog.Builder(activity).setTitle("Set Device DFU").setPositiveButton("OK") { dialog, which ->
+            AlertDialog.Builder(activity).setTitle("Set Device DFU").setPositiveButton("OK") { _, _ ->
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -395,11 +389,11 @@ class FragmentFeatureSet : Fragment() {
                 sendMsg.btCmd[4] = cmdDfuGeatureId
                 sendMsg.btCmd[5] = 0x00
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-            }.setNegativeButton("CANCEL") { dialog, which ->
+            }.setNegativeButton("CANCEL") { _, _ ->
             }.show()
             true
         }
-        rdGpDevFeature.setOnCheckedChangeListener { group, checkedId ->
+        rdGpDevFeature.setOnCheckedChangeListener { _, checkedId ->
             srcDevId =
                 when(checkedId) {
                     R.id.rdSrcFeature -> {
