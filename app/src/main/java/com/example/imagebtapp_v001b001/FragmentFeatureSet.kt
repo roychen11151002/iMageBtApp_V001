@@ -12,12 +12,7 @@ import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 
 class FragmentFeatureSet : Fragment() {
-    var srcDevItme = 0
-    var srcDevId: Byte = 0x30
-    var cmdSetFeatureId: Byte = CmdId.SET_HFP_FEATURE_REQ.value
-    var cmdGetFeatureId: Byte = CmdId.GET_HFP_FEATURE_REQ.value
-    var cmdDfuGeatureId: Byte = CmdId.SET_HFP_DFU_REQ.value
-    var cmdRfTestGeatureId: Byte = CmdId.SET_HFP_TEST_REQ.value
+    var srcDevItem = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,65 +44,121 @@ class FragmentFeatureSet : Fragment() {
             rdAgAllFeature.isEnabled = true
             rdHfpAllFeature.isEnabled = true
         }
+
         btnFeatureRead.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
             val sendMsgMode = BtDevMsg(0, 0)
 
+            deviceItemGet()
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsg.btCmd[3] = srcDevId
-            sendMsg.btCmd[4] = cmdGetFeatureId
+            sendMsg.btCmd[3] =
+                when(rdGpDevFeature.checkedRadioButtonId) {
+                    R.id.rdSrcFeature -> 0x30
+                    R.id.rdAgAllFeature -> 0x38
+                    R.id.rdHfpAllFeature -> 0x38
+                    else -> 0x38
+                }
+            sendMsg.btCmd[4] =
+                when(rdGpDevFeature.checkedRadioButtonId) {
+                    R.id.rdSrcFeature -> CmdId.GET_HFP_FEATURE_REQ.value
+                    R.id.rdAgAllFeature -> CmdId.GET_AG_FEATURE_REQ.value
+                    R.id.rdHfpAllFeature -> CmdId.GET_HFP_FEATURE_REQ.value
+                    else -> CmdId.GET_HFP_FEATURE_REQ.value
+                }
             sendMsg.btCmd[5] = 0x00
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
 
             sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgMode.btCmd[3] = srcDevId
-            sendMsgMode.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
+                when(rdGpDevFeature.checkedRadioButtonId) {
+                R.id.rdSrcFeature -> {
+                    sendMsgMode.btCmd[3] = 0x30
+                    sendMsgMode.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
+                }
+                R.id.rdAgAllFeature -> {
+                    sendMsgMode.btCmd[3] = 0x38
+                    sendMsgMode.btCmd[4] = CmdId.GET_AG_PSKEY_REQ.value
+                }
+                R.id.rdHfpAllFeature -> {
+                    sendMsgMode.btCmd[3] = 0x38
+                    sendMsgMode.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
+                }
+            }
             sendMsgMode.btCmd[5] = 0x02
             sendMsgMode.btCmd[6] = 0x00
             sendMsgMode.btCmd[7] = 9
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
         }
+
         btnFeatureWrite.setOnClickListener {
             val sendMsgMode = BtDevMsg(0, 0)
             val sendMsg = BtDevMsg(0, 0)
             val strList = BtDevUnit.featureBdaddrFilter.split(':')
 
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000.inv())
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode =
+            deviceItemGet()
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000.inv())
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode =
                 when(rdGpModeFeature.checkedRadioButtonId) {
-                    R.id.rdModeUsbFeature ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
-                    R.id.rdModeBtFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x02000000)
-                    R.id.rdModeVcsFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x04000000)
-                    R.id.rdModeWireFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x08000000)
-                    else -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.or(0x01000000)
+                    R.id.rdModeUsbFeature ->  (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.or(0x01000000)
+                    R.id.rdModeBtFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.or(0x02000000)
+                    R.id.rdModeVcsFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.or(0x04000000)
+                    R.id.rdModeWireFeature -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.or(0x08000000)
+                    else -> (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.or(0x01000000)
                 }
 
             sendMsgMode.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgMode.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgMode.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgMode.btCmd[3] = srcDevId
-            sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+            when(rdGpDevFeature.checkedRadioButtonId) {
+                R.id.rdSrcFeature -> {
+                    sendMsgMode.btCmd[3] = 0x30
+                    sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+                }
+                R.id.rdAgAllFeature -> {
+                    sendMsgMode.btCmd[3] = 0x38
+                    sendMsgMode.btCmd[4] = CmdId.SET_AG_FEATURE_REQ.value
+                }
+                R.id.rdHfpAllFeature -> {
+                    sendMsgMode.btCmd[3] = 0x38
+                    sendMsgMode.btCmd[4] = CmdId.SET_HFP_PSKEY_REQ.value
+                }
+            }
             sendMsgMode.btCmd[5] = 0x6
             sendMsgMode.btCmd[6] = 0x00
             sendMsgMode.btCmd[7] = 9
-            sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(24).toByte()
-            sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(16).toByte()
-            sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(8).toByte()
-            sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.shr(0).toByte()
+            sendMsgMode.btCmd[8] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.shr(24).toByte()
+            sendMsgMode.btCmd[9] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.shr(16).toByte()
+            sendMsgMode.btCmd[10] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.shr(8).toByte()
+            sendMsgMode.btCmd[11] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.shr(0).toByte()
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsgMode)
 
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsg.btCmd[3] = srcDevId
-            sendMsg.btCmd[4] = cmdSetFeatureId
             sendMsg.btCmd[5] = 0x13
-            sendMsg.btCmd[6] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.shr(8).toByte()
-            sendMsg.btCmd[7] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.and(0xff).toByte()
+            when(rdGpDevFeature.checkedRadioButtonId) {
+                R.id.rdSrcFeature -> {
+                    sendMsg.btCmd[3] = 0x30
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                    sendMsg.btCmd[6] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.shr(8).toByte()
+                    sendMsg.btCmd[7] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.and(0xff).toByte()
+                }
+                R.id.rdAgAllFeature -> {
+                    sendMsg.btCmd[3] = 0x38
+                    sendMsg.btCmd[4] = CmdId.SET_AG_FEATURE_REQ.value
+                    sendMsg.btCmd[6] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg.shr(8).toByte()
+                    sendMsg.btCmd[7] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg.and(0xff).toByte()
+                }
+                R.id.rdHfpAllFeature -> {
+                    sendMsg.btCmd[3] = 0x38
+                    sendMsg.btCmd[4] = CmdId.SET_HFP_FEATURE_REQ.value
+                    sendMsg.btCmd[6] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.shr(8).toByte()
+                    sendMsg.btCmd[7] = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.and(0xff).toByte()
+                }
+            }
             sendMsg.btCmd[8] = BtDevUnit.maxAgNo.and(0xff).toByte()
             sendMsg.btCmd[9] = BtDevUnit.maxTalkNo.and(0xff).toByte()
             sendMsg.btCmd[10] = 0x00
@@ -126,29 +177,32 @@ class FragmentFeatureSet : Fragment() {
             sendMsg.btCmd[23] = seekLedRev.progress.shr(8).toByte()
             sendMsg.btCmd[24] = seekLedRev.progress.and(0xff).toByte()
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-            Handler().postDelayed({
-                var sendMsgCon = BtDevMsg(0, 1)
+            if(rdGpDevFeature.checkedRadioButtonId == R.id.rdSrcFeature) {
+                Handler().postDelayed({
+                    var sendMsgCon = BtDevMsg(0, 1)
 
-                sendMsgCon.btCmd[0] = CmdId.CMD_HEAD_FF.value
-                sendMsgCon.btCmd[1] = CmdId.CMD_HEAD_55.value
-                sendMsgCon.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsgCon.btCmd[3] = CmdId.CMD_DEV_HOST.value
-                sendMsgCon.btCmd[4] = CmdId.SET_INT_CON_REQ.value
-                sendMsgCon.btCmd[5] = 0x07
-                sendMsgCon.btCmd[6] = 0x00
-                sendMsgCon.btCmd[7] = 0x00
-                sendMsgCon.btCmd[8] = 0x00
-                sendMsgCon.btCmd[9] = 0x00
-                sendMsgCon.btCmd[10] = 0x00
-                sendMsgCon.btCmd[11] = 0x00
-                sendMsgCon.btCmd[12] = 0x00
-                (activity as DevUnitMsg).sendBtServiceMsg(sendMsgCon)
-            }, 200)
+                    sendMsgCon.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                    sendMsgCon.btCmd[1] = CmdId.CMD_HEAD_55.value
+                    sendMsgCon.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                    sendMsgCon.btCmd[3] = CmdId.CMD_DEV_HOST.value
+                    sendMsgCon.btCmd[4] = CmdId.SET_INT_CON_REQ.value
+                    sendMsgCon.btCmd[5] = 0x07
+                    sendMsgCon.btCmd[6] = 0x00
+                    sendMsgCon.btCmd[7] = 0x00
+                    sendMsgCon.btCmd[8] = 0x00
+                    sendMsgCon.btCmd[9] = 0x00
+                    sendMsgCon.btCmd[10] = 0x00
+                    sendMsgCon.btCmd[11] = 0x00
+                    sendMsgCon.btCmd[12] = 0x00
+                    (activity as DevUnitMsg).sendBtServiceMsg(sendMsgCon)
+                }, 200)
+            }
         }
-        btnFeatureWrite.setOnLongClickListener {
-            val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp.split(':')
 
-            AlertDialog.Builder(activity).setTitle("Set device default function").setPositiveButton("OK") { _, _ ->
+        btnFeatureWrite.setOnLongClickListener {
+            val strList = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp.split(':')
+
+            AlertDialog.Builder(activity).setTitle(R.string.txvFunDefult).setPositiveButton(R.string.txvOk) { _, _ ->
                 for(dev in 0 .. BtDevUnit.deviceNo) {
                     when ((activity as DevUnitMsg).getDevType(dev)) {
                         "A6" -> {
@@ -360,77 +414,96 @@ class FragmentFeatureSet : Fragment() {
                         Logger.d(LogGbl, "other source feature parameter send")
                     }
                 }
-            }.setNegativeButton("CANCEL") { _, _ ->
+            }.setNegativeButton(R.string.txvCancel) { _, _ ->
             }.show()
             true
         }
+
         btnFeatureDfu.setOnClickListener {
-            var sendMsg = BtDevMsg(0, 0)
-
-            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
-            sendMsg.btCmd[4] = CmdId.SET_DISCOVERY_REQ.value
-            sendMsg.btCmd[5] = 0x02.toByte()
-            sendMsg.btCmd[6] = 0x70.toByte()
-            sendMsg.btCmd[7] = 0x20.toByte()
-
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-        }
-        btnFeatureDfu.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
+            val sendMsgOld = BtDevMsg(0, 0)
 
-            AlertDialog.Builder(activity).setTitle("Set Device DFU").setPositiveButton("OK") { _, _ ->
+            AlertDialog.Builder(activity).setTitle(R.string.txvDevDuf).setPositiveButton(R.string.txvOk) { _, _ ->
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-                sendMsg.btCmd[3] = srcDevId
-                sendMsg.btCmd[4] = cmdDfuGeatureId
-                sendMsg.btCmd[5] = 0x00
+                sendMsg.btCmd[3] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                        R.id.rdSrcFeature -> 0x30
+                        R.id.rdAgAllFeature -> 0x38
+                        R.id.rdHfpAllFeature -> 0x38
+                        else -> 0x38
+                    }
+                sendMsg.btCmd[4] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                        R.id.rdSrcFeature -> CmdId.SET_HFP_CTRL_REQ.value
+                        R.id.rdAgAllFeature -> CmdId.SET_AG_CTRL_REQ.value
+                        R.id.rdHfpAllFeature -> CmdId.SET_HFP_CTRL_REQ.value
+                        else -> CmdId.SET_HFP_PSKEY_REQ.value
+                    }
+                sendMsg.btCmd[5] = 0x02
+                sendMsg.btCmd[6] = 0x04
+                sendMsg.btCmd[7] = 0x01
                 (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
-            }.setNegativeButton("CANCEL") { _, _ ->
+
+                sendMsgOld.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsgOld.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsgOld.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsgOld.btCmd[3] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                        R.id.rdSrcFeature -> 0x30
+                        R.id.rdAgAllFeature -> 0x38
+                        R.id.rdHfpAllFeature -> 0x38
+                        else -> 0x38
+                    }
+                sendMsgOld.btCmd[4] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                        R.id.rdSrcFeature -> CmdId.SET_HFP_DFU_REQ.value
+                        R.id.rdAgAllFeature -> CmdId.SET_AG_DFU_REQ.value
+                        R.id.rdHfpAllFeature -> CmdId.SET_HFP_DFU_REQ.value
+                        else -> CmdId.SET_HFP_DFU_REQ.value
+                    }
+                sendMsgOld.btCmd[5] = 0x00
+                (activity as DevUnitMsg).sendBtServiceMsg(sendMsgOld)
+            }.setNegativeButton(R.string.txvCancel) { _, _ ->
+            }.show()
+        }
+
+        btnFeatureDfu.setOnLongClickListener {
+            val sendMsg = BtDevMsg(0, 0)
+
+            AlertDialog.Builder(activity).setTitle(R.string.txvDevReset).setPositiveButton(R.string.txvOk) { _, _ ->
+                sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsg.btCmd[3] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                    R.id.rdSrcFeature -> 0x30
+                    R.id.rdAgAllFeature -> 0x38
+                    R.id.rdHfpAllFeature -> 0x38
+                    else -> 0x38
+                }
+                sendMsg.btCmd[4] =
+                    when(rdGpDevFeature.checkedRadioButtonId) {
+                        R.id.rdSrcFeature -> CmdId.SET_HFP_CTRL_REQ.value
+                        R.id.rdAgAllFeature -> CmdId.SET_AG_CTRL_REQ.value
+                        R.id.rdHfpAllFeature -> CmdId.SET_HFP_CTRL_REQ.value
+                        else -> CmdId.SET_HFP_PSKEY_REQ.value
+                    }
+                sendMsg.btCmd[5] = 0x02
+                sendMsg.btCmd[6] = 0x02
+                sendMsg.btCmd[7] = 0x01
+                (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            }.setNegativeButton(R.string.txvCancel) { _, _ ->
             }.show()
             true
         }
-        rdGpDevFeature.setOnCheckedChangeListener { _, checkedId ->
-            srcDevId =
-                when(checkedId) {
-                    R.id.rdSrcFeature -> {
-                        srcDevItme = 0
-                        cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
-                        cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
-                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
-                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
-                        0x30
-                    }
-                    R.id.rdAgAllFeature -> {
-                        srcDevItme = 1
-                        cmdSetFeatureId = CmdId.SET_AG_FEATURE_REQ.value
-                        cmdGetFeatureId = CmdId.GET_AG_FEATURE_REQ.value
-                        cmdDfuGeatureId = CmdId.SET_AG_DFU_REQ.value
-                        cmdRfTestGeatureId = CmdId.SET_AG_TEST_REQ.value
-                        0x38
-                    }
-                    R.id.rdHfpAllFeature -> {
-                        srcDevItme = 1
-                        cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
-                        cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
-                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
-                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
-                        0x38
-                    }
-                    else -> {
-                        srcDevItme = 0
-                        cmdSetFeatureId = CmdId.SET_HFP_FEATURE_REQ.value
-                        cmdGetFeatureId = CmdId.GET_HFP_FEATURE_REQ.value
-                        cmdDfuGeatureId = CmdId.SET_HFP_DFU_REQ.value
-                        cmdRfTestGeatureId = CmdId.SET_HFP_TEST_REQ.value
-                        0x30
-                    }
-                }
+
+        rdGpDevFeature.setOnCheckedChangeListener { _, _ ->
+            deviceItemGet()
             updateData()
         }
+
         chkFeature0.setOnCheckedChangeListener { buttonView, isChecked ->
             checkUpdate(buttonView, isChecked)
         }
@@ -514,6 +587,26 @@ class FragmentFeatureSet : Fragment() {
         updateData()
     }
 
+    fun deviceItemGet() {
+        srcDevItem =
+            when(rdGpDevFeature.checkedRadioButtonId) {
+                R.id.rdSrcFeature -> 0
+                R.id.rdAgAllFeature -> 1
+                R.id.rdHfpAllFeature -> {
+                    var devItem = 1
+
+                    for (dev in 1..BtDevUnit.deviceNo) {
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[dev].stateCon.and(0x00000220) == 0x00000220) {
+                            devItem = dev
+                            break
+                        }
+                    }
+                    devItem
+                }
+                else -> 0
+            }
+    }
+
     fun checkUpdate(it: View, isChecked: Boolean) {
         val i =
             when(it.id) {
@@ -535,21 +628,21 @@ class FragmentFeatureSet : Fragment() {
                 R.id.chkFeature15 -> 15
                 else -> 16
             }
-        if(cmdGetFeatureId == CmdId.GET_AG_FEATURE_REQ.value) {
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg =
+        if(rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg =
                 if (isChecked)
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg.or(1.shl(i))
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg.or(1.shl(i))
                 else
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg.and(1.shl(i).inv())
-            Logger.d(LogGbl, String.format("checkbox id:%2d feature:%4X", i, (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg))
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg.and(1.shl(i).inv())
+            Logger.d(LogGbl, String.format("checkbox id:%2d feature:%4X", i, (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg))
         }
         else {
-            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp =
+            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp =
                 if (isChecked)
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.or(1.shl(i))
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.or(1.shl(i))
                 else
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp.and(1.shl(i).inv())
-            Logger.d(LogGbl, String.format("checkbox id:%2d feature:%4X", i, (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp))
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp.and(1.shl(i).inv())
+            Logger.d(LogGbl, String.format("checkbox id:%2d feature:%4X", i, (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp))
         }
     }
 
@@ -558,18 +651,18 @@ class FragmentFeatureSet : Fragment() {
         var feature: Int
         var ledLight: Array<Int>
 
-        if(cmdGetFeatureId == CmdId.GET_AG_FEATURE_REQ.value) {
-            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureAg
-            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].ledLightAg
-            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterAg
+        if(rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg
+            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg
+            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterAg
         }
         else {
-            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureHfp
-            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].ledLightHfp
-            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].bdaddrFilterHfp
+            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp
+            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp
+            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp
         }
 
-        when((activity as DevUnitMsg).getBtDevUnitList()[srcDevItme].featureMode.and(0x0f000000)) {
+        when((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000)) {
             0x01000000 -> rdModeUsbFeature.isChecked = true
             0x02000000 -> rdModeBtFeature.isChecked = true
             0x04000000 -> rdModeVcsFeature.isChecked = true

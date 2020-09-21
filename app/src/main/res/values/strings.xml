@@ -45,7 +45,7 @@
     <string name="txvFeature0">Fixed Device</string>
     <string name="txvFeature1">Clear Mute</string>
     <string name="txvFeature2">2</string>
-    <string name="txvFeature3">3</string>
+    <string name="txvFeature3">USB VOL MAX</string>
     <string name="txvFeature4">Disable EC</string>
     <string name="txvFeature5">Enable I2S Output</string>
     <string name="txvFeature6">Enable Loop Back</string>
@@ -69,11 +69,11 @@
     <string name="txvAudioParaTitle">Audio Parameter Set</string>
     <string name="txvDevPair">Pair Device</string>
     <string name="txvDevMsg">Device Message</string>
-    <string name="txvAudioParameter0">audio parameter 0(normal)</string>
-    <string name="txvAudioParameter1">audio parameter 1(normal AGC)</string>
-    <string name="txvAudioParameter2">audio parameter 2(Room Kit)</string>
-    <string name="txvAudioParameter3">audio parameter 3(A6)</string>
-    <string name="txvAudioParameter4">audio parameter 4(A6)</string>
+    <string name="txvAudioParameter0">General</string>
+    <string name="txvAudioParameter1">General AGC</string>
+    <string name="txvAudioParameter2">Room Kit</string>
+    <string name="txvAudioParameter3">audio parameter 3</string>
+    <string name="txvAudioParameter4">audio parameter 4</string>
     <string name="txvAudioParameter5">audio parameter 5</string>
     <string name="txvAudioParameter6">audio parameter 6</string>
     <string name="txvAudioParameter7">audio parameter 7</string>
@@ -87,9 +87,16 @@
     <string name="txvAudioParameter15">audio parameter 15</string>
     <string name="txvUpdateTime">60</string>
     <string name="txvRfTestTime">test time</string>
+    <string name="txvDistance">Distance</string>
     <string name="txvFreqHi">2480 MHz</string>
     <string name="txvFreqMid">2441 MHz</string>
     <string name="txvFreqLo">2402 MHz</string>
+    <string name="txvPwrOff">Set Device Power Off</string>
+    <string name="txvDevDuf">Set Device Entry Upgrate Mode</string>
+    <string name="txvDevReset">Reset</string>
+    <string name="txvFunDefult">Set Device Function Default</string>
+    <string name="txvOk">OK</string>
+    <string name="txvCancel">CANCEL</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.0</item>
@@ -111,9 +118,10 @@
         <item name="0">Alias Name:</item>
         <item name="1">Local name:</item>
         <item name="2">AG Local name:</item>
-        <item name="3">Ver:</item>
+        <item name="3">Device Ver:</item>
         <item name="4">AG Ver:</item>
         <item name="5">BDA: </item>
         <item name="6">Pair BDA: </item>
+        <item name="7">APP Ver:</item>
     </string-array>
 </resources>

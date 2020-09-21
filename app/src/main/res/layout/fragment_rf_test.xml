@@ -33,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvDevAllHfp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/btnRfTestHfp0"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -110,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvDevAllAg"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/btnRfTestAg0"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -146,6 +148,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -159,6 +162,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/txvDevSrc"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/btnRfTestSrc"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -176,6 +180,58 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        <Button
+            android:id="@+id/btnTxPwrRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btnRead"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txvDistance"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnTxPwrWrite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="152dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintStart_toEndOf="@+id/btnTxPwrRead"
+            app:layout_constraintTop_toTopOf="@+id/btnTxPwrRead" />
+
+        <TextView
+            android:id="@+id/txvDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/txvDistance"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
+            android:id="@+id/seekTxPower"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="192dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="48dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txvDistance" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/txvRfTestShow"
         android:layout_width="wrap_content"
@@ -188,13 +244,13 @@
     <SeekBar
         android:id="@+id/seekRfTestTime"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="128dp"
+        android:layout_width="192dp"
         android:layout_height="0dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginEnd="48dp"
         android:max="31"
         android:progress="3"
         app:layout_constraintBottom_toBottomOf="@+id/txvRfTestShow"
-        app:layout_constraintStart_toEndOf="@+id/txvRfTestShow"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txvRfTestShow" />
 
     <RadioGroup

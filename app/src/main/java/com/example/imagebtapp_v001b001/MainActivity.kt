@@ -60,16 +60,14 @@ enum class CmdId(val value: Byte) {
     SET_HFP_DIAL_RSP(0x21.toByte()),
     SET_DISCOVERY_REQ(0x22.toByte()),
     SET_DISCOVERY_RSP(0x23.toByte()),
-    SET_HFP_TEST_REQ(0x34.toByte()),
-    SET_HFP_TEST_RSP(0x35.toByte()),
-    SET_AG_TEST_REQ(0x36.toByte()),
-    SET_AG_TEST_RSP(0x37.toByte()),
-    SET_HFP_POWER_REQ(0x38.toByte()),
-    SET_HFP_POWER_RSP(0x39.toByte()),
-    SET_AG_DFU_REQ(0x3c.toByte()),
-    SET_AG_DFU_RSP(0x3d.toByte()),
-    SET_HFP_DFU_REQ(0x3e.toByte()),
-    SET_HFP_DFU_RSP(0x3f.toByte()),
+    SET_HFP_CTRL_REQ(0x38.toByte()),
+    SET_HFP_CTRL_RSP(0x39.toByte()),
+    SET_AG_CTRL_REQ(0x3a.toByte()),
+    SET_AG_CTRL_RSP(0x3b.toByte()),
+    SET_AG_DFU_REQ(0x3c.toByte()),                  // phase out command
+    SET_AG_DFU_RSP(0x3d.toByte()),                  // phase out command
+    SET_HFP_DFU_REQ(0x3e.toByte()),                 // phase out command
+    SET_FHP_DFU_RSP(0x3f.toByte()),                 // phase out command
     SET_INT_SERVICE_REQ(0xe0.toByte()),
     SET_INT_SERVICE_RSP(0xe1.toByte()),
     SET_INT_CON_REQ(0xe2.toByte()),
@@ -169,32 +167,32 @@ class BtDevUnit {
         val ledBcbA7 =0x03ff
         val ledRevA7 = 0x03ff
         val paraDataA6 = arrayOf(
-            arrayOf("227c 227d 00de e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
-                "227d 0000 de00 8000 0000 0199"),
-            arrayOf("227c 227d 00de e188 0466 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
-                "227d 0000 de00 8000 0000 0199"),
-            arrayOf("227c 227d 00de e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0600 cccc 0004 197f 9999 ffff 0000 0014 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0108 2802 7a26 0000 0000 0000 0004 0000 0b53",
-                "227d 0000 de00 8080 0000 0199 0109"),
-            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 0c7f cccc ffff 0000 0014 0002 0000 00cb 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cb 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
-            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 0014 0002 0000 00cd 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cd 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
-            arrayOf("2284 2285 0041 e18a 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 1000 0000 7ee0 00f2 0004 b659 2000 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "2285 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 80c9 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109")
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae"),
+            arrayOf("227c 227d 00df e188 0066 f60c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ff00 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 e000 0001 0109 47ae 0100 47ae")
         )
         val paraDataA7 = arrayOf(
-            arrayOf("227c 227d 00de e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
-                "227d 0000 de00 8000 0000 0199"),
-            arrayOf("227c 227d 00de e188 0466 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 80c9 3f30 0c00 cccc 0000 0108 1906 8a13 5316 0000 0000 0004 7f00 ffff",
-                "227d 0000 de00 8000 0000 0199"),
-            arrayOf("227c 227d 00de e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0600 cccc 0004 197f 9999 ffff 0000 0014 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0108 2802 7a26 0000 0000 0000 0004 0000 0b53",
-                "227d 0000 de00 8080 0000 0199 0109"),
-            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 0c7f cccc ffff 0000 0014 0002 0000 00cb 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cb 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
-            arrayOf("227c 227d 0041 e188 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 0014 0002 0000 00cd 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "227d 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 00cd 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109"),
-            arrayOf("2284 2285 0041 e18a 0066 f70c 6666 6603 6666 3333 ffe8 ffff 0000 1000 0000 7ee0 00f2 0004 b659 2000 0000 0004 197f 9999 ffff 0000 000f 0002 0000 80c9 13ff 001f 0903 886f d37a a8cb 73fa 19d3 fc69 a8cb e926 d25e da18 4ef8 bc7b 8eda 2600 da18 f800 3b89 606b 3f2a 3b37 606b 1673 8900 94c7 8000 0000 0001",
-                "2285 0000 4100 8000 0000 0001 0000 0000 0030 3300 3333 0003 1006 000b 80c9 3f30 0c00 cccc 0000 0210 2802 7a26 0000 0000 0000 000c 0000 0804 0199 0400 0000 0109")
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109"),
+            arrayOf("227c 227d 00df e188 0066 f60c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109"),
+            arrayOf("227c 227d 00df e188 0466 f70c 6666 6603 6666 3333 ffe8 ffff 0000 7ee0 00f9 0004 5b2d 0800 0000 0004 197f 9999 ffff 0000 000f 0002 0000 00cc 0000 0000 0000 0000 0000 0018 3300 3333 0003 0803 000b 00cc 3f30 0c00 cccc 0000 0100 1900 8a13 0000 0000 0006 7f00 ffff 0199",
+                "227d 0000 e600 8000 0000 0109")
         )
     }
     var imgIconUri = Uri.parse("")
@@ -251,6 +249,8 @@ class BtDevUnit {
     var modeAgVcsHfpMicVol = 15
     var modeAgVcsHfpSpkrVol = 15
     var modeAgVcsAvSpkrVol = 15
+    var txPowerHfp = 20
+    var txPowerAg = 20
 }
 
 interface DevUnitMsg {
@@ -415,21 +415,22 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             sendBtServiceMsg(sendMsg)
             true
  */
-            val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
+            AlertDialog.Builder(this).setTitle(R.string.txvPwrOff).setPositiveButton(R.string.txvOk) { _, _ ->
+                val sendMsg = arrayOf(BtDevMsg(0, 0), BtDevMsg(0, 0))
 
-            AlertDialog.Builder(this).setTitle("Set Device power off").setPositiveButton("OK") { _, _ ->
-                sendMsg[0].btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+                sendMsg[0].btCmd[3] = CmdId.CMD_DEV_HFP_ALL.value
                 sendMsg[1].btCmd[3] = CmdId.CMD_DEV_SRC.value
                 for (i in 0 until sendMsg.size) {
                     sendMsg[i].btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg[i].btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg[i].btCmd[2] = CmdId.CMD_DEV_HOST.value
-                    sendMsg[i].btCmd[4] = CmdId.SET_HFP_POWER_REQ.value
-                    sendMsg[i].btCmd[5] = 0x01.toByte()
-                    sendMsg[i].btCmd[6] = 0x00.toByte()
+                    sendMsg[i].btCmd[4] = CmdId.SET_HFP_CTRL_REQ.value
+                    sendMsg[i].btCmd[5] = 0x02.toByte()
+                    sendMsg[i].btCmd[6] = 0x01.toByte()
+                    sendMsg[i].btCmd[7] = 0x00.toByte()
                     Handler().postDelayed({ sendBtServiceMsg(sendMsg[i]) }, i.toLong() * 1000)
                 }
-            }.setNegativeButton("CANCEL") {_, _ ->
+            }.setNegativeButton(R.string.txvCancel) { _, _ ->
             }.show()
             true
         }
@@ -685,7 +686,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
 
     fun setUpdate() {
         val srcDevId = arrayOf(CmdId.CMD_DEV_SRC.value, CmdId.CMD_DEV_AG_ALL.value)
-        val pskey = arrayOf(9, 16, 17, 18, 26)
+        val pskeyHfp = arrayOf(9, 10, 16, 17, 18, 26)
+        val pskeyAg = arrayOf(10)
         val cmdId = arrayOf(
             CmdId.GET_HFP_LOCAL_NAME_REQ.value,
             CmdId.GET_AG_LOCAL_NAME_REQ.value,
@@ -715,7 +717,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         for(j in 0 until srcDevId.size) {
             var devId = srcDevId[j]
 
-            for(i in 0 until pskey.size) {
+            for(i in 0 until pskeyHfp.size) {
                 var sendMsg = BtDevMsg(0, 0)
 
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
@@ -725,8 +727,22 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
                 sendMsg.btCmd[5] = 0x02
                 sendMsg.btCmd[6] = 0x00
-                sendMsg.btCmd[7] = pskey[i].toByte()
+                sendMsg.btCmd[7] = pskeyHfp[i].toByte()
                 sendBtServiceMsg(sendMsg)
+            }
+
+            for(i in 0 until pskeyAg.size) {
+                var sendMsgAg = BtDevMsg(0, 0)
+
+                sendMsgAg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+                sendMsgAg.btCmd[1] = CmdId.CMD_HEAD_55.value
+                sendMsgAg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+                sendMsgAg.btCmd[3] = devId
+                sendMsgAg.btCmd[4] = CmdId.GET_AG_PSKEY_REQ.value
+                sendMsgAg.btCmd[5] = 0x02
+                sendMsgAg.btCmd[6] = 0x00
+                sendMsgAg.btCmd[7] = pskeyAg[i].toByte()
+                sendBtServiceMsg(sendMsgAg)
             }
         }
     }
@@ -827,6 +843,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         9 -> {
                             BtDevUnitList[id].featureMode = msg.btCmd[8].toInt().and(0xff).shl(24) + msg.btCmd[9].toInt().and(0xff).shl(16) + msg.btCmd[10].toInt().and(0xff).shl(8) + msg.btCmd[11].toInt().and(0xff)
                         }
+                        10 -> {
+                            BtDevUnitList[id].txPowerHfp = msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
+                            Logger.d(LogMain, "${String.format("get HFP pskey id:%d power:%04x", pskId, BtDevUnitList[id].txPowerHfp)}")
+                        }
                         16 -> {
 
                         }
@@ -877,6 +897,16 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 }
                 CmdId.GET_AG_PSKEY_RSP.value -> {
                     val pskId = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
+                    when(pskId) {
+                        10 -> {
+                            BtDevUnitList[id].txPowerAg =
+                                if(msg.btCmd[8].toInt().and(0x80) == 0x80)
+                                    (msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)).or(0xffff0000.toInt())
+                                else
+                                    msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
+                            Logger.d(LogMain, "${String.format("get ag %d pskey id:%d power:%04x", id, pskId, BtDevUnitList[id].txPowerAg)}")
+                        }
+                    }
                     Logger.d(LogMain, "${String.format("get ag pskey id:%d", pskId)}")
                 }
                 CmdId.GET_HFP_VRESION_RSP.value -> {

@@ -18,10 +18,11 @@
 
     <ImageView
         android:id="@+id/imgViewStaCon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_marginStart="32dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="8dp"
         android:background="#DFD581"
+        app:layout_constraintBottom_toBottomOf="@+id/imgViewIcon"
         app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
         app:layout_constraintTop_toTopOf="@+id/imgViewIcon"
         app:srcCompat="@android:drawable/sym_action_call" />
@@ -30,53 +31,56 @@
         android:id="@+id/seekVolSpkr"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="0dp"
-        android:layout_height="24dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:max="15"
         android:progress="10"
-        app:layout_constraintBottom_toBottomOf="@+id/imgViewMuSpkr"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgViewMuSpkr" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imgViewMuSpkr"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
         android:id="@+id/imgViewMuMic"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/imgViewIcon"
-        app:layout_constraintTop_toBottomOf="@+id/imgViewIcon"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgViewStaCon"
+        app:layout_constraintTop_toBottomOf="@+id/txvRssi"
         app:srcCompat="@android:drawable/presence_audio_online" />
 
     <ImageView
         android:id="@+id/imgViewMuSpkr"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="16dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         android:background="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="@+id/imgViewMuMic"
-        app:layout_constraintStart_toEndOf="@+id/imgViewMuMic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/imgViewMuMic"
+        app:layout_constraintTop_toBottomOf="@+id/imgViewMuMic"
         app:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
 
     <SeekBar
         android:id="@+id/seekVolMic"
         style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="116dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="108dp"
+        android:layout_height="4dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
         android:max="15"
         android:progress="15"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgViewMuMic"
-        app:layout_constraintTop_toTopOf="@+id/imgViewMuMic" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgViewIcon"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txvDeviceName"
         app:srcCompat="@drawable/android_image_1" />
@@ -85,18 +89,19 @@
         android:id="@+id/txvBat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnCon"
+        android:layout_marginStart="128dp"
+        android:text="@string/txvOk"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/imgViewIcon"
-        app:layout_constraintTop_toTopOf="@+id/imgViewIcon" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txvRssi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnCon"
+        android:text="@string/txvOk"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgViewIcon"
-        app:layout_constraintStart_toEndOf="@+id/imgViewIcon" />
+        app:layout_constraintStart_toStartOf="@+id/txvBat"
+        app:layout_constraintTop_toBottomOf="@+id/txvBat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

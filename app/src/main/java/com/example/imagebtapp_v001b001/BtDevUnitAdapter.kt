@@ -178,7 +178,8 @@ class BtDevUnitAdapter(val btDevUnitList: ArrayList<BtDevUnit>, val strIndicate:
                     fromUser: Boolean
                 ) {
                     Logger.d(LogGbl, "seekVolSpkr progress changed $adapterPosition $fromUser")
-                    clickSpkrVolListener.onSpkrVol(adapterPosition, progress, fromUser)
+                    if(adapterPosition >= 0)
+                        clickSpkrVolListener.onSpkrVol(adapterPosition, progress, fromUser)
                 }
 
                 override fun onStartTrackingTouch(seekBar: SeekBar?) {

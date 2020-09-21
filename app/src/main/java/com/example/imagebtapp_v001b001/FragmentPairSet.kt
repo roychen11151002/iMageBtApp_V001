@@ -78,6 +78,22 @@ class FragmentPairSet : Fragment() {
             }
         }
 
+        btnDiscovery.setOnLongClickListener {
+            var sendMsg = BtDevMsg(0, 0)
+
+            sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsg.btCmd[3] = CmdId.CMD_DEV_SRC.value
+            sendMsg.btCmd[4] = CmdId.SET_DISCOVERY_REQ.value
+            sendMsg.btCmd[5] = 0x02.toByte()
+            sendMsg.btCmd[6] = 0x70.toByte()
+            sendMsg.btCmd[7] = 0x20.toByte()
+
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+            true
+        }
+
         recyclerListAdapter.setOnItemClickListener(object : BtListAdapter.OnItemClickListener {
             override fun onItemClick(view: View, position: Int) {
                 val listItem = resources.getStringArray(R.array.txvDevName)

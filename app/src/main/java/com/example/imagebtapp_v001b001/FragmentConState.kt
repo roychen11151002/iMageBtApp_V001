@@ -11,6 +11,7 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.imagebtapp_v001b001.BuildConfig.VERSION_NAME
 import kotlinx.android.synthetic.main.fragment_con_state.*
 import kotlin.experimental.and
 import kotlin.experimental.or
@@ -50,7 +51,7 @@ class FragmentConState : Fragment() {
         }
         recyclerDevList.layoutManager = lmg
         recyclerDevList.adapter = devUnitAdapter
-        recyclerDevList.addItemDecoration(SpaceItemDecoration(4))
+        recyclerDevList.addItemDecoration(SpaceItemDecoration(12))
         //strIndMsg[0] = context!!.resources.getString(R.string.txvStaRssiStrong)
         //strIndMsg[1] = context!!.resources.getString(R.string.txvStaRssiWeak)
         //strIndMsg[2] = context!!.resources.getString(R.string.txvStaBat)
@@ -61,15 +62,72 @@ class FragmentConState : Fragment() {
         devUnitAdapter.setOnkItemImageListener(object : BtDevUnitAdapter.OnItemImageListener {
             override fun onItemImage(position: Int, btDevUnit: BtDevUnit) {
                 // val txvMsgName = resources.getStringArray(R.array.txvStaName)
-                val msgItem = arrayOf(
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
-                        String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
-                    )
+                val msgItem =
+                    when((activity as DevUnitMsg).getDevType(position)) {
+                        "M6_SRC" -> {
+                            if (position == 0)
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[7]} ${VERSION_NAME}")
+                                )
+                            else
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
+                                )
+                        }
+                        "A6", "A7" -> {
+                            if (position == 0)
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[7]} ${VERSION_NAME}")
+                                )
+                            else
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
+                                )
+                        }
+                        else -> {
+                            if (position == 0)
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[7]} ${VERSION_NAME}")
+                                )
+                            else
+                                arrayOf(
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[1]} ${btDevUnit.nameLocalHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[2]} ${btDevUnit.nameLocalAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[3]} ${btDevUnit.verFirmwareHfp}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[4]} ${btDevUnit.verFirmwareAg}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[5]} ${btDevUnit.bdaddr}"),
+                                    String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
+                                )
+                        }
+                    }
 
                 AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevMsg)).setItems(msgItem) { _, _ ->
                 }.setPositiveButton("OK") { _, _ ->
@@ -112,6 +170,7 @@ class FragmentConState : Fragment() {
                     sendMsg.btCmd[5] = 0x01
                     sendMsg.btCmd[6] = progress.toByte().or(0x20.toByte())
                     (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
+                    (activity as DevUnitMsg).getBtDevUnitList()[position].volSpkrHfp = progress
                 }
                 Logger.d(LogGbl, "spkr volume id:$position progress:$progress")
             }
@@ -345,8 +404,8 @@ class FragmentConState : Fragment() {
             2 -> 0x08
             3 -> 0x10
             4 -> 0x18
-            5 -> 0x20
             6 -> 0x28
+            5 -> 0x20
             else -> 0xff.toByte()
         }
 

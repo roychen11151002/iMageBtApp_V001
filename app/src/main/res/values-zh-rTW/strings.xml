@@ -58,7 +58,7 @@
     <string name="txvDecadeSpkrHfp">麥克風輸入</string>
     <string name="txvDecadeSpkrAv">麥克風輸入</string>
     <string name="txvFeature2">" "</string>
-    <string name="txvFeature3">" "</string>
+    <string name="txvFeature3">" 開啟USB 最大音量"</string>
     <string name="txvVolumeSrc">系統外部音量設定</string>
     <string name="txvVolumeAg">系統內部音量設定</string>
     <string name="txvModeVcs">"多顆喇叭  "</string>
@@ -70,11 +70,11 @@
     <string name="txvDevA7">A7</string>
     <string name="txvDevPair">需連接裝置</string>
     <string name="txvDevMsg">裝置訊息</string>
-    <string name="txvAudioParameter0">音效參數0(normal)</string>
-    <string name="txvAudioParameter1">音效參數1(normal AGC)</string>
-    <string name="txvAudioParameter2">音效參數2(Room Kit)</string>
-    <string name="txvAudioParameter3">音效參數3(A6)</string>
-    <string name="txvAudioParameter4">音效參數4(A6)</string>
+    <string name="txvAudioParameter0">通用</string>
+    <string name="txvAudioParameter1">通用 AGC</string>
+    <string name="txvAudioParameter2">Room Kit</string>
+    <string name="txvAudioParameter3">音效參數3</string>
+    <string name="txvAudioParameter4">音效參數4</string>
     <string name="txvAudioParameter5">音效參數5</string>
     <string name="txvAudioParameter6">音效參數6</string>
     <string name="txvAudioParameter7">音效參數7</string>
@@ -87,6 +87,7 @@
     <string name="txvAudioParameter14">音效參數14</string>
     <string name="txvAudioParameter15">音效參數15</string>
     <string name="txvUpdateTime">60</string>
+    <string name="txvDistance">通訊距離</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.0</item>
@@ -108,13 +109,20 @@
         <item name="0">名稱:</item>
         <item name="1">搜尋名稱:</item>
         <item name="2">AG名稱:</item>
-        <item name="3">版本:</item>
+        <item name="3">裝置版本:</item>
         <item name="4">AG版本:</item>
         <item name="5">位址:</item>
         <item name="6">配對位址:</item>
+        <item name="7">APP版本:</item>
     </string-array>
     <string name="txvRfTestTime">測試時間</string>
     <string name="txvFreqHi">2480 MHz</string>
     <string name="txvFreqMid">2441 MHz</string>
     <string name="txvFreqLo">2402 MHz</string>
+    <string name="txvPwrOff">設定裝置關機</string>
+    <string name="txvDevDuf">裝置進入更新模式</string>
+    <string name="txvDevReset">重置裝置</string>
+    <string name="txvFunDefult">設定裝置預設值</string>
+    <string name="txvOk">確認</string>
+    <string name="txvCancel">取消</string>
 </resources>
