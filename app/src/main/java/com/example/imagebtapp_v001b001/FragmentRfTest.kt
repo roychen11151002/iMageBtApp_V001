@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_rf_test.*
-import kotlinx.android.synthetic.main.fragment_vol_set.*
 import kotlin.experimental.or
 
 class FragmentRfTest : Fragment() {
@@ -31,10 +30,10 @@ class FragmentRfTest : Fragment() {
         var rfTestMode: Byte = 0x02
         var txPower = 0
 
-        txvRfTestShow.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
+        txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
         rdGpRfTestFreq.setOnCheckedChangeListener { _, checkedId ->
             rfTestMode =
-                when(checkedId) {
+                when (checkedId) {
                     R.id.rdRfTestFreqHi -> 3
                     R.id.rdRfTestFreqMid -> 2
                     R.id.rdRfTestFreqLo -> 1
@@ -45,7 +44,7 @@ class FragmentRfTest : Fragment() {
         seekRfTestTime.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 rfTestTime = (progress + 1).shl(2)
-                txvRfTestShow.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
+                txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -344,129 +343,32 @@ class FragmentRfTest : Fragment() {
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsg)
             true
         }
-
-        seekTxPower.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                txPower = progress * 4 - 20
-                txvDistance.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistance), txPower)
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-            }
-        })
-
-        btnTxPwrWrite.setOnClickListener {
-            val sendMsgSrc = BtDevMsg(0, 0)
-            val sendMsgAg = BtDevMsg(0, 0)
-
-            sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgSrc.btCmd[3] = 0x30
-            sendMsgSrc.btCmd[4] = CmdId.SET_HFP_CTRL_REQ.value
-            sendMsgSrc.btCmd[5] = 0x02
-            sendMsgSrc.btCmd[6] = 0x10
-            sendMsgSrc.btCmd[7] = (seekTxPower.progress * 4 - 20).toByte()
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgSrc)
-
-            sendMsgAg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsgAg.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsgAg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgAg.btCmd[3] = 0x38
-            sendMsgAg.btCmd[4] = CmdId.SET_AG_CTRL_REQ.value
-            sendMsgAg.btCmd[5] = 0x02
-            sendMsgAg.btCmd[6] = 0x10
-            sendMsgAg.btCmd[7] = (seekTxPower.progress * 4 - 20).toByte()
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
-            (activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg = seekTxPower.progress * 4 - 20
-        }
-
-        btnTxPwrRead.setOnClickListener {
-            val sendMsgAg = BtDevMsg(0, 0)
-
-            sendMsgAg.btCmd[0] = CmdId.CMD_HEAD_FF.value
-            sendMsgAg.btCmd[1] = CmdId.CMD_HEAD_55.value
-            sendMsgAg.btCmd[2] = CmdId.CMD_DEV_HOST.value
-            sendMsgAg.btCmd[3] = 0x38
-            sendMsgAg.btCmd[4] = CmdId.GET_AG_PSKEY_REQ.value
-            sendMsgAg.btCmd[5] = 0x02
-            sendMsgAg.btCmd[6] = 0x00
-            sendMsgAg.btCmd[7] = 0x0a
-            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
-        }
     }
 
     fun updateData() {
-        when ((activity as DevUnitMsg).getDevType(0)) {
-            "M6_SRC", "DG_BT", "VC_BT" -> {
-                seekTxPower.progress = ((activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg + 20) / 4
-                Logger.d(LogGbl, "txPower ${(activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg}")
-                when(BtDevUnit.sppStateCon) {
-                    0x00.toByte() -> {
-                        btnRfTestSrc.visibility = View.VISIBLE
-                        btnRfTestAg0.visibility = View.VISIBLE
-                        btnRfTestAg1.visibility = View.VISIBLE
-                        btnRfTestAg2.visibility = View.VISIBLE
-                        btnRfTestHfp0.visibility = View.VISIBLE
-                        btnRfTestHfp1.visibility = View.VISIBLE
-                        btnRfTestHfp2.visibility = View.VISIBLE
-                        btnRfTestHfp3.visibility = View.VISIBLE
-                        btnRfTestHfp4.visibility = View.VISIBLE
-                        btnRfTestHfp5.visibility = View.VISIBLE
-                        btnTxPwrWrite.visibility = View.VISIBLE
-                        btnTxPwrRead.visibility = View.VISIBLE
-                        seekTxPower.visibility = View.VISIBLE
-                    }
-                    0x01.toByte() -> {
-                        btnRfTestSrc.visibility = View.INVISIBLE
-                        btnRfTestAg0.visibility = View.INVISIBLE
-                        btnRfTestAg1.visibility = View.INVISIBLE
-                        btnRfTestAg2.visibility = View.INVISIBLE
-                        btnRfTestHfp0.visibility = View.INVISIBLE
-                        btnRfTestHfp1.visibility = View.INVISIBLE
-                        btnRfTestHfp2.visibility = View.INVISIBLE
-                        btnRfTestHfp3.visibility = View.INVISIBLE
-                        btnRfTestHfp4.visibility = View.INVISIBLE
-                        btnRfTestHfp5.visibility = View.INVISIBLE
-                        btnTxPwrWrite.visibility = View.INVISIBLE
-                        btnTxPwrRead.visibility = View.INVISIBLE
-                        seekTxPower.visibility = View.INVISIBLE
-                    }
-                    else -> {
-                        btnRfTestSrc.visibility = View.INVISIBLE
-                        btnRfTestAg0.visibility = View.INVISIBLE
-                        btnRfTestAg1.visibility = View.INVISIBLE
-                        btnRfTestAg2.visibility = View.INVISIBLE
-                        btnRfTestHfp0.visibility = View.INVISIBLE
-                        btnRfTestHfp1.visibility = View.INVISIBLE
-                        btnRfTestHfp2.visibility = View.INVISIBLE
-                        btnRfTestHfp3.visibility = View.INVISIBLE
-                        btnRfTestHfp4.visibility = View.INVISIBLE
-                        btnRfTestHfp5.visibility = View.INVISIBLE
-                        btnTxPwrWrite.visibility = View.INVISIBLE
-                        btnTxPwrRead.visibility = View.INVISIBLE
-                        seekTxPower.visibility = View.INVISIBLE
-                    }
-                }
-            }
-            else -> {
-                btnRfTestSrc.visibility = View.INVISIBLE
-                btnRfTestAg0.visibility = View.INVISIBLE
-                btnRfTestAg1.visibility = View.INVISIBLE
-                btnRfTestAg2.visibility = View.INVISIBLE
-                btnRfTestHfp0.visibility = View.INVISIBLE
-                btnRfTestHfp1.visibility = View.INVISIBLE
-                btnRfTestHfp2.visibility = View.INVISIBLE
-                btnRfTestHfp3.visibility = View.INVISIBLE
-                btnRfTestHfp4.visibility = View.INVISIBLE
-                btnRfTestHfp5.visibility = View.INVISIBLE
-                btnTxPwrWrite.visibility = View.INVISIBLE
-                btnTxPwrRead.visibility = View.INVISIBLE
-                seekTxPower.visibility = View.INVISIBLE
-            }
+        if (BtDevUnit.sppStateCon == 0x00.toByte()) {
+            btnRfTestSrc.visibility = View.VISIBLE
+            btnRfTestAg0.visibility = View.VISIBLE
+            btnRfTestAg1.visibility = View.VISIBLE
+            btnRfTestAg2.visibility = View.VISIBLE
+            btnRfTestHfp0.visibility = View.VISIBLE
+            btnRfTestHfp1.visibility = View.VISIBLE
+            btnRfTestHfp2.visibility = View.VISIBLE
+            btnRfTestHfp3.visibility = View.VISIBLE
+            btnRfTestHfp4.visibility = View.VISIBLE
+            btnRfTestHfp5.visibility = View.VISIBLE
+        }
+        else {
+            btnRfTestSrc.visibility = View.INVISIBLE
+            btnRfTestAg0.visibility = View.INVISIBLE
+            btnRfTestAg1.visibility = View.INVISIBLE
+            btnRfTestAg2.visibility = View.INVISIBLE
+            btnRfTestHfp0.visibility = View.INVISIBLE
+            btnRfTestHfp1.visibility = View.INVISIBLE
+            btnRfTestHfp2.visibility = View.INVISIBLE
+            btnRfTestHfp3.visibility = View.INVISIBLE
+            btnRfTestHfp4.visibility = View.INVISIBLE
+            btnRfTestHfp5.visibility = View.INVISIBLE
         }
     }
 }

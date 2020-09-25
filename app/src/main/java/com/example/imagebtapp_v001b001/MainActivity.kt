@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
@@ -265,6 +266,7 @@ val ViewPagerArray = arrayOf(FragmentConState(),
                                               FragmentPairSet(),
                                               FragmentFeatureSet(),
                                               FragmentVolSet(),
+                                              FragmentTxPower(),
                                               FragmentRfTest())
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
@@ -337,6 +339,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             is FragmentAudioParaSet -> {
                 (ViewPagerArray[it.what] as FragmentAudioParaSet).updateData()
                 Logger.d(LogMain, "FragmentAudioParaSetA6 fragment update")
+            }
+            is FragmentTxPower -> {
+                (ViewPagerArray[it.what] as FragmentTxPower).updateData()
+                Logger.d(LogMain, "FragmentTxPower fragment update")
             }
             is FragmentRfTest -> {
                 (ViewPagerArray[it.what] as FragmentRfTest).updateData()
@@ -641,7 +647,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     }
 
     override fun getDevType(devNo: Int): String {
-        return if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 12).compareTo("iMage M6_SRC") == 0) {
+        return if(BtDevUnitList[devNo].stateCon.and(0x00000220) != 0x00000220) {
+            "UNKNOW"
+        }
+        else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 12).compareTo("iMage M6_SRC") == 0) {
             "M6_SRC"
         }
         else if (BtDevUnitList[devNo].nameLocalHfp.substring(0, 11).compareTo("iMage DG_BT") == 0) {
@@ -711,7 +720,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = cmdId[i]
                 sendMsg.btCmd[5] = 0x00
-                sendBtServiceMsg(sendMsg)
+                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 100.toLong())
             }
         }
         for(j in 0 until srcDevId.size) {
@@ -728,7 +737,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[5] = 0x02
                 sendMsg.btCmd[6] = 0x00
                 sendMsg.btCmd[7] = pskeyHfp[i].toByte()
-                sendBtServiceMsg(sendMsg)
+                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 200.toLong())
             }
 
             for(i in 0 until pskeyAg.size) {
@@ -742,7 +751,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsgAg.btCmd[5] = 0x02
                 sendMsgAg.btCmd[6] = 0x00
                 sendMsgAg.btCmd[7] = pskeyAg[i].toByte()
-                sendBtServiceMsg(sendMsgAg)
+                Handler().postDelayed({sendBtServiceMsg(sendMsgAg)}, i * j * 300.toLong())
             }
         }
     }
@@ -844,8 +853,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                             BtDevUnitList[id].featureMode = msg.btCmd[8].toInt().and(0xff).shl(24) + msg.btCmd[9].toInt().and(0xff).shl(16) + msg.btCmd[10].toInt().and(0xff).shl(8) + msg.btCmd[11].toInt().and(0xff)
                         }
                         10 -> {
-                            BtDevUnitList[id].txPowerHfp = msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
-                            Logger.d(LogMain, "${String.format("get HFP pskey id:%d power:%04x", pskId, BtDevUnitList[id].txPowerHfp)}")
+                            BtDevUnitList[id].txPowerHfp =
+                                if(msg.btCmd[8].toInt().and(0x80) == 0x80)
+                                    (msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)).or(0xffff0000.toInt())
+                                else
+                                    msg.btCmd[8].toInt().and(0xff).shl(8) + msg.btCmd[9].toInt().and(0xff)
+                            Logger.d(LogMain, "${String.format("get src pskey id:%d power:%04x", id, pskId, BtDevUnitList[id].txPowerHfp)}")
                         }
                         16 -> {
 

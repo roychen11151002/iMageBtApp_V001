@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".FragmentTxPower">
+
+    <TextView
+        android:id="@+id/txvTxPowerTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/txvTxPowerTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_rectangle"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txvTxPowerTitle">
+
+        <Button
+            android:id="@+id/btnTxPwrWriteSrc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintBottom_toBottomOf="@+id/seekTxPowerSrc"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txvDistanceSrc" />
+
+        <Button
+            android:id="@+id/btnTxPwrWriteAg0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintBottom_toBottomOf="@+id/seekTxPowerAg0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txvDistanceAg0" />
+
+        <Button
+            android:id="@+id/btnTxPwrWriteAg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintBottom_toBottomOf="@+id/seekTxPowerAg1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txvDistanceAg1" />
+
+        <Button
+            android:id="@+id/btnTxPwrWriteAg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintBottom_toBottomOf="@+id/seekTxPowerAg2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/txvDistanceAg2" />
+
+        <Button
+            android:id="@+id/btnTxPwrWriteAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="@string/btnWrite"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btnTxPwrRead" />
+
+        <Button
+            android:id="@+id/btnTxPwrRead"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/btnRead"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/seekTxPowerAg2" />
+
+        <TextView
+            android:id="@+id/txvDistanceSrc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txvDistanceSrc"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
+            android:id="@+id/seekTxPowerSrc"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toStartOf="@+id/btnTxPwrWriteSrc"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceSrc"
+            app:layout_constraintTop_toBottomOf="@+id/txvDistanceSrc" />
+
+        <TextView
+            android:id="@+id/txvDistanceAg0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txvDistanceAg0"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceSrc"
+            app:layout_constraintTop_toBottomOf="@+id/seekTxPowerSrc" />
+
+        <TextView
+            android:id="@+id/txvDistanceAg1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txvDistanceAg1"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceAg0"
+            app:layout_constraintTop_toBottomOf="@+id/seekTxPowerAg0" />
+
+        <TextView
+            android:id="@+id/txvDistanceAg2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/txvDistanceAg2"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceAg1"
+            app:layout_constraintTop_toBottomOf="@+id/seekTxPowerAg1" />
+
+        <SeekBar
+            android:id="@+id/seekTxPowerAg0"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toStartOf="@+id/btnTxPwrWriteAg0"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceAg0"
+            app:layout_constraintTop_toBottomOf="@+id/txvDistanceAg0" />
+
+        <SeekBar
+            android:id="@+id/seekTxPowerAg1"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toStartOf="@+id/btnTxPwrWriteAg1"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceAg1"
+            app:layout_constraintTop_toBottomOf="@+id/txvDistanceAg1" />
+
+        <SeekBar
+            android:id="@+id/seekTxPowerAg2"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:max="10"
+            android:progress="3"
+            app:layout_constraintEnd_toStartOf="@+id/btnTxPwrWriteAg2"
+            app:layout_constraintStart_toStartOf="@+id/txvDistanceAg2"
+            app:layout_constraintTop_toBottomOf="@+id/txvDistanceAg2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,7 @@
     <string name="txvRecyclerTitle">non activity</string>
     <string name="txvFeatureTitle">Feature Set</string>
     <string name="txvVolumeTitle">Volume Set</string>
+    <string name="txvTxPowerTitle">Tx Power Set</string>
     <string name="txvRfTestTitle">RF Test</string>
     <string name="txvStaConnected">Connected</string>
     <string name="txvStaConnecting">Connecting</string>
@@ -87,7 +88,10 @@
     <string name="txvAudioParameter15">audio parameter 15</string>
     <string name="txvUpdateTime">60</string>
     <string name="txvRfTestTime">test time</string>
-    <string name="txvDistance">Distance</string>
+    <string name="txvDistanceSrc">Distance source</string>
+    <string name="txvDistanceAg0">Distance AG0</string>
+    <string name="txvDistanceAg1">Distance AG1</string>
+    <string name="txvDistanceAg2">Distance AG2</string>
     <string name="txvFreqHi">2480 MHz</string>
     <string name="txvFreqMid">2441 MHz</string>
     <string name="txvFreqLo">2402 MHz</string>

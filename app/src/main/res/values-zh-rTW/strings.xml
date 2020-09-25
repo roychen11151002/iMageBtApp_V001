@@ -87,7 +87,10 @@
     <string name="txvAudioParameter14">音效參數14</string>
     <string name="txvAudioParameter15">音效參數15</string>
     <string name="txvUpdateTime">60</string>
-    <string name="txvDistance">通訊距離</string>
+    <string name="txvDistanceSrc">通訊距離 SRC</string>
+    <string name="txvDistanceAg0">通訊距離 AG0</string>
+    <string name="txvDistanceAg1">通訊距離 AG1</string>
+    <string name="txvDistanceAg2">通訊距離 AG2</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.0</item>
@@ -125,4 +128,5 @@
     <string name="txvFunDefult">設定裝置預設值</string>
     <string name="txvOk">確認</string>
     <string name="txvCancel">取消</string>
+    <string name="txvTxPowerTitle">通訊距離設定</string>
 </resources>
