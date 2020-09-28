@@ -207,8 +207,8 @@ class BtDevUnit {
     var verFirmwareHfp = ""
     var verFirmwareAg = ""
     var nameAlias = "alias name"
-    var nameLocalHfp = ""
-    var nameLocalAg = ""
+    var nameLocalHfp = "unknow HFP device"
+    var nameLocalAg = "unknow AG device"
     var featureHfp = 0
     var featureAg = 0
     var featureMode = 0x01000000
@@ -276,6 +276,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     private lateinit var preferData: SharedPreferences
     private var iMageBtServiceBind = false
     private lateinit var iMageBtServiceMsg: Messenger
+    private val viewM6UpdateTask = Handler()
     private val clientMsgHandler = Messenger(Handler(Handler.Callback {
         when(it.what) {
             0 -> {
@@ -683,7 +684,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         }, 1000)
     }
 
-    fun viewM6Update() = viewM6UpdateHandler.send(Message.obtain(null, viewPagerM6.currentItem))
+    fun viewM6Update() {
+        viewM6UpdateTask.removeCallbacksAndMessages(null)
+        viewM6UpdateTask.postDelayed({ viewM6UpdateHandler.send(Message.obtain(null, viewPagerM6.currentItem)) }, 50)
+    }
 
     fun stateUpdateAuto(time: Long) {
         Handler().postDelayed({
@@ -1029,12 +1033,6 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 sendMsg.btCmd[5] = 0x01
                                 sendMsg.btCmd[6] = 0x01
                                 sendBtServiceMsg(sendMsg)
-                                for(i in 0 until ViewPagerArray.size) {
-                                    if(ViewPagerArray[i] is FragmentPairSet) {
-                                        viewPagerM6.setCurrentItem(i)
-                                        break
-                                    }
-                                }
                             }
                             else {
                                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
@@ -1052,6 +1050,12 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 sendMsg.btCmd[12] = parseInt(strList[1], 16).toByte()
                                 Logger.d(LogGbl, "bdaddr ${bdaddrTranslate(sendMsg, 7)}")
                                 sendBtServiceMsg(sendMsg)
+                            }
+                            for(i in 0 until ViewPagerArray.size) {
+                                if(ViewPagerArray[i] is FragmentPairSet) {
+                                    viewPagerM6.setCurrentItem(i)
+                                    break
+                                }
                             }
                             viewM6UpdateNest()
 /*
