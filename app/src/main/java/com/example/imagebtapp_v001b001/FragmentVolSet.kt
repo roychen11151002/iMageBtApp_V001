@@ -331,117 +331,151 @@ class FragmentVolSet : Fragment() {
     }
 
     fun updateData() {
-        when(mode) {
-            1 -> {
-                if(srcDevItem == 0) {
-                    seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
-                    seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
-                    seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
+        if(btnVolRead != null) {
+            when (mode) {
+                1 -> {
+                    if (srcDevItem == 0) {
+                        seekSrcAvSpkrVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
+                        seekSrcHfpSpkrVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
+                        seekSrcHfpMicVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
+                    } else {
+                        seekSrcAvSpkrVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireAvSpkrVol
+                        seekSrcHfpSpkrVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpSpkrVol
+                        seekSrcHfpMicVol.progress =
+                            (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpMicVol
+                    }
+                    seekAgAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
+                    seekAgHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
+                    seekAgHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
+                    chkSrcHfpSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x01) == 0x01)
+                            true
+                        else
+                            false
+                    chkSrcAvSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x10) == 0x10)
+                            true
+                        else
+                            false
                 }
-                else {
-                    seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireAvSpkrVol
-                    seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpSpkrVol
-                    seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpMicVol
+                2 -> {
+                    seekSrcAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbAvSpkrVol
+                    seekSrcHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbHfpSpkrVol
+                    seekSrcHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbHfpMicVol
+                    seekAgAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbAvSpkrVol
+                    seekAgHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbHfpSpkrVol
+                    seekAgHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbHfpMicVol
+                    chkSrcHfpSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x02) == 0x02)
+                            true
+                        else
+                            false
+                    chkSrcAvSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x20) == 0x20)
+                            true
+                        else
+                            false
                 }
-                seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
-                seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
-                seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
-                chkSrcHfpSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x01) == 0x01)
-                        true
-                    else
-                        false
-                chkSrcAvSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x10) == 0x10)
-                        true
-                    else
-                        false
+                4 -> {
+                    seekSrcAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtAvSpkrVol
+                    seekSrcHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtHfpSpkrVol
+                    seekSrcHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtHfpMicVol
+                    seekAgAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtAvSpkrVol
+                    seekAgHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtHfpSpkrVol
+                    seekAgHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtHfpMicVol
+                    chkSrcHfpSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x04) == 0x04)
+                            true
+                        else
+                            false
+                    chkSrcAvSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x40) == 0x40)
+                            true
+                        else
+                            false
+                }
+                8 -> {
+                    seekSrcAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsAvSpkrVol
+                    seekSrcHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsHfpSpkrVol
+                    seekSrcHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsHfpMicVol
+                    seekAgAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsAvSpkrVol
+                    seekAgHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsHfpSpkrVol
+                    seekAgHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsHfpMicVol
+                    chkSrcHfpSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x08) == 0x08)
+                            true
+                        else
+                            false
+                    chkSrcAvSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x80) == 0x80)
+                            true
+                        else
+                            false
+                }
+                else -> {
+                    seekSrcAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireAvSpkrVol
+                    seekSrcHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpSpkrVol
+                    seekSrcHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpMicVol
+                    seekAgAvSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
+                    seekAgHfpSpkrVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
+                    seekAgHfpMicVol.progress =
+                        (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
+                    chkSrcHfpSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x01) == 0x01)
+                            true
+                        else
+                            false
+                    chkSrcAvSpkrDecade.isChecked =
+                        if ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x10) == 0x10)
+                            true
+                        else
+                            false
+                }
             }
-            2 -> {
-                seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbAvSpkrVol
-                seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbHfpSpkrVol
-                seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcUsbHfpMicVol
-                seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbAvSpkrVol
-                seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbHfpSpkrVol
-                seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgUsbHfpMicVol
-                chkSrcHfpSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x02) == 0x02)
-                        true
-                    else
-                        false
-                chkSrcAvSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x20) == 0x20)
-                        true
-                    else
-                        false
-            }
-            4 -> {
-                seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtAvSpkrVol
-                seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtHfpSpkrVol
-                seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcBtHfpMicVol
-                seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtAvSpkrVol
-                seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtHfpSpkrVol
-                seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgBtHfpMicVol
-                chkSrcHfpSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x04) == 0x04)
-                        true
-                    else
-                        false
-                chkSrcAvSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x40) == 0x40)
-                        true
-                    else
-                        false
-            }
-            8 -> {
-                seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsAvSpkrVol
-                seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsHfpSpkrVol
-                seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcVcsHfpMicVol
-                seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsAvSpkrVol
-                seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsHfpSpkrVol
-                seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgVcsHfpMicVol
-                chkSrcHfpSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x08) == 0x08)
-                        true
-                    else
-                        false
-                chkSrcAvSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x80) == 0x80)
-                        true
-                    else
-                        false
-            }
-            else -> {
-                seekSrcAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireAvSpkrVol
-                seekSrcHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpSpkrVol
-                seekSrcHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcWireHfpMicVol
-                seekAgAvSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireAvSpkrVol
-                seekAgHfpSpkrVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpSpkrVol
-                seekAgHfpMicVol.progress = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeAgWireHfpMicVol
-                chkSrcHfpSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x01) == 0x01)
-                        true
-                    else
-                        false
-                chkSrcAvSpkrDecade.isChecked =
-                    if((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].modeSrcSpkrDecade.and(0x10) == 0x10)
-                        true
-                    else
-                        false
-            }
-        }
-        when(BtDevUnit.sppStateCon) {
-            0x00.toByte() -> {
-                btnVolWrite.visibility = View.VISIBLE
-                btnVolRead.visibility = View.VISIBLE
-            }
-            0x01.toByte() -> {
-                btnVolWrite.visibility = View.INVISIBLE
-                btnVolRead.visibility = View.INVISIBLE
-            }
-            else -> {
-                btnVolWrite.visibility = View.INVISIBLE
-                btnVolRead.visibility = View.INVISIBLE
+            when (BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    btnVolWrite.visibility = View.VISIBLE
+                    btnVolRead.visibility = View.VISIBLE
+                }
+                0x01.toByte() -> {
+                    btnVolWrite.visibility = View.INVISIBLE
+                    btnVolRead.visibility = View.INVISIBLE
+                }
+                else -> {
+                    btnVolWrite.visibility = View.INVISIBLE
+                    btnVolRead.visibility = View.INVISIBLE
+                }
             }
         }
     }

@@ -651,69 +651,72 @@ class FragmentFeatureSet : Fragment() {
         var feature: Int
         var ledLight: Array<Int>
 
-        if(rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
-            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg
-            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg
-            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterAg
-        }
-        else {
-            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp
-            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp
-            txvFilterBda.text = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp
-        }
+        if(rdGpDevFeature != null) {
+            if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+                feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg
+                ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg
+                txvFilterBda.text =
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterAg
+            } else {
+                feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp
+                ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp
+                txvFilterBda.text =
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp
+            }
 
-        when((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000)) {
-            0x01000000 -> rdModeUsbFeature.isChecked = true
-            0x02000000 -> rdModeBtFeature.isChecked = true
-            0x04000000 -> rdModeVcsFeature.isChecked = true
-            0x08000000 -> rdModeWireFeature.isChecked = true
-        }
-        for(i in 0..15) {
-            chkBox =
-                when(i) {
-                    0 -> chkFeature0
-                    1 -> chkFeature1
-                    2 -> chkFeature2
-                    3 -> chkFeature3
-                    4 -> chkFeature4
-                    5 -> chkFeature5
-                    6 -> chkFeature6
-                    7 -> chkFeature7
-                    8 -> chkFeature8
-                    9 -> chkFeature9
-                    10 -> chkFeature10
-                    11 -> chkFeature11
-                    12 -> chkFeature12
-                    13 -> chkFeature13
-                    14 -> chkFeature14
-                    15 -> chkFeature15
-                    else -> chkFeature0
+            when ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000)) {
+                0x01000000 -> rdModeUsbFeature.isChecked = true
+                0x02000000 -> rdModeBtFeature.isChecked = true
+                0x04000000 -> rdModeVcsFeature.isChecked = true
+                0x08000000 -> rdModeWireFeature.isChecked = true
+            }
+            for (i in 0..15) {
+                chkBox =
+                    when (i) {
+                        0 -> chkFeature0
+                        1 -> chkFeature1
+                        2 -> chkFeature2
+                        3 -> chkFeature3
+                        4 -> chkFeature4
+                        5 -> chkFeature5
+                        6 -> chkFeature6
+                        7 -> chkFeature7
+                        8 -> chkFeature8
+                        9 -> chkFeature9
+                        10 -> chkFeature10
+                        11 -> chkFeature11
+                        12 -> chkFeature12
+                        13 -> chkFeature13
+                        14 -> chkFeature14
+                        15 -> chkFeature15
+                        else -> chkFeature0
+                    }
+                chkBox.isChecked =
+                    if (feature.and(1.shl(i)) == 1.shl(i))
+                        true
+                    else
+                        false
+            }
+            seekLedPwr.progress = ledLight[0]
+            seekLedMfb.progress = ledLight[1]
+            seekLedBcb.progress = ledLight[2]
+            seekLedRev.progress = ledLight[3]
+            when (BtDevUnit.sppStateCon) {
+                0x00.toByte() -> {
+                    btnFeatureWrite.visibility = View.VISIBLE
+                    btnFeatureRead.visibility = View.VISIBLE
+                    btnFeatureDfu.visibility = View.VISIBLE
                 }
-            chkBox.isChecked =
-                if(feature.and(1.shl(i)) == 1.shl(i))
-                    true
-                else
-                    false
-        }
-        seekLedPwr.progress = ledLight[0]
-        seekLedMfb.progress = ledLight[1]
-        seekLedBcb.progress = ledLight[2]
-        seekLedRev.progress = ledLight[3]
-        when(BtDevUnit.sppStateCon) {
-            0x00.toByte() -> {
-                btnFeatureWrite.visibility = View.VISIBLE
-                btnFeatureRead.visibility = View.VISIBLE
-                btnFeatureDfu.visibility = View.VISIBLE
-            }
-            0x01.toByte() -> {
-                btnFeatureWrite.visibility = View.INVISIBLE
-                btnFeatureRead.visibility = View.INVISIBLE
-                btnFeatureDfu.visibility = View.INVISIBLE
-            }
-            else -> {
-                btnFeatureWrite.visibility = View.INVISIBLE
-                btnFeatureRead.visibility = View.INVISIBLE
-                btnFeatureDfu.visibility = View.INVISIBLE
+                0x01.toByte() -> {
+                    btnFeatureWrite.visibility = View.INVISIBLE
+                    btnFeatureRead.visibility = View.INVISIBLE
+                    btnFeatureDfu.visibility = View.INVISIBLE
+                }
+                else -> {
+                    btnFeatureWrite.visibility = View.INVISIBLE
+                    btnFeatureRead.visibility = View.INVISIBLE
+                    btnFeatureDfu.visibility = View.INVISIBLE
+                }
             }
         }
     }

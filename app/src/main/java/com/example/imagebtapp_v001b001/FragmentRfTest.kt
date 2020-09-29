@@ -346,29 +346,30 @@ class FragmentRfTest : Fragment() {
     }
 
     fun updateData() {
-        if (BtDevUnit.sppStateCon == 0x00.toByte()) {
-            btnRfTestSrc.visibility = View.VISIBLE
-            btnRfTestAg0.visibility = View.VISIBLE
-            btnRfTestAg1.visibility = View.VISIBLE
-            btnRfTestAg2.visibility = View.VISIBLE
-            btnRfTestHfp0.visibility = View.VISIBLE
-            btnRfTestHfp1.visibility = View.VISIBLE
-            btnRfTestHfp2.visibility = View.VISIBLE
-            btnRfTestHfp3.visibility = View.VISIBLE
-            btnRfTestHfp4.visibility = View.VISIBLE
-            btnRfTestHfp5.visibility = View.VISIBLE
-        }
-        else {
-            btnRfTestSrc.visibility = View.INVISIBLE
-            btnRfTestAg0.visibility = View.INVISIBLE
-            btnRfTestAg1.visibility = View.INVISIBLE
-            btnRfTestAg2.visibility = View.INVISIBLE
-            btnRfTestHfp0.visibility = View.INVISIBLE
-            btnRfTestHfp1.visibility = View.INVISIBLE
-            btnRfTestHfp2.visibility = View.INVISIBLE
-            btnRfTestHfp3.visibility = View.INVISIBLE
-            btnRfTestHfp4.visibility = View.INVISIBLE
-            btnRfTestHfp5.visibility = View.INVISIBLE
+        if(rdGpRfTestFreq != null) {
+            if (BtDevUnit.sppStateCon == 0x00.toByte()) {
+                btnRfTestSrc.visibility = View.VISIBLE
+                btnRfTestAg0.visibility = View.VISIBLE
+                btnRfTestAg1.visibility = View.VISIBLE
+                btnRfTestAg2.visibility = View.VISIBLE
+                btnRfTestHfp0.visibility = View.VISIBLE
+                btnRfTestHfp1.visibility = View.VISIBLE
+                btnRfTestHfp2.visibility = View.VISIBLE
+                btnRfTestHfp3.visibility = View.VISIBLE
+                btnRfTestHfp4.visibility = View.VISIBLE
+                btnRfTestHfp5.visibility = View.VISIBLE
+            } else {
+                btnRfTestSrc.visibility = View.INVISIBLE
+                btnRfTestAg0.visibility = View.INVISIBLE
+                btnRfTestAg1.visibility = View.INVISIBLE
+                btnRfTestAg2.visibility = View.INVISIBLE
+                btnRfTestHfp0.visibility = View.INVISIBLE
+                btnRfTestHfp1.visibility = View.INVISIBLE
+                btnRfTestHfp2.visibility = View.INVISIBLE
+                btnRfTestHfp3.visibility = View.INVISIBLE
+                btnRfTestHfp4.visibility = View.INVISIBLE
+                btnRfTestHfp5.visibility = View.INVISIBLE
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ class FragmentPairSet : Fragment() {
 
             /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
             (activity as DevUnitMsg).getBtList().add("clear paired device + 00:00:00:00:00:00") */
-            recyclerListPair.layoutManager!!.scrollToPosition(0)
+            recyclerListPair.layoutManager?.scrollToPosition(0)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -55,7 +55,7 @@ class FragmentPairSet : Fragment() {
             /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList()) */
             when(BtDevUnit.PairState) {
                 0x00 -> {
-                    recyclerListPair.layoutManager!!.scrollToPosition(0)
+                    recyclerListPair.layoutManager?.scrollToPosition(0)
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -166,36 +166,6 @@ class FragmentPairSet : Fragment() {
         updateData()
     }
 
-    fun updateData() {
-        recyclerListPair.adapter!!.notifyDataSetChanged()
-        txvPairTitle.text =
-            when(BtDevUnit.PairState) {
-                0 -> {
-                    btnPair.isEnabled = true
-                    btnDiscovery.isEnabled = true
-                    context!!.resources.getString(R.string.txvStaDiscoveryEnd)
-                }
-                1 -> {
-                    btnPair.isEnabled = false
-                    context!!.resources.getString(R.string.txvStaDiscovey)
-                }
-                2 -> {
-                    btnPair.isEnabled = false
-                    context!!.resources.getString(R.string.txvStaDiscoveryStart)
-                }
-                3 -> {
-                    btnPair.isEnabled = false
-                    btnDiscovery.isEnabled = false
-                    context!!.resources.getString(R.string.txvStaPaired)
-                }
-                else -> {
-                    btnPair.isEnabled = true
-                    btnDiscovery.isEnabled = true
-                    context!!.resources.getString(R.string.txvPairTitle)
-                }
-        }
-    }
-
     fun getDevId(dev: Int): Byte =
         when(dev) {
             0 -> 0x30
@@ -207,4 +177,34 @@ class FragmentPairSet : Fragment() {
             6 -> 0x28
             else -> 0xff.toByte()
         }
+
+    fun updateData() {
+        recyclerListPair?.adapter?.notifyDataSetChanged()
+        txvPairTitle?.text =
+            when(BtDevUnit.PairState) {
+                0 -> {
+                    btnPair.isEnabled = true
+                    btnDiscovery.isEnabled = true
+                    context?.resources?.getString(R.string.txvStaDiscoveryEnd)
+                }
+                1 -> {
+                    btnPair.isEnabled = false
+                    context?.resources?.getString(R.string.txvStaDiscovey)
+                }
+                2 -> {
+                    btnPair.isEnabled = false
+                    context?.resources?.getString(R.string.txvStaDiscoveryStart)
+                }
+                3 -> {
+                    btnPair.isEnabled = false
+                    btnDiscovery.isEnabled = false
+                    context?.resources?.getString(R.string.txvStaPaired)
+                }
+                else -> {
+                    btnPair.isEnabled = true
+                    btnDiscovery.isEnabled = true
+                    context?.resources?.getString(R.string.txvPairTitle)
+                }
+        }
+    }
 }

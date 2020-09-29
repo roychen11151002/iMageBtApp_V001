@@ -338,7 +338,7 @@ class FragmentConState : Fragment() {
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode) {
             100 -> {
@@ -410,15 +410,15 @@ class FragmentConState : Fragment() {
         }
 
     fun updateData() {
-        recyclerDevList.adapter!!.notifyDataSetChanged()
-        recyclerDevList.visibility =
-            when(BtDevUnit.sppStateCon) {
+        recyclerDevList?.adapter?.notifyDataSetChanged()    // if not null
+        recyclerDevList?.visibility =
+            when (BtDevUnit.sppStateCon) {
                 0x00.toByte() -> {
-                     VISIBLE
+                    VISIBLE
                 }
                 0x01.toByte() -> {
                     INVISIBLE
-               }
+                }
                 else -> {
                     INVISIBLE
                 }

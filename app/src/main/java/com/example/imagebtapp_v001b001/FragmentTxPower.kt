@@ -37,7 +37,7 @@ class FragmentTxPower : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 txPowerSrc = progress * 4 - 20
                 (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp = txPowerSrc
-                txvDistanceSrc.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceSrc), txPowerSrc)
+                txvDistanceSrc.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceSrc), txPowerSrc)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -51,7 +51,7 @@ class FragmentTxPower : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 txPowerAg0 = progress * 4 - 20
                 (activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg = txPowerAg0
-                txvDistanceAg0.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg0), txPowerAg0)
+                txvDistanceAg0.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg0), txPowerAg0)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -65,7 +65,7 @@ class FragmentTxPower : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 txPowerAg1 = progress * 4 - 20
                 (activity as DevUnitMsg).getBtDevUnitList()[3].txPowerAg = txPowerAg1
-                txvDistanceAg1.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg1), txPowerAg1)
+                txvDistanceAg1.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg1), txPowerAg1)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -79,7 +79,7 @@ class FragmentTxPower : Fragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 txPowerAg2 = progress * 4 - 20
                 (activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg = txPowerAg2
-                txvDistanceAg2.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg2), txPowerAg2)
+                txvDistanceAg2.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg2), txPowerAg2)
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
@@ -234,19 +234,19 @@ class FragmentTxPower : Fragment() {
     }
 
     fun updateData() {
-        when ((activity as DevUnitMsg).getDevType(0)) {
+        when ((activity as DevUnitMsg?)?.getDevType(0)) {
             "M6_SRC" -> {
                 seekTxPowerSrc.progress = ((activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp + 20) / 4
-                txvDistanceSrc.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceSrc), (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp)
+                txvDistanceSrc.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceSrc), (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp)
                 Logger.d(LogGbl, "txPower SRC ${(activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp}")
                 seekTxPowerAg0.progress = ((activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg + 20) / 4
-                txvDistanceAg0.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg0), (activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg)
+                txvDistanceAg0.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg0), (activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg)
                 Logger.d(LogGbl, "txPower AG0 ${(activity as DevUnitMsg).getBtDevUnitList()[1].txPowerAg}")
                 seekTxPowerAg1.progress = ((activity as DevUnitMsg).getBtDevUnitList()[3].txPowerAg + 20) / 4
-                txvDistanceAg1.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg1), (activity as DevUnitMsg).getBtDevUnitList()[3].txPowerAg)
+                txvDistanceAg1.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg1), (activity as DevUnitMsg).getBtDevUnitList()[3].txPowerAg)
                 Logger.d(LogGbl, "txPower AG1 ${(activity as DevUnitMsg).getBtDevUnitList()[3].txPowerAg}")
                 seekTxPowerAg2.progress = ((activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg + 20) / 4
-                txvDistanceAg2.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceAg2), (activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg)
+                txvDistanceAg2.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceAg2), (activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg)
                 Logger.d(LogGbl, "txPower AG2 ${(activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg}")
                 if (BtDevUnit.sppStateCon == 0x00.toByte()) {
                     btnTxPwrRead.visibility = View.VISIBLE
@@ -273,7 +273,7 @@ class FragmentTxPower : Fragment() {
             }
             "DG_BT", "VC_BT" -> {
                 seekTxPowerSrc.progress = ((activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp + 20) / 4
-                txvDistanceSrc.text = String.format("%s(%d)", context!!.resources.getString(R.string.txvDistanceSrc), (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp)
+                txvDistanceSrc.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceSrc), (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp)
                 Logger.d(LogGbl, "txPower SRC ${(activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp}")
                 if (BtDevUnit.sppStateCon == 0x00.toByte()) {
                     btnTxPwrRead.visibility = View.VISIBLE
@@ -293,15 +293,15 @@ class FragmentTxPower : Fragment() {
                 seekTxPowerAg2.visibility = View.INVISIBLE
             }
             else -> {
-                btnTxPwrRead.visibility = View.INVISIBLE
-                btnTxPwrWriteSrc.visibility = View.INVISIBLE
-                btnTxPwrWriteAg0.visibility = View.INVISIBLE
-                btnTxPwrWriteAg1.visibility = View.INVISIBLE
-                btnTxPwrWriteAg2.visibility = View.INVISIBLE
-                seekTxPowerSrc.visibility = View.INVISIBLE
-                seekTxPowerAg0.visibility = View.INVISIBLE
-                seekTxPowerAg1.visibility = View.INVISIBLE
-                seekTxPowerAg2.visibility = View.INVISIBLE
+                btnTxPwrRead?.visibility = View.INVISIBLE
+                btnTxPwrWriteSrc?.visibility = View.INVISIBLE
+                btnTxPwrWriteAg0?.visibility = View.INVISIBLE
+                btnTxPwrWriteAg1?.visibility = View.INVISIBLE
+                btnTxPwrWriteAg2?.visibility = View.INVISIBLE
+                seekTxPowerSrc?.visibility = View.INVISIBLE
+                seekTxPowerAg0?.visibility = View.INVISIBLE
+                seekTxPowerAg1?.visibility = View.INVISIBLE
+                seekTxPowerAg2?.visibility = View.INVISIBLE
             }
         }
     }
