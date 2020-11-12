@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import kotlin.experimental.or
 class FragmentConState : Fragment() {
     private val DevIconImage = 101
     private var positionEdit = 0
+    private var isFragmentReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,7 @@ class FragmentConState : Fragment() {
         val lmg = GridLayoutManager(context, 2)
 
         Logger.d(LogGbl, "FragmentConState on Activity created")
+        isFragmentReady = true
         lmg.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 if(position == 0)
@@ -85,7 +88,7 @@ class FragmentConState : Fragment() {
                                     String.format("${resources.getStringArray(R.array.txvMessageName)[6]} ${btDevUnit.bdaddrPair}")
                                 )
                         }
-                        "A6", "A7" -> {
+                        "A6_BT", "A7_BT" -> {
                             if (position == 0)
                                 arrayOf(
                                     String.format("${resources.getStringArray(R.array.txvMessageName)[0]} ${btDevUnit.nameAlias}"),
@@ -162,6 +165,7 @@ class FragmentConState : Fragment() {
                 if(fromUser) {
                     val sendMsg = BtDevMsg(0, 0)
 
+                    (activity as DevUnitMsg).setVibrator(200)
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -179,6 +183,7 @@ class FragmentConState : Fragment() {
             override fun onSpkrMute(position: Int, mute: Boolean) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -198,6 +203,7 @@ class FragmentConState : Fragment() {
             override fun onLongSpkrMute(position: Int, mute: Boolean) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 if (position == 0) {
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -233,6 +239,7 @@ class FragmentConState : Fragment() {
             override fun onMicMute(position: Int, mute: Boolean) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -251,6 +258,7 @@ class FragmentConState : Fragment() {
             override fun onLongMicMute(position: Int, mute: Boolean) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 if (position == 0) {
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -287,6 +295,7 @@ class FragmentConState : Fragment() {
             override fun onTalk(position: Int) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 if((activity as DevUnitMsg).getBtDevUnitList()[position].stateCon.and(0x00000220) == 0x00000220) {
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -324,6 +333,7 @@ class FragmentConState : Fragment() {
             override fun onLongTalk(position: Int) {
                 val sendMsg = BtDevMsg(0, 0)
 
+                (activity as DevUnitMsg).setVibrator(200)
                 sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                 sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                 sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -336,6 +346,13 @@ class FragmentConState : Fragment() {
                 Logger.d(LogGbl, "talk long click id:$position")
             }
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Logger.d(LogGbl, "FragmentConState on Pause")
+        isFragmentReady = false
     }
 
    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -410,8 +427,14 @@ class FragmentConState : Fragment() {
         }
 
     fun updateData() {
-        recyclerDevList?.adapter?.notifyDataSetChanged()    // if not null
-        recyclerDevList?.visibility =
+        if(isFragmentReady == false) {
+            Handler().postDelayed({updateData()}, 100)
+            Logger.d(LogGbl, "fragment not ready")
+            return
+        }
+
+        recyclerDevList.adapter?.notifyDataSetChanged()    // if not null do
+        recyclerDevList.visibility =
             when (BtDevUnit.sppStateCon) {
                 0x00.toByte() -> {
                     VISIBLE

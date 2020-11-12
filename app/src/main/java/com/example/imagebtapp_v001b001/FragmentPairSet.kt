@@ -12,6 +12,8 @@ import kotlinx.android.synthetic.main.fragment_pair_set.*
 import java.lang.Integer.parseInt
 
 class FragmentPairSet : Fragment() {
+    private var isFragmentReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d(LogGbl, "FragmentConState on Create")
@@ -29,6 +31,7 @@ class FragmentPairSet : Fragment() {
         super.onActivityCreated(savedInstanceState)
         val recyclerListAdapter = BtListAdapter(BtDevUnit.BtList)
 
+        isFragmentReady = true
         recyclerListPair.layoutManager = LinearLayoutManager(context)
         recyclerListPair.adapter = recyclerListAdapter
         recyclerListPair.addItemDecoration(SpaceItemDecoration(4))
@@ -36,6 +39,7 @@ class FragmentPairSet : Fragment() {
         btnPair.setOnClickListener{
             val sendMsg = BtDevMsg(0, 1)
 
+            (activity as DevUnitMsg).setVibrator(200)
             /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList())
             (activity as DevUnitMsg).getBtList().add("clear paired device + 00:00:00:00:00:00") */
             recyclerListPair.layoutManager?.scrollToPosition(0)
@@ -52,6 +56,7 @@ class FragmentPairSet : Fragment() {
         btnDiscovery.setOnClickListener {
             val sendMsg = BtDevMsg(0, 1)
 
+            (activity as DevUnitMsg).setVibrator(200)
             /* (activity as DevUnitMsg).getBtList().removeAll((activity as DevUnitMsg).getBtList()) */
             when(BtDevUnit.PairState) {
                 0x00 -> {
@@ -104,6 +109,7 @@ class FragmentPairSet : Fragment() {
 
                 AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevPair)).setItems(listItem) {
                     _, which ->
+                    (activity as DevUnitMsg).setVibrator(200)
                     sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
                     sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
                     sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -166,6 +172,13 @@ class FragmentPairSet : Fragment() {
         updateData()
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        Logger.d(LogGbl, "FragmentConState on Pause")
+        isFragmentReady = false
+    }
+
     fun getDevId(dev: Int): Byte =
         when(dev) {
             0 -> 0x30
@@ -179,8 +192,14 @@ class FragmentPairSet : Fragment() {
         }
 
     fun updateData() {
-        recyclerListPair?.adapter?.notifyDataSetChanged()
-        txvPairTitle?.text =
+        if(isFragmentReady == false) {
+            Handler().postDelayed({updateData()}, 100)
+            Logger.d(LogGbl, "fragment not ready")
+            return
+        }
+
+        recyclerListPair.adapter?.notifyDataSetChanged()
+        txvPairTitle.text =
             when(BtDevUnit.PairState) {
                 0 -> {
                     btnPair.isEnabled = true

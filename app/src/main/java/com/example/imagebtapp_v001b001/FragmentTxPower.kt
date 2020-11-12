@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_tx_power.*
 
 class FragmentTxPower : Fragment() {
+    private var isFragmentReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d(LogGbl, "FragmentTxPower on Create")
@@ -26,13 +28,12 @@ class FragmentTxPower : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        var rfTestTime = (3 + 1).shl(2)
-        var rfTestMode: Byte = 0x02
         var txPowerSrc = 0
         var txPowerAg0 = 0
         var txPowerAg1 = 0
         var txPowerAg2 = 0
 
+        isFragmentReady = true
         seekTxPowerSrc.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 txPowerSrc = progress * 4 - 20
@@ -92,6 +93,7 @@ class FragmentTxPower : Fragment() {
         btnTxPwrWriteAll.setOnClickListener {
             val sendMsgSrc = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -145,6 +147,7 @@ class FragmentTxPower : Fragment() {
         btnTxPwrWriteSrc.setOnClickListener {
             val sendMsgSrc = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -161,6 +164,7 @@ class FragmentTxPower : Fragment() {
             val sendMsgSrc = BtDevMsg(0, 0)
             val sendMsgAg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value               // set AG ID
             sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -186,6 +190,7 @@ class FragmentTxPower : Fragment() {
             val sendMsgSrc = BtDevMsg(0, 0)
             val sendMsgAg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -211,6 +216,7 @@ class FragmentTxPower : Fragment() {
             val sendMsgSrc = BtDevMsg(0, 0)
             val sendMsgAg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -231,10 +237,49 @@ class FragmentTxPower : Fragment() {
             (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
             (activity as DevUnitMsg).getBtDevUnitList()[5].txPowerAg = txPowerAg2
         }
+
+        btnTxPwrRead.setOnClickListener {
+            val sendMsgSrc = BtDevMsg(0, 0)
+            val sendMsgAg = BtDevMsg(0, 0)
+
+            (activity as DevUnitMsg).setVibrator(200)
+            sendMsgSrc.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsgSrc.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsgSrc.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsgSrc.btCmd[3] = CmdId.CMD_DEV_SRC.value
+            sendMsgSrc.btCmd[4] = CmdId.GET_HFP_PSKEY_REQ.value
+            sendMsgSrc.btCmd[5] = 0x02
+            sendMsgSrc.btCmd[6] = 0x00
+            sendMsgSrc.btCmd[7] = 0x0a
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgSrc)
+
+            sendMsgAg.btCmd[0] = CmdId.CMD_HEAD_FF.value
+            sendMsgAg.btCmd[1] = CmdId.CMD_HEAD_55.value
+            sendMsgAg.btCmd[2] = CmdId.CMD_DEV_HOST.value
+            sendMsgAg.btCmd[3] = CmdId.CMD_DEV_AG_ALL.value
+            sendMsgAg.btCmd[4] = CmdId.GET_AG_PSKEY_REQ.value
+            sendMsgAg.btCmd[5] = 0x02
+            sendMsgAg.btCmd[6] = 0x00
+            sendMsgAg.btCmd[7] = 0x0a
+            (activity as DevUnitMsg).sendBtServiceMsg(sendMsgAg)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Logger.d(LogGbl, "FragmentConState on Pause")
+        isFragmentReady = false
     }
 
     fun updateData() {
-        when ((activity as DevUnitMsg?)?.getDevType(0)) {
+        if(isFragmentReady == false) {
+            Handler().postDelayed({updateData()}, 100)
+            Logger.d(LogGbl, "fragment not ready")
+            return
+        }
+
+        when ((activity as DevUnitMsg).getDevType(0)) {
             "M6_SRC" -> {
                 seekTxPowerSrc.progress = ((activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp + 20) / 4
                 txvDistanceSrc.text = String.format("%s(%d)", context?.resources?.getString(R.string.txvDistanceSrc), (activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp)
@@ -254,6 +299,7 @@ class FragmentTxPower : Fragment() {
                     btnTxPwrWriteAg0.visibility = View.VISIBLE
                     btnTxPwrWriteAg1.visibility = View.VISIBLE
                     btnTxPwrWriteAg2.visibility = View.VISIBLE
+                    btnTxPwrWriteAll.visibility = View.VISIBLE
                     seekTxPowerSrc.visibility = View.VISIBLE
                     seekTxPowerAg0.visibility = View.VISIBLE
                     seekTxPowerAg1.visibility = View.VISIBLE
@@ -265,6 +311,7 @@ class FragmentTxPower : Fragment() {
                     btnTxPwrWriteAg0.visibility = View.INVISIBLE
                     btnTxPwrWriteAg1.visibility = View.INVISIBLE
                     btnTxPwrWriteAg2.visibility = View.INVISIBLE
+                    btnTxPwrWriteAll.visibility = View.INVISIBLE
                     seekTxPowerSrc.visibility = View.INVISIBLE
                     seekTxPowerAg0.visibility = View.INVISIBLE
                     seekTxPowerAg1.visibility = View.INVISIBLE
@@ -288,6 +335,7 @@ class FragmentTxPower : Fragment() {
                 btnTxPwrWriteAg0.visibility = View.INVISIBLE
                 btnTxPwrWriteAg1.visibility = View.INVISIBLE
                 btnTxPwrWriteAg2.visibility = View.INVISIBLE
+                btnTxPwrWriteAll.visibility = View.INVISIBLE
                 seekTxPowerAg0.visibility = View.INVISIBLE
                 seekTxPowerAg1.visibility = View.INVISIBLE
                 seekTxPowerAg2.visibility = View.INVISIBLE
@@ -298,6 +346,7 @@ class FragmentTxPower : Fragment() {
                 btnTxPwrWriteAg0?.visibility = View.INVISIBLE
                 btnTxPwrWriteAg1?.visibility = View.INVISIBLE
                 btnTxPwrWriteAg2?.visibility = View.INVISIBLE
+                btnTxPwrWriteAll?.visibility = View.INVISIBLE
                 seekTxPowerSrc?.visibility = View.INVISIBLE
                 seekTxPowerAg0?.visibility = View.INVISIBLE
                 seekTxPowerAg1?.visibility = View.INVISIBLE

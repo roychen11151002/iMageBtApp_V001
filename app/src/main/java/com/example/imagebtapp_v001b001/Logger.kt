@@ -2,7 +2,6 @@ package com.example.imagebtapp_v001b001
 
 import android.util.Log
 
-
 object Logger {
     private val DEBUG_ON = BuildConfig.DEBUG_ON
     private val VERBOSE_TAG = BuildConfig.VERBOSE_TAG

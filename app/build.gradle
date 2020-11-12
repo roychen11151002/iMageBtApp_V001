@@ -20,16 +20,39 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            buildConfigField("Boolean", "DEBUG_ON", "false")
-            buildConfigField("Boolean", "VERBOSE_TAG", "false")
+            buildConfigField("boolean", "DEBUG_ON", "false")
+            buildConfigField("boolean", "VERBOSE_TAG", "false")
         }
         debug {
-            buildConfigField("Boolean", "DEBUG_ON", "true")
-            buildConfigField("Boolean", "VERBOSE_TAG", "true")
+            buildConfigField("boolean", "DEBUG_ON", "true")
+            buildConfigField("boolean", "VERBOSE_TAG", "true")
         }
     }
 
-// To inline the bytecode built with JVM target 1.8 into
+    flavorDimensions "product", "version"
+    productFlavors {
+        rd {
+            dimension "product"
+
+            buildConfigField("int", "VERSION_APP", "0")
+        }
+        fae {
+            dimension "product"
+
+            buildConfigField("int", "VERSION_APP", "1")
+        }
+        user {
+            dimension "product"
+
+            buildConfigField("int", "VERSION_APP", "2")
+        }
+        v1 {
+            dimension "version"
+        }
+        v2 {
+            dimension "version"
+        }
+    }// To inline the bytecode built with JVM target 1.8 into
 // bytecode that is being built with JVM target 1.6. (e.g. navArgs)
 
 

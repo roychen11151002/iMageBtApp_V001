@@ -240,4 +240,22 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/btnAudioParaUsbVolMax"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/txvUsbVolMax"
+        app:layout_constraintEnd_toStartOf="@+id/btnAudioParaWrite"
+        app:layout_constraintStart_toEndOf="@+id/btnAudioParaUsbVolSync"
+        app:layout_constraintTop_toTopOf="@+id/btnAudioParaWrite" />
+
+    <Button
+        android:id="@+id/btnAudioParaUsbVolSync"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/txvUsbVolSync"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnAudioParaWrite" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

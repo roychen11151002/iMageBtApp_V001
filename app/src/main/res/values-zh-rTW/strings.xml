@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">圖像M6 APP</string>
+    <string name="app_name">iMage M6</string>
     <string name="txvStaDisable">藍牙關閉</string>
     <string name="btnUpdate">更新裝置</string>
     <string name="btnCon">連接裝置</string>
@@ -48,7 +48,7 @@
     <string name="txvFeature7">開啟音樂模式</string>
     <string name="txvFeature9">開啟I2S輸入</string>
     <string name="txvFeature8">關閉過濾裝置</string>
-    <string name="txvFeatureA">" "</string>
+    <string name="txvFeatureA">"開啟裝置自動開機 "</string>
     <string name="txvFeatureB">" "</string>
     <string name="txvFeatureC">" "</string>
     <string name="txvFeatureD">開啟iOS控制</string>
@@ -73,7 +73,7 @@
     <string name="txvAudioParameter0">通用</string>
     <string name="txvAudioParameter1">通用 AGC</string>
     <string name="txvAudioParameter2">Room Kit</string>
-    <string name="txvAudioParameter3">音效參數3</string>
+    <string name="txvAudioParameter3">通用 AGC_1</string>
     <string name="txvAudioParameter4">音效參數4</string>
     <string name="txvAudioParameter5">音效參數5</string>
     <string name="txvAudioParameter6">音效參數6</string>
@@ -91,6 +91,8 @@
     <string name="txvDistanceAg0">通訊距離 AG0</string>
     <string name="txvDistanceAg1">通訊距離 AG1</string>
     <string name="txvDistanceAg2">通訊距離 AG2</string>
+    <string name="txvUsbVolSync">音量同步</string>
+    <string name="txvUsbVolMax">音量最大</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.0</item>

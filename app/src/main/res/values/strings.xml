@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">iMage M6 APP</string>
+    <string name="app_name">iMage M6</string>
     <string name="btnUpdate">Update</string>
     <string name="btnCon">BT Con</string>
     <string name="btnPair">Pair</string>
@@ -53,7 +53,7 @@
     <string name="txvFeature7">Enable Music Mode</string>
     <string name="txvFeature8">Disable Filter BDA</string>
     <string name="txvFeature9">Enable I2S Input</string>
-    <string name="txvFeatureA">10</string>
+    <string name="txvFeatureA">Enable Auto Power On</string>
     <string name="txvFeatureB">11</string>
     <string name="txvFeatureC">12</string>
     <string name="txvFeatureD">Enable BLE</string>
@@ -73,7 +73,7 @@
     <string name="txvAudioParameter0">General</string>
     <string name="txvAudioParameter1">General AGC</string>
     <string name="txvAudioParameter2">Room Kit</string>
-    <string name="txvAudioParameter3">audio parameter 3</string>
+    <string name="txvAudioParameter3">General AGC_1</string>
     <string name="txvAudioParameter4">audio parameter 4</string>
     <string name="txvAudioParameter5">audio parameter 5</string>
     <string name="txvAudioParameter6">audio parameter 6</string>
@@ -101,6 +101,8 @@
     <string name="txvFunDefult">Set Device Function Default</string>
     <string name="txvOk">OK</string>
     <string name="txvCancel">CANCEL</string>
+    <string name="txvUsbVolSync">Vol Sync</string>
+    <string name="txvUsbVolMax">Vol Max</string>
     <string-array name="txvDevName">
         <item name="0">M6 / VC adapter / Dongle</item>
         <item name="1">A6 / A7 NO.0</item>

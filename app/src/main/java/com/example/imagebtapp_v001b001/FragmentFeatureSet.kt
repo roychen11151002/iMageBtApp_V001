@@ -12,7 +12,9 @@ import android.widget.SeekBar
 import kotlinx.android.synthetic.main.fragment_feature_set.*
 
 class FragmentFeatureSet : Fragment() {
-    var srcDevItem = 0
+    private var srcDevItem = 0
+    private var isFragmentReady = false
+    private var isCheckReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +38,8 @@ class FragmentFeatureSet : Fragment() {
             else
                 View.GONE
  */
+        isFragmentReady = true
+        updateData()
         if((activity as DevUnitMsg).getBtDevUnitList().size == 1) {
             rdAgAllFeature.isEnabled = false
             rdHfpAllFeature.isEnabled = false
@@ -49,6 +53,7 @@ class FragmentFeatureSet : Fragment() {
             val sendMsg = BtDevMsg(0, 0)
             val sendMsgMode = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             deviceItemGet()
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
@@ -98,6 +103,7 @@ class FragmentFeatureSet : Fragment() {
             val sendMsg = BtDevMsg(0, 0)
             val strList = BtDevUnit.featureBdaddrFilter.split(':')
 
+            (activity as DevUnitMsg).setVibrator(200)
             deviceItemGet()
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000.inv())
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode =
@@ -505,52 +511,68 @@ class FragmentFeatureSet : Fragment() {
         }
 
         chkFeature0.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature1.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature2.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature3.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature4.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature5.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature6.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature7.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature8.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature9.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature10.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature11.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature12.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature13.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature14.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         chkFeature15.setOnCheckedChangeListener { buttonView, isChecked ->
-            checkUpdate(buttonView, isChecked)
+            if(isCheckReady == true)
+                checkUpdate(buttonView, isChecked)
         }
         seekLedPwr.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
@@ -558,6 +580,12 @@ class FragmentFeatureSet : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                deviceItemGet()
+                if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg[0] = seekLedPwr.progress
+                } else {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp[0] = seekLedPwr.progress
+                }
             }
         })
         seekLedMfb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -566,6 +594,12 @@ class FragmentFeatureSet : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                deviceItemGet()
+                if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg[1] = seekLedMfb.progress
+                } else {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp[1] = seekLedMfb.progress
+                }
             }
         })
         seekLedBcb.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -574,6 +608,12 @@ class FragmentFeatureSet : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                deviceItemGet()
+                if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg[2] = seekLedBcb.progress
+                } else {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp[2] = seekLedBcb.progress
+                }
             }
         })
         seekLedRev.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -582,9 +622,23 @@ class FragmentFeatureSet : Fragment() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) {
             }
             override fun onStopTrackingTouch(seekBar: SeekBar?) {
+                deviceItemGet()
+                if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg[3] = seekLedRev.progress
+                } else {
+                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp[3] = seekLedRev.progress
+                }
             }
         })
         updateData()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        Logger.d(LogGbl, "FragmentConState on Pause")
+        isFragmentReady = false
+        isCheckReady = false
     }
 
     fun deviceItemGet() {
@@ -628,6 +682,7 @@ class FragmentFeatureSet : Fragment() {
                 R.id.chkFeature15 -> 15
                 else -> 16
             }
+
         if(rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
             (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg =
                 if (isChecked)
@@ -651,72 +706,77 @@ class FragmentFeatureSet : Fragment() {
         var feature: Int
         var ledLight: Array<Int>
 
-        if(rdGpDevFeature != null) {
-            if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
-                feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg
-                ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg
-                txvFilterBda.text =
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterAg
-            } else {
-                feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp
-                ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp
-                txvFilterBda.text =
-                    (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp
-            }
+        if(isFragmentReady == false) {
+            Handler().postDelayed({updateData()}, 100)
+            Logger.d(LogGbl, "fragment not ready")
+            return
+        }
 
-            when ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000)) {
-                0x01000000 -> rdModeUsbFeature.isChecked = true
-                0x02000000 -> rdModeBtFeature.isChecked = true
-                0x04000000 -> rdModeVcsFeature.isChecked = true
-                0x08000000 -> rdModeWireFeature.isChecked = true
+        Handler().postDelayed({ isCheckReady = true}, 200)
+        if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
+            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg
+            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightAg
+            txvFilterBda.text =
+                (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterAg
+        } else {
+            feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureHfp
+            ledLight = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].ledLightHfp
+            txvFilterBda.text =
+                (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].bdaddrFilterHfp
+        }
+
+        when ((activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureMode.and(0x0f000000)) {
+            0x01000000 -> rdModeUsbFeature.isChecked = true
+            0x02000000 -> rdModeBtFeature.isChecked = true
+            0x04000000 -> rdModeVcsFeature.isChecked = true
+            0x08000000 -> rdModeWireFeature.isChecked = true
+        }
+        for (i in 0..15) {
+            chkBox =
+                when (i) {
+                    0 -> chkFeature0
+                    1 -> chkFeature1
+                    2 -> chkFeature2
+                    3 -> chkFeature3
+                    4 -> chkFeature4
+                    5 -> chkFeature5
+                    6 -> chkFeature6
+                    7 -> chkFeature7
+                    8 -> chkFeature8
+                    9 -> chkFeature9
+                    10 -> chkFeature10
+                    11 -> chkFeature11
+                    12 -> chkFeature12
+                    13 -> chkFeature13
+                    14 -> chkFeature14
+                    15 -> chkFeature15
+                    else -> chkFeature0
+                }
+            chkBox.isChecked =
+                if (feature.and(1.shl(i)) == 1.shl(i))
+                    true
+                else
+                    false
+        }
+        seekLedPwr.progress = ledLight[0]
+        seekLedMfb.progress = ledLight[1]
+        seekLedBcb.progress = ledLight[2]
+        seekLedRev.progress = ledLight[3]
+        when (BtDevUnit.sppStateCon) {
+            0x00.toByte() -> {
+                btnFeatureWrite.visibility = View.VISIBLE
+                btnFeatureRead.visibility = View.VISIBLE
+                btnFeatureDfu.visibility = View.VISIBLE
             }
-            for (i in 0..15) {
-                chkBox =
-                    when (i) {
-                        0 -> chkFeature0
-                        1 -> chkFeature1
-                        2 -> chkFeature2
-                        3 -> chkFeature3
-                        4 -> chkFeature4
-                        5 -> chkFeature5
-                        6 -> chkFeature6
-                        7 -> chkFeature7
-                        8 -> chkFeature8
-                        9 -> chkFeature9
-                        10 -> chkFeature10
-                        11 -> chkFeature11
-                        12 -> chkFeature12
-                        13 -> chkFeature13
-                        14 -> chkFeature14
-                        15 -> chkFeature15
-                        else -> chkFeature0
-                    }
-                chkBox.isChecked =
-                    if (feature.and(1.shl(i)) == 1.shl(i))
-                        true
-                    else
-                        false
+            0x01.toByte() -> {
+                btnFeatureWrite.visibility = View.INVISIBLE
+                btnFeatureRead.visibility = View.INVISIBLE
+                btnFeatureDfu.visibility = View.INVISIBLE
             }
-            seekLedPwr.progress = ledLight[0]
-            seekLedMfb.progress = ledLight[1]
-            seekLedBcb.progress = ledLight[2]
-            seekLedRev.progress = ledLight[3]
-            when (BtDevUnit.sppStateCon) {
-                0x00.toByte() -> {
-                    btnFeatureWrite.visibility = View.VISIBLE
-                    btnFeatureRead.visibility = View.VISIBLE
-                    btnFeatureDfu.visibility = View.VISIBLE
-                }
-                0x01.toByte() -> {
-                    btnFeatureWrite.visibility = View.INVISIBLE
-                    btnFeatureRead.visibility = View.INVISIBLE
-                    btnFeatureDfu.visibility = View.INVISIBLE
-                }
-                else -> {
-                    btnFeatureWrite.visibility = View.INVISIBLE
-                    btnFeatureRead.visibility = View.INVISIBLE
-                    btnFeatureDfu.visibility = View.INVISIBLE
-                }
+            else -> {
+                btnFeatureWrite.visibility = View.INVISIBLE
+                btnFeatureRead.visibility = View.INVISIBLE
+                btnFeatureDfu.visibility = View.INVISIBLE
             }
         }
     }

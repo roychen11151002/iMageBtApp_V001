@@ -1,6 +1,7 @@
 package com.example.imagebtapp_v001b001
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import kotlinx.android.synthetic.main.fragment_rf_test.*
 import kotlin.experimental.or
 
 class FragmentRfTest : Fragment() {
+    private var isFragmentReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Logger.d(LogGbl, "FragmentRfTest on Create")
@@ -28,8 +31,8 @@ class FragmentRfTest : Fragment() {
         super.onActivityCreated(savedInstanceState)
         var rfTestTime = (3 + 1).shl(2)
         var rfTestMode: Byte = 0x02
-        var txPower = 0
 
+        isFragmentReady = true
         txvRfTestShow.text = String.format("%s(%03d)", context!!.resources.getString(R.string.txvRfTestTime), ((rfTestTime * 5).shr(2)))
         rdGpRfTestFreq.setOnCheckedChangeListener { _, checkedId ->
             rfTestMode =
@@ -57,6 +60,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp0.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -71,6 +75,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp0.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -86,6 +91,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp1.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -100,6 +106,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp1.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -115,6 +122,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp2.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -129,6 +137,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp2.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -144,6 +153,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp3.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -158,6 +168,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp3.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -173,6 +184,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp4.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -187,6 +199,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp4.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -202,6 +215,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp5.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -216,6 +230,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestHfp5.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -231,6 +246,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestSrc.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -245,6 +261,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestSrc.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -260,6 +277,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg0.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -274,6 +292,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg0.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -289,6 +308,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg1.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -303,6 +323,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg1.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -318,6 +339,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg2.setOnClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -332,6 +354,7 @@ class FragmentRfTest : Fragment() {
         btnRfTestAg2.setOnLongClickListener {
             val sendMsg = BtDevMsg(0, 0)
 
+            (activity as DevUnitMsg).setVibrator(200)
             sendMsg.btCmd[0] = CmdId.CMD_HEAD_FF.value
             sendMsg.btCmd[1] = CmdId.CMD_HEAD_55.value
             sendMsg.btCmd[2] = CmdId.CMD_DEV_HOST.value
@@ -345,31 +368,42 @@ class FragmentRfTest : Fragment() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+
+        Logger.d(LogGbl, "FragmentConState on Pause")
+        isFragmentReady = false
+    }
+
     fun updateData() {
-        if(rdGpRfTestFreq != null) {
-            if (BtDevUnit.sppStateCon == 0x00.toByte()) {
-                btnRfTestSrc.visibility = View.VISIBLE
-                btnRfTestAg0.visibility = View.VISIBLE
-                btnRfTestAg1.visibility = View.VISIBLE
-                btnRfTestAg2.visibility = View.VISIBLE
-                btnRfTestHfp0.visibility = View.VISIBLE
-                btnRfTestHfp1.visibility = View.VISIBLE
-                btnRfTestHfp2.visibility = View.VISIBLE
-                btnRfTestHfp3.visibility = View.VISIBLE
-                btnRfTestHfp4.visibility = View.VISIBLE
-                btnRfTestHfp5.visibility = View.VISIBLE
-            } else {
-                btnRfTestSrc.visibility = View.INVISIBLE
-                btnRfTestAg0.visibility = View.INVISIBLE
-                btnRfTestAg1.visibility = View.INVISIBLE
-                btnRfTestAg2.visibility = View.INVISIBLE
-                btnRfTestHfp0.visibility = View.INVISIBLE
-                btnRfTestHfp1.visibility = View.INVISIBLE
-                btnRfTestHfp2.visibility = View.INVISIBLE
-                btnRfTestHfp3.visibility = View.INVISIBLE
-                btnRfTestHfp4.visibility = View.INVISIBLE
-                btnRfTestHfp5.visibility = View.INVISIBLE
-            }
+        if(isFragmentReady == false) {
+            Handler().postDelayed({updateData()}, 100)
+            Logger.d(LogGbl, "fragment not ready")
+            return
+        }
+
+        if (BtDevUnit.sppStateCon == 0x00.toByte()) {
+            btnRfTestSrc.visibility = View.VISIBLE
+            btnRfTestAg0.visibility = View.VISIBLE
+            btnRfTestAg1.visibility = View.VISIBLE
+            btnRfTestAg2.visibility = View.VISIBLE
+            btnRfTestHfp0.visibility = View.VISIBLE
+            btnRfTestHfp1.visibility = View.VISIBLE
+            btnRfTestHfp2.visibility = View.VISIBLE
+            btnRfTestHfp3.visibility = View.VISIBLE
+            btnRfTestHfp4.visibility = View.VISIBLE
+            btnRfTestHfp5.visibility = View.VISIBLE
+        } else {
+            btnRfTestSrc.visibility = View.INVISIBLE
+            btnRfTestAg0.visibility = View.INVISIBLE
+            btnRfTestAg1.visibility = View.INVISIBLE
+            btnRfTestAg2.visibility = View.INVISIBLE
+            btnRfTestHfp0.visibility = View.INVISIBLE
+            btnRfTestHfp1.visibility = View.INVISIBLE
+            btnRfTestHfp2.visibility = View.INVISIBLE
+            btnRfTestHfp3.visibility = View.INVISIBLE
+            btnRfTestHfp4.visibility = View.INVISIBLE
+            btnRfTestHfp5.visibility = View.INVISIBLE
         }
     }
 }
