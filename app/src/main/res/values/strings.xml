@@ -74,9 +74,9 @@
     <string name="txvAudioParameter1">General AGC</string>
     <string name="txvAudioParameter2">Room Kit</string>
     <string name="txvAudioParameter3">General AGC_1</string>
-    <string name="txvAudioParameter4">audio parameter 4</string>
+    <string name="txvAudioParameter4">General AGC_2</string>
     <string name="txvAudioParameter5">audio parameter 5</string>
-    <string name="txvAudioParameter6">audio parameter 6</string>
+    <string name="txvAudioParameter6">audio parameter6</string>
     <string name="txvAudioParameter7">audio parameter 7</string>
     <string name="txvAudioParameter8">audio parameter 8</string>
     <string name="txvAudioParameter9">audio parameter 9</string>

@@ -74,7 +74,7 @@
     <string name="txvAudioParameter1">通用 AGC</string>
     <string name="txvAudioParameter2">Room Kit</string>
     <string name="txvAudioParameter3">通用 AGC_1</string>
-    <string name="txvAudioParameter4">音效參數4</string>
+    <string name="txvAudioParameter4">通用 AGC_2</string>
     <string name="txvAudioParameter5">音效參數5</string>
     <string name="txvAudioParameter6">音效參數6</string>
     <string name="txvAudioParameter7">音效參數7</string>

@@ -107,6 +107,7 @@ class FragmentPairSet : Fragment() {
                 var strList = str.split(':')
                 var preferDataEdit = (activity as DevUnitMsg).getpreferData().edit()
 
+                // setMultiChoiceItems
                 AlertDialog.Builder(activity).setTitle(getString(R.string.txvDevPair)).setItems(listItem) {
                     _, which ->
                     (activity as DevUnitMsg).setVibrator(200)

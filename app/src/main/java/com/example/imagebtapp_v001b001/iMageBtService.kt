@@ -153,7 +153,7 @@ class iMageBtService : Service() {
                         i++
                 }
                 if(isRfcRecHead == false) {
-                    rfcRecDataLen = 0
+                    // rfcRecDataLen = 0
                 }
             }
             isReadable = false
@@ -208,7 +208,7 @@ class iMageBtService : Service() {
         fun rfcCmdSend(msg: BtDevMsg) {
             if(isReadable) {
                 checkSum(msg.btCmd)
-                rfcSocket.outputStream.write(msg.btCmd)
+                rfcSocket.outputStream.write(msg.btCmd, 0, msg.btCmd[5] + 7)
             }
         }
 

@@ -556,7 +556,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = cmdId[i]
                 sendMsg.btCmd[5] = 0x00
-                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 200.toLong())
+                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 2000.toLong())
             }
         }
         for(j in 0 until srcDevId.size) {
@@ -573,7 +573,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[5] = 0x02
                 sendMsg.btCmd[6] = 0x00
                 sendMsg.btCmd[7] = pskeyHfp[i].toByte()
-                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 400.toLong())
+                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, i * j * 4000.toLong())
             }
 
             for(i in 0 until pskeyAg.size) {
@@ -587,7 +587,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsgAg.btCmd[5] = 0x02
                 sendMsgAg.btCmd[6] = 0x00
                 sendMsgAg.btCmd[7] = pskeyAg[i].toByte()
-                Handler().postDelayed({sendBtServiceMsg(sendMsgAg)}, i * j * 600.toLong())
+                Handler().postDelayed({sendBtServiceMsg(sendMsgAg)}, i * j * 6000.toLong())
             }
         }
     }
@@ -595,10 +595,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     fun stateUpdate() {
         val srcDevId = arrayOf(CmdId.CMD_DEV_SRC.value, CmdId.CMD_DEV_AG_ALL.value)
         val cmdId = arrayOf(
-            CmdId.GET_HFP_VOL_REQ.value,
-            CmdId.GET_HFP_STA_REQ.value,
+            // CmdId.GET_HFP_VOL_REQ.value,
+            // CmdId.GET_HFP_STA_REQ.value,
             CmdId.GET_HFP_EXT_STA_REQ.value,
-            CmdId.GET_HFP_PAIR_REQ.value,
+            // CmdId.GET_HFP_PAIR_REQ.value,
             CmdId.GET_HFP_RSSI_REQ.value)
 
         for(j in 0 until srcDevId.size) {
@@ -613,7 +613,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 sendMsg.btCmd[3] = devId
                 sendMsg.btCmd[4] = cmdId[i]
                 sendMsg.btCmd[5] = 0x00
-                sendBtServiceMsg(sendMsg)
+                Handler().postDelayed({sendBtServiceMsg(sendMsg)}, (j * 500 + i * 100.toLong()))
             }
         }
     }
@@ -629,6 +629,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
         // Logger.d(LogMain, "${String.format("command src:%02X id:%02X", msg.btCmd[2], msg.btCmd[4])}")
         var id = BtDevUnit.getBtDevId(msg.btCmd[2])
 
+        Logger.d(LogMain, "${String.format("cmd src:%02X dest:%2X id:%02X", msg.btCmd[2], msg.btCmd[3], msg.btCmd[4])}")
         if ((id < BtDevUnitList.size) || (id == 0x80)) {
             when (msg.btCmd[4]) {
                 CmdId.SET_AG_VOL_RSP.value -> Logger.d(LogMain, "${String.format("src:%02X AG volume set", msg.btCmd[2])}")
@@ -765,8 +766,10 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                         initHfpDevice(msg.btCmd[6].toUByte().toInt())
                         BtDevUnit.deviceNo = msg.btCmd[6].toUByte().toInt()
                     }
-                    setUpdate()
-                    stateUpdate()
+                    Handler().postDelayed({
+                        setUpdate()
+                        stateUpdate()
+                    }, 100)
                 }
                 CmdId.GET_HFP_FEATURE_RSP.value -> {
                     BtDevUnitList[id].featureHfp = msg.btCmd[6].toInt().and(0xff).shl(8) + msg.btCmd[7].toInt().and(0xff)
@@ -795,6 +798,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                 }
                 CmdId.GET_HFP_PAIR_RSP.value -> {
                     BtDevUnitList[id].bdaddrPair = BtDevMsg.bdaddrTranslate(msg, 7)
+                    Logger.d(LogMain, "${String.format("GET_HFP_PAIR_RSP source: %02X BDA: %02X %02X %02X %02X %02X %02X %02X %02X", msg.btCmd[2], msg.btCmd[6], msg.btCmd[7], msg.btCmd[8], msg.btCmd[9], msg.btCmd[10], msg.btCmd[11], msg.btCmd[12], msg.btCmd[13])}")
                 }
                 CmdId.GET_HFP_BDA_RSP.value -> {
                     if(id == 0)
@@ -992,7 +996,7 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
                                 str += msg.btCmd[i * 2 + 13].toInt().shl(8).or(msg.btCmd[i * 2 + 13 + 1].toInt()).toChar()
                             }
                             str += " + " + BtDevMsg.bdaddrTranslate(msg, 7)
-                            if(str.substring(0, 6).compareTo("iMage ") == 0) {
+                            if((str.substring(0, 6).compareTo("iMage ") == 0) || (str.substring(0, 6).compareTo("Aopen ") == 0) || (str.substring(0, 5).compareTo("AOPEN") == 0)){
                                 if(!BtDevUnit.BtList.contains(str))
                                 BtDevUnit.BtList.add(str)
                                 Logger.d(LogMain, "$str has iMage")
@@ -1037,6 +1041,9 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
             viewM6Update()
             // ((viewPagerM6.adapter as ViewPagerAdapter).getItem(0) as FragmentConState).recyclerDevList.adapter!!.notifyDataSetChanged()
             // viewPagerM6.adapter!!.notifyDataSetChanged()
+        }
+        else {
+            Logger.d("testAaa", "${String.format("other command src:%02X dest:%02x id:%02X", msg.btCmd[2], msg.btCmd[3], msg.btCmd[4])}")
         }
     }
 }
