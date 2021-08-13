@@ -376,12 +376,13 @@ class FragmentRfTest : Fragment() {
     }
 
     fun updateData() {
+/*
         if(isFragmentReady == false) {
             Handler().postDelayed({updateData()}, 100)
             Logger.d(LogGbl, "fragment not ready")
             return
         }
-
+*/
         if (BtDevUnit.sppStateCon == 0x00.toByte()) {
             btnRfTestSrc.visibility = View.VISIBLE
             btnRfTestAg0.visibility = View.VISIBLE

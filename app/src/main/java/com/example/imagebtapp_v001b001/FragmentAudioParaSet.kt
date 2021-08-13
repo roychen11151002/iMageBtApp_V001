@@ -337,12 +337,13 @@ class FragmentAudioParaSet : Fragment() {
     }
 
     fun updateData() {
+/*
         if(isFragmentReady == false) {
             Handler().postDelayed({updateData()}, 100)
             Logger.d(LogGbl, "fragment not ready")
             return
         }
-
+*/
         when (BtDevUnit.sppStateCon) {
             0x00.toByte() -> {
                 btnAudioParaRead.visibility = View.VISIBLE

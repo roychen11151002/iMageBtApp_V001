@@ -705,13 +705,13 @@ class FragmentFeatureSet : Fragment() {
         var chkBox: CheckBox
         var feature: Int
         var ledLight: Array<Int>
-
+/*
         if(isFragmentReady == false) {
             Handler().postDelayed({updateData()}, 100)
             Logger.d(LogGbl, "fragment not ready")
             return
         }
-
+*/
         Handler().postDelayed({ isCheckReady = true}, 200)
         if (rdGpDevFeature.checkedRadioButtonId == R.id.rdAgAllFeature) {
             feature = (activity as DevUnitMsg).getBtDevUnitList()[srcDevItem].featureAg

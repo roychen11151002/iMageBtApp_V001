@@ -273,12 +273,13 @@ class FragmentTxPower : Fragment() {
     }
 
     fun updateData() {
+/*
         if(isFragmentReady == false) {
             Handler().postDelayed({updateData()}, 100)
             Logger.d(LogGbl, "fragment not ready")
             return
         }
-
+*/
         when ((activity as DevUnitMsg).getDevType(0)) {
             "M6_SRC" -> {
                 seekTxPowerSrc.progress = ((activity as DevUnitMsg).getBtDevUnitList()[0].txPowerHfp + 20) / 4

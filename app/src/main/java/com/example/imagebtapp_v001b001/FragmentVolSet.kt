@@ -349,12 +349,13 @@ class FragmentVolSet : Fragment() {
     }
 
     fun updateData() {
+/*
         if(isFragmentReady == false) {
             Handler().postDelayed({updateData()}, 100)
             Logger.d(LogGbl, "fragment not ready")
             return
         }
-
+*/
         when (mode) {
             1 -> {
                 if (srcDevItem == 0) {
