@@ -50,7 +50,7 @@
     <string name="txvFeature8">關閉過濾裝置</string>
     <string name="txvFeatureA">"開啟裝置自動開機 "</string>
     <string name="txvFeatureB">" "</string>
-    <string name="txvFeatureC">" "</string>
+    <string name="txvFeatureC">"開啟麥克風靜音控制"</string>
     <string name="txvFeatureD">開啟iOS控制</string>
     <string name="txvFeatureE">" "</string>
     <string name="txvFeatureF">開啟額外功能</string>

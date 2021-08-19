@@ -40,6 +40,7 @@
             android:id="@+id/rdSrcVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvDevSrc" />
 
         <RadioButton
@@ -47,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="36dp"
             android:text="@string/txvDevAllHfp" />
     </RadioGroup>
 
@@ -54,6 +56,7 @@
         android:id="@+id/txvVolSetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/txvVolumeTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,12 +77,14 @@
             android:id="@+id/rdModeWireVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvModeWired" />
 
         <RadioButton
             android:id="@+id/rdModeUsbVolume"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvModeUsb" />
 
         <RadioButton
@@ -87,6 +92,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="36dp"
             android:text="@string/txvModeBt" />
 
         <RadioButton
@@ -94,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="36dp"
             android:text="@string/txvModeVcs" />
     </RadioGroup>
 
@@ -116,14 +123,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:minHeight="48dp"
             android:text="@string/txvDecadeSpkrHfp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/seekSrcHfpSpkrVol" />
+            app:layout_constraintTop_toBottomOf="@+id/seekSrcHfpSpkrVol"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <CheckBox
             android:id="@+id/chkSrcAvSpkrDecade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:text="@string/txvDecadeSpkrAv"
             app:layout_constraintStart_toStartOf="@+id/textView3"
             app:layout_constraintTop_toTopOf="@+id/chkSrcHfpSpkrDecade" />
@@ -186,11 +196,11 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="@string/txvVolumeSrc"
-            app:layout_constraintStart_toStartOf="@+id/rdGpModeVolume"
-            app:layout_constraintTop_toBottomOf="@+id/rdGpModeVolume" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView6"
@@ -198,7 +208,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:text="@string/txvVolumeAg"
-            app:layout_constraintStart_toStartOf="@+id/seekSrcHfpMicVol"
+            app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toBottomOf="@+id/seekSrcHfpMicVol" />
 
         <SeekBar

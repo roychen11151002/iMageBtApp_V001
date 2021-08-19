@@ -17,8 +17,8 @@ import android.widget.SeekBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.example.imagebtapp_v001b001.BuildConfig.VERSION_APP
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,7 +45,7 @@ val ViewPagerArray = mutableListOf(  FragmentConState(),
 
 class MainActivity : AppCompatActivity(), DevUnitMsg {
     private var BtDevUnitList = ArrayList<BtDevUnit>()
-    private val adapterPager = ViewPagerAdapter(supportFragmentManager)
+    private val adapterPager = ViewPagerAdapter(this)
     private val MainBackGroundImage = 88
     private lateinit var preferData: SharedPreferences
     private var iMageBtServiceBind = false
@@ -1046,7 +1046,8 @@ class MainActivity : AppCompatActivity(), DevUnitMsg {
     }
 }
 
-class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-    override fun getItem(position: Int): Fragment = ViewPagerArray[position]
-    override fun getCount(): Int = ViewPagerArray.size
+class ViewPagerAdapter(fm: FragmentActivity) : FragmentStateAdapter(fm) {
+    override fun getItemCount(): Int = ViewPagerArray.size
+
+    override fun createFragment(position: Int): Fragment = ViewPagerArray[position]
 }

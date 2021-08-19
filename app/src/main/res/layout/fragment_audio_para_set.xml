@@ -11,6 +11,7 @@
         android:id="@+id/txvAudioParaSetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/txvAudioParaTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,22 +32,28 @@
             android:id="@+id/rdA6AudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvDevA6"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdA7AudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvDevA7" />
+            android:maxHeight="36dp"
+            android:text="@string/txvDevA7"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdAllAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvDevAllHfp" />
+            android:minHeight="36dp"
+            android:text="@string/txvDevAllHfp"
+            tools:ignore="TouchTargetSizeCheck" />
     </RadioGroup>
 
     <RadioGroup
@@ -64,12 +71,14 @@
             android:id="@+id/rdModeWireAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvModeWired" />
 
         <RadioButton
             android:id="@+id/rdModeUsbAudioPara"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvModeUsb" />
 
         <RadioButton
@@ -77,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="36dp"
             android:text="@string/txvModeBt" />
 
         <RadioButton
@@ -84,6 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:minHeight="36dp"
             android:text="@string/txvModeVcs" />
     </RadioGroup>
 
@@ -121,60 +132,70 @@
                     android:id="@+id/rdAudioPara0"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter0" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter1" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter2" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter3" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter4" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara5"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter5" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter6" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter7" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara8"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter8" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara9"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:minHeight="48dp"
                     android:text="@string/txvAudioParameter9"
                     app:layout_constraintStart_toStartOf="parent" />
 
@@ -182,7 +203,9 @@
                     android:id="@+id/rdAudioPara10"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/txvAudioParameter10" />
+                    android:minHeight="48dp"
+                    android:text="@string/txvAudioParameter10"
+                    tools:ignore="TouchTargetSizeCheck" />
 
                 <RadioButton
                     android:id="@+id/rdAudioPara11"

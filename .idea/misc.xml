@@ -3,13 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/activity_main.xml" value="0.67" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/activity_msg_edit.xml" value="0.20520833333333333" />
         <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/bdaddr_adapter.xml" value="0.20520833333333333" />
         <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/device_unit_adapter.xml" value="0.2015625" />
         <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/device_unit_adapter_1.xml" value="0.20520833333333333" />
-        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_audio_para_set.xml" value="0.2015625" />
-        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_con_state.xml" value="0.20520833333333333" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_audio_para_set.xml" value="0.33" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_con_state.xml" value="0.67" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_feature_set.xml" value="0.5" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_pair_set.xml" value="0.67" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_rf_test.xml" value="0.33" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_tx_power.xml" value="0.5" />
+        <entry key="..\:/iMage/iMage_SW/iMage_android App/iMageBtApp_V001B001/app/src/main/res/layout/fragment_vol_set.xml" value="0.5" />
       </map>
     </option>
   </component>

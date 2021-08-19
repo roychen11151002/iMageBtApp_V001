@@ -10,6 +10,7 @@
         android:id="@+id/txvFeatureSetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/txvFeatureTitle"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,22 +31,28 @@
             android:id="@+id/rdSrcFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxHeight="36dp"
             android:text="@string/txvDevSrc"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdAgAllFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvDevAllAg" />
+            android:minHeight="36dp"
+            android:text="@string/txvDevAllAg"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdHfpAllFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvDevAllHfp" />
+            android:minHeight="36dp"
+            android:text="@string/txvDevAllHfp"
+            tools:ignore="TouchTargetSizeCheck" />
     </RadioGroup>
 
     <RadioGroup
@@ -63,27 +70,35 @@
             android:id="@+id/rdModeWireFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/txvModeWired" />
+            android:minHeight="36dp"
+            android:text="@string/txvModeWired"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdModeUsbFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/txvModeUsb" />
+            android:minHeight="36dp"
+            android:text="@string/txvModeUsb"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdModeBtFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvModeBt" />
+            android:minHeight="36dp"
+            android:text="@string/txvModeBt"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <RadioButton
             android:id="@+id/rdModeVcsFeature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/txvModeVcs" />
+            android:minHeight="36dp"
+            android:text="@string/txvModeVcs"
+            tools:ignore="TouchTargetSizeCheck" />
     </RadioGroup>
 
     <ScrollView
@@ -94,12 +109,14 @@
         android:background="@drawable/shape_rectangle"
         app:layout_constraintBottom_toTopOf="@+id/btnFeatureWrite"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature">
+        app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature"
+        app:layout_constraintVertical_bias="0.0">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <CheckBox
@@ -109,7 +126,8 @@
                 android:layout_marginStart="168dp"
                 android:text="@string/txvFeatureF"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature7"
-                app:layout_constraintTop_toTopOf="@+id/chkFeature7" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature14"
@@ -126,16 +144,18 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeatureD"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature14"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature14" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature14"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature12"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeatureC"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature13"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature13" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature13"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature11"
@@ -153,7 +173,8 @@
                 android:text="@string/txvFeatureA"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature11"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature11" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature11"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature9"
@@ -162,7 +183,8 @@
                 android:text="@string/txvFeature9"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature10"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature10" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature10"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature8"
@@ -170,7 +192,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature8"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature9"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature9" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature9"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature0"
@@ -178,7 +201,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature0"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature1"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature1" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature1"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature1"
@@ -186,7 +210,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature1"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature2"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature2" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature2"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature2"
@@ -203,7 +228,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature3"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature4"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature4" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature4"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature4"
@@ -211,7 +237,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature4"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature5"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature5" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature5"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature5"
@@ -220,7 +247,8 @@
                 android:text="@string/txvFeature5"
                 android:visibility="visible"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature6"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature6" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature6"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature6"
@@ -228,16 +256,17 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txvFeature6"
                 app:layout_constraintStart_toStartOf="@+id/chkFeature7"
-                app:layout_constraintTop_toBottomOf="@+id/chkFeature7" />
+                app:layout_constraintTop_toBottomOf="@+id/chkFeature7"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <CheckBox
                 android:id="@+id/chkFeature7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:text="@string/txvFeature7"
-                app:layout_constraintStart_toStartOf="@+id/rdGpDevFeature"
-                app:layout_constraintTop_toBottomOf="@+id/rdGpModeFeature" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <SeekBar
                 android:id="@+id/seekLedPwr"
@@ -282,8 +311,11 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="@string/txvFilterBda"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/seekLedMfb"
                 app:layout_constraintTop_toBottomOf="@+id/seekLedMfb" />
 
@@ -292,9 +324,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="    "
+                android:text="@string/btnAg0"
+                app:layout_constraintBottom_toBottomOf="@+id/textView2"
                 app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="@+id/textView2" />
+                app:layout_constraintTop_toTopOf="@+id/textView2"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

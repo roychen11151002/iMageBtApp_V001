@@ -217,18 +217,21 @@
             android:id="@+id/rdRfTestFreqHi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvFreqHi" />
 
         <RadioButton
             android:id="@+id/rdRfTestFreqMid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvFreqMid" />
 
         <RadioButton
             android:id="@+id/rdRfTestFreqLo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minHeight="36dp"
             android:text="@string/txvFreqLo" />
     </RadioGroup>
 

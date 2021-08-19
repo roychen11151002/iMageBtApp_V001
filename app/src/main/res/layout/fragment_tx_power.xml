@@ -34,7 +34,8 @@
             android:text="@string/btnWrite"
             app:layout_constraintBottom_toBottomOf="@+id/seekTxPowerSrc"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txvDistanceSrc" />
+            app:layout_constraintTop_toTopOf="@+id/txvDistanceSrc"
+            tools:ignore="DuplicateSpeakableTextCheck" />
 
         <Button
             android:id="@+id/btnTxPwrWriteAg0"
@@ -91,6 +92,7 @@
             android:id="@+id/txvDistanceSrc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="@string/txvDistanceSrc"
             app:layout_constraintStart_toStartOf="parent"

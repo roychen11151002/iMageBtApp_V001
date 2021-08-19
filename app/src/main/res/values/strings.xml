@@ -55,7 +55,7 @@
     <string name="txvFeature9">Enable I2S Input</string>
     <string name="txvFeatureA">Enable Auto Power On</string>
     <string name="txvFeatureB">11</string>
-    <string name="txvFeatureC">12</string>
+    <string name="txvFeatureC">Enable HID MIC mute command</string>
     <string name="txvFeatureD">Enable BLE</string>
     <string name="txvFeatureE">14</string>
     <string name="txvFeatureF">Enable Expan Function</string>
